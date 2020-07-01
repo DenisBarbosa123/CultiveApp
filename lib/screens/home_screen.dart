@@ -1,5 +1,3 @@
-import 'package:cultiveapp/screens/dashboard_screen.dart';
-import 'package:cultiveapp/screens/login_screen.dart';
 import 'package:cultiveapp/tabs/news_tabs.dart';
 import 'package:cultiveapp/tabs/quotation_tabs.dart';
 import 'package:cultiveapp/tabs/weather_tabs.dart';
@@ -33,9 +31,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 body: TabBarView(
                     children: [WeatherTabs(), QuotationTabs(), NewsTabs()]),
-              )
-          ),
-        ]
-    );
+              )),
+        ]);
   }
 }
