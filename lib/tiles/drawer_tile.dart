@@ -11,7 +11,9 @@ class DrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
+      color: pageController.page.round() == page
+          ? Colors.grey[200]
+          : Colors.transparent,
       child: InkWell(
           onTap: () {
             Navigator.of(context).pop();
@@ -24,21 +26,24 @@ class DrawerTile extends StatelessWidget {
                 Icon(
                   icon,
                   size: 32.0,
-                  color: pageController.page.round() == page ?
-                  Colors.white :
-                  Colors.grey[700],
+                  color: pageController.page.round() == page
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
                 ),
-                SizedBox(width: 32,),
-                Text(text, style: TextStyle(
-                    fontSize: 16.0,
-                    color: pageController.page.round() == page ?
-                    Colors.white :
-                    Colors.grey[700]),
+                SizedBox(
+                  width: 32,
+                ),
+                Text(
+                  text,
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: pageController.page.round() == page
+                          ? Colors.green[900]
+                          : Colors.black),
                 )
               ],
             ),
-          )
-      ),
+          )),
     );
   }
 }

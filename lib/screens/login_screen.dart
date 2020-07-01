@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
           centerTitle: true,
           actions: <Widget>[
             RaisedButton(
-              child: Text("CADASTRE-SE", style: TextStyle(color: Colors.white)),
+              child: Text("CADASTRE-SE"),
               onPressed: () {},
               color: Theme.of(context).primaryColor,
             )
@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 30),
             SizedBox(
-              height: 40.0,
+              height: 45.0,
               child: RaisedButton(
                 onPressed: () {},
                 child: Text(

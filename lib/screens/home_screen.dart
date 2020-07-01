@@ -18,7 +18,9 @@ class HomeScreen extends StatelessWidget {
               child: Scaffold(
                 drawer: CustomDrawer(_pageController),
                 appBar: AppBar(
-                  title: Text("DASHBOARD"),
+                  title: Text(
+                    "DASHBOARD",
+                  ),
                   centerTitle: true,
                   backgroundColor: Theme.of(context).primaryColor,
                   bottom: TabBar(indicatorColor: Colors.white, tabs: [
