@@ -1,24 +1,15 @@
-import 'package:cultiveapp/screens/reset_password_screen.dart';
 import 'package:cultiveapp/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class ResetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text("LOGIN"),
-          centerTitle: true,
-          actions: <Widget>[
-            RaisedButton(
-              child: Text("CADASTRE-SE", style: TextStyle(color: Colors.white)),
-              onPressed: () {},
-              color: Theme.of(context).primaryColor,
-            )
-          ],
-        ),
+            backgroundColor: Theme.of(context).primaryColor,
+            title: Text("ESQUECEU A SENHA"),
+            centerTitle: true),
         body: ListView(
           children: <Widget>[
             Padding(
@@ -39,7 +30,12 @@ class LoginScreen extends StatelessWidget {
             ),
             InputField(
               icon: Icons.lock_outline,
-              hint: "Senha",
+              hint: "Nova senha",
+              obscure: true,
+            ),
+            InputField(
+              icon: Icons.lock_outline,
+              hint: "Repita a nova senha",
               obscure: true,
             ),
             SizedBox(height: 30),
@@ -48,27 +44,14 @@ class LoginScreen extends StatelessWidget {
               child: RaisedButton(
                 onPressed: () {},
                 child: Text(
-                  "Entrar",
+                  "Confirmar",
                   style: TextStyle(fontSize: 18.0),
                 ),
                 textColor: Colors.white,
                 color: Colors.green[900],
                 disabledColor: Colors.grey,
               ),
-            ),
-            Center(
-                child: FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ResetPasswordScreen()));
-              },
-              child: Text(
-                "Esqueceu sua senha?",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-              ),
-              padding: EdgeInsets.only(top: 40),
-            )),
+            )
           ],
         ));
   }
