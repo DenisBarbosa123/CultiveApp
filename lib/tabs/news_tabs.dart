@@ -8,18 +8,54 @@ class NewsTabs extends StatefulWidget {
 class _NewsTabsState extends State<NewsTabs> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-        margin: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 10),
-              child: Text("Notícias sobre o Agronegócio",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.black, fontSize: 20.0)),
+    return ListView.builder(
+      itemCount: 5,
+      itemBuilder: (context, index){
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(0.0,0.5,0.0,0.5),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("Artigo", style: TextStyle(color: Colors.black38,fontWeight: FontWeight.w500, fontSize: 16.0),),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0,12.0,0.0,12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(child: Text("Titulo do Artigo", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),), flex: 3,),
+                        Flexible(
+                          flex: 1,
+                          child: Container(
+                              height: 80.0,
+                              width: 80.0,
+                              child: Image.asset("assets/gol.jpg", fit: BoxFit.cover,)
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("Autor do artigo", style: TextStyle(fontSize: 18.0),),
+                          Text("20/10/2019" + " . " + "7 min", style: TextStyle(color: Colors.black45, fontWeight: FontWeight.w500),)
+                        ],
+                      ),
+                      Icon(Icons.bookmark_border),
+                    ],
+                  )
+                ],
+              ),
             ),
-            Divider(color: Colors.grey[400])
-          ],
-        ));
+          ),
+        );
+      },
+    );
   }
 }
