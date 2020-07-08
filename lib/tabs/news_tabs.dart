@@ -1,3 +1,6 @@
+import 'package:cultiveapp/bloc/news_bloc.dart';
+import 'package:cultiveapp/model/news_model.dart';
+import 'package:cultiveapp/tiles/news_tile.dart';
 import 'package:flutter/material.dart';
 
 class NewsTabs extends StatefulWidget {
@@ -6,56 +9,45 @@ class NewsTabs extends StatefulWidget {
 }
 
 class _NewsTabsState extends State<NewsTabs> {
+  NewsBloc _newsBloc = new NewsBloc();
+  @override
+  void initState() {
+    super.initState();
+    _newsBloc.getListNews();
+  }
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 5,
-      itemBuilder: (context, index){
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(0.0,0.5,0.0,0.5),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("Artigo", style: TextStyle(color: Colors.black38,fontWeight: FontWeight.w500, fontSize: 16.0),),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0,12.0,0.0,12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Flexible(child: Text("Titulo do Artigo", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),), flex: 3,),
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                              height: 80.0,
-                              width: 80.0,
-                              child: Image.asset("assets/gol.jpg", fit: BoxFit.cover,)
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Autor do artigo", style: TextStyle(fontSize: 18.0),),
-                          Text("20/10/2019" + " . " + "7 min", style: TextStyle(color: Colors.black45, fontWeight: FontWeight.w500),)
-                        ],
-                      ),
-                      Icon(Icons.bookmark_border),
-                    ],
-                  )
-                ],
-              ),
+    return StreamBuilder<List<News>>(
+      stream: _newsBloc.output,
+      builder: (context, snapshot) {
+        if(!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)
             ),
-          ),
+          );
+        }
+        return ListView.builder(
+          itemCount: snapshot.data.length + 1,
+          itemBuilder: (context, index){
+            if(index < snapshot.data.length){
+              return NewsTile(snapshot.data[index]);
+            }else if(index > 1){
+              _newsBloc.getListNews();
+              return Container(
+                  height: 40,
+                  width: 40,
+                  alignment: Alignment.center,
+                  child: Center(
+                      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))
+                  )
+              );
+            } else {
+              return Container();
+            }
+          },
         );
-      },
+      }
     );
   }
 }
