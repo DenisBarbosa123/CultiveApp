@@ -15,39 +15,39 @@ class _NewsTabsState extends State<NewsTabs> {
     super.initState();
     _newsBloc.getListNews();
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<News>>(
-      stream: _newsBloc.output,
-      builder: (context, snapshot) {
-        if(!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)
-            ),
+        stream: _newsBloc.output,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      Theme.of(context).primaryColor)),
+            );
+          }
+          return ListView.builder(
+            itemCount: snapshot.data.length + 1,
+            itemBuilder: (context, index) {
+              if (index < snapshot.data.length) {
+                return NewsTile(snapshot.data[index]);
+              } else if (index > 1) {
+                _newsBloc.getListNews();
+                return Container(
+                    height: 40,
+                    width: 40,
+                    alignment: Alignment.center,
+                    child: Center(
+                        child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).primaryColor))));
+              } else {
+                return Container();
+              }
+            },
           );
-        }
-        return ListView.builder(
-          itemCount: snapshot.data.length + 1,
-          itemBuilder: (context, index){
-            if(index < snapshot.data.length){
-              return NewsTile(snapshot.data[index]);
-            }else if(index > 1){
-              _newsBloc.getListNews();
-              return Container(
-                  height: 40,
-                  width: 40,
-                  alignment: Alignment.center,
-                  child: Center(
-                      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))
-                  )
-              );
-            } else {
-              return Container();
-            }
-          },
-        );
-      }
-    );
+        });
   }
 }
