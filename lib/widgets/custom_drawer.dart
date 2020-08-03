@@ -1,4 +1,4 @@
-import 'package:cultiveapp/screens/login_screen.dart';
+import 'file:///C:/Users/Denis%20Barbosa/AndroidStudioProjects/cultiveapp/lib/screens/login_screen.dart';
 import 'package:cultiveapp/tiles/drawer_tile.dart';
 import "package:flutter/material.dart";
 

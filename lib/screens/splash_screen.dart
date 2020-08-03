@@ -16,34 +16,42 @@ class _SplashScreenState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5)).then((_) {
+     Future.delayed(Duration(seconds: 5)).then((_) {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => HomeScreen()));
     });
   }
 
   Widget _introScreen() {
-    return Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
-        body: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              LogoCultive(),
-              SizedBox(height: 50),
-              Center(
-                  child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(Colors.white))),
-              SizedBox(height: 50),
-              Text("from",
-                  style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center),
-              Text("Notorius Development",
-                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center)
-            ],
-          ),
-        ));
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/login-image.jpg"),
+                fit: BoxFit.cover)),
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  LogoCultive(),
+                  SizedBox(height: 90),
+                  Center(
+                      child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Colors.green))),
+                  SizedBox(height: 90),
+                  Text("from",
+                      style: TextStyle(fontSize: 15.0, color: Colors.white),
+                      textAlign: TextAlign.center),
+                  Text("Notorius Development",
+                      style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                      textAlign: TextAlign.center)
+                ],
+              ),
+            )));
   }
 }

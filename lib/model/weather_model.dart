@@ -4,25 +4,25 @@ class Weather {
   String description;
   String city;
   int humidity;
-  String condition_slug;
+  String conditionSlug;
   String windSpeedy;
   List<Forecast> forecast;
 
   Weather(
       {this.temp,
-        this.date,
-        this.description,
-        this.city,
-        this.condition_slug,
-        this.humidity,
-        this.windSpeedy,
-        this.forecast});
+      this.date,
+      this.description,
+      this.city,
+      this.conditionSlug,
+      this.humidity,
+      this.windSpeedy,
+      this.forecast});
 
   Weather.fromJson(Map<String, dynamic> json) {
     temp = json['temp'];
     date = json['date'];
     description = json['description'];
-    condition_slug = json['condition_slug'];
+    conditionSlug = json['condition_slug'];
     city = json['city'];
     humidity = json['humidity'];
     windSpeedy = json['wind_speedy'];
@@ -41,7 +41,7 @@ class Weather {
     data['description'] = this.description;
     data['city'] = this.city;
     data['humidity'] = this.humidity;
-    data['currently '] = this.condition_slug;
+    data['currently '] = this.conditionSlug;
     data['wind_speedy'] = this.windSpeedy;
     if (this.forecast != null) {
       data['forecast'] = this.forecast.map((v) => v.toJson()).toList();
@@ -60,11 +60,11 @@ class Forecast {
 
   Forecast(
       {this.date,
-        this.weekday,
-        this.max,
-        this.min,
-        this.description,
-        this.condition});
+      this.weekday,
+      this.max,
+      this.min,
+      this.description,
+      this.condition});
 
   Forecast.fromJson(Map<String, dynamic> json) {
     date = json['date'];

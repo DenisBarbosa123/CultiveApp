@@ -36,7 +36,7 @@ class _WeatherTabsState extends State<WeatherTabs> {
               SizedBox(
                 width: 120,
                 height: 100,
-                child: _provideWeatherIcon("${snapshot.data.condition_slug}", 60),
+                child: _provideWeatherIcon("${snapshot.data.conditionSlug}", 60),
               ),
               Text(
                 "${snapshot.data.temp}°",
