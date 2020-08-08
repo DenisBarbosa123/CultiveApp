@@ -18,7 +18,8 @@ class Weather {
       this.windSpeedy,
       this.forecast});
 
-  Weather.fromJson(Map<String, dynamic> json) {
+  Weather.
+  fromJson(Map<String, dynamic> json) {
     temp = json['temp'];
     date = json['date'];
     description = json['description'];

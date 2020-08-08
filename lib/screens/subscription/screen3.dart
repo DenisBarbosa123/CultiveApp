@@ -1,6 +1,5 @@
 import 'package:cultiveapp/screens/subscription/successSubscription.dart';
 import 'package:cultiveapp/utils/CircleUtil.dart';
-import 'package:cultiveapp/utils/textField_util.dart';
 import 'package:flutter/material.dart';
 
 class Screen3 extends StatelessWidget {

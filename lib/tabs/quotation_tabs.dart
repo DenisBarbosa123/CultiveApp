@@ -1,3 +1,6 @@
+import 'package:cultiveapp/api/dolar_api.dart';
+import 'package:cultiveapp/bloc/quotation_bloc.dart';
+import 'package:cultiveapp/model/quotation_model.dart';
 import 'package:flutter/material.dart';
 
 class QuotationTabs extends StatefulWidget {
@@ -6,7 +9,9 @@ class QuotationTabs extends StatefulWidget {
 }
 
 class _QuotationTabsState extends State<QuotationTabs> {
-
+  QuotationBloc _quotationBloc;
+  DolarAPI _dolarAPI = DolarAPI();
+  double _dolarPrice;
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -19,13 +24,120 @@ class _QuotationTabsState extends State<QuotationTabs> {
             mainAxisSpacing: 10,
             crossAxisCount: 2,
             children: <Widget>[
-              _buildCard(title: "Saca de Milho", imageName: "assets/corn.png", isIncreased: false, productPrice: "50.00"),
-              _buildCard(title: "Saca da Soja", imageName: "assets/soy.png", isIncreased: true, productPrice: "100.00"),
-              _buildCard(title: "Saca de Trigo", imageName: "assets/wheat.png", isIncreased: false, productPrice: "30.00"),
-              _buildCard(title: "Saca de Feijao", imageName: "assets/beans.png", isIncreased: true, productPrice: "40.00"),
-              _buildCard(title: "Litro do Leite", imageName: "assets/milk.png", isIncreased: false, productPrice: "60.00"),
-              _buildCard(title: "Arroba do Boi", imageName: "assets/cow.png", isIncreased: true, productPrice: "170.00"),
-              _buildCard(title: "Saca de Café", imageName: "assets/coffee.png", isIncreased: false, productPrice: "400.00"),
+              StreamBuilder<Quotation>(
+                stream: _quotationBloc.outputCorn,
+                builder: (context, snapshot) {
+                  _getDolarPrice();
+                  if(!snapshot.hasData && _dolarPrice == null){
+                    return Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                      ),
+                    );
+                  }
+                  double _updatedPrice = snapshot.data.firstPrice * _dolarPrice;
+                  return _buildCard(
+                      title: "Saca de Milho",
+                      imageName: "assets/corn.png",
+                      isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
+                      productPrice: _updatedPrice.toStringAsFixed(2));
+                }
+              ),
+              StreamBuilder<Quotation>(
+                  stream: _quotationBloc.outputSoy,
+                  builder: (context, snapshot) {
+                    _getDolarPrice();
+                    if(!snapshot.hasData && _dolarPrice == null){
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                        ),
+                      );
+                    }
+                    double _updatedPrice = snapshot.data.firstPrice * _dolarPrice;
+                    return _buildCard(
+                        title: "Saca da Soja",
+                        imageName: "assets/soy.png",
+                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice: _updatedPrice.toStringAsFixed(2));
+                  }
+              ),
+              StreamBuilder<Quotation>(
+                  stream: _quotationBloc.outputWheat,
+                  builder: (context, snapshot) {
+                    _getDolarPrice();
+                    if(!snapshot.hasData && _dolarPrice == null){
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                        ),
+                      );
+                    }
+                    double _updatedPrice = snapshot.data.firstPrice * _dolarPrice;
+                    return _buildCard(
+                        title: "Saca de Trigo",
+                        imageName: "assets/wheat.png",
+                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice: _updatedPrice.toStringAsFixed(2));
+                  }
+              ),
+              StreamBuilder<Quotation>(
+                  stream: _quotationBloc.outputMilk,
+                  builder: (context, snapshot) {
+                    _getDolarPrice();
+                    if(!snapshot.hasData && _dolarPrice == null){
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                        ),
+                      );
+                    }
+                    double _updatedPrice = snapshot.data.firstPrice * _dolarPrice;
+                    return _buildCard(
+                        title: "Litro do Leite",
+                        imageName: "assets/milk.png",
+                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice: _updatedPrice.toStringAsFixed(2));
+                  }
+              ),
+              StreamBuilder<Quotation>(
+                  stream: _quotationBloc.outputCoffee,
+                  builder: (context, snapshot) {
+                    _getDolarPrice();
+                    if(!snapshot.hasData && _dolarPrice == null){
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                        ),
+                      );
+                    }
+                    double _updatedPrice = snapshot.data.firstPrice * _dolarPrice;
+                    return _buildCard(
+                        title: "Saca de Café",
+                        imageName: "assets/coffee.png",
+                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice: _updatedPrice.toStringAsFixed(2));
+                  }
+              ),
+              StreamBuilder<Quotation>(
+                  stream: _quotationBloc.outputCattle,
+                  builder: (context, snapshot) {
+                    _getDolarPrice();
+                    if(!snapshot.hasData && _dolarPrice == null){
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                        ),
+                      );
+                    }
+                    double _updatedPrice = snapshot.data.firstPrice * _dolarPrice;
+                    return _buildCard(
+                        title: "Arroba do Boi",
+                        imageName: "assets/cow.png",
+                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice: _updatedPrice.toStringAsFixed(2));
+                  }
+              ),
             ],
           ),
         ),
@@ -82,5 +194,25 @@ class _QuotationTabsState extends State<QuotationTabs> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _quotationBloc = QuotationBloc();
+    _quotationBloc.getCornPrice();
+    _quotationBloc.getMilkPrice();
+    _quotationBloc.getCattlePrice();
+    _quotationBloc.getWheatPrice();
+    _quotationBloc.getSoyPrice();
+    _quotationBloc.getCoffeePrice();
+  }
+  
+  bool isIncreased(double firstPrice, double lastPrice){
+    return firstPrice > lastPrice ? true : false; 
+  }
+
+  _getDolarPrice() async{
+    _dolarPrice = await _dolarAPI.getDolarPrice();
   }
 }

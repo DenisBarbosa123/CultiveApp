@@ -11,6 +11,7 @@ class WeatherTabs extends StatefulWidget {
 
 class _WeatherTabsState extends State<WeatherTabs> {
   WeatherBloc _weatherBloc;
+
   @override
   Widget build(BuildContext context) {
     return Card(
