@@ -66,7 +66,7 @@ class Screen1 extends StatelessWidget {
                   },
                   color: Colors.green[900],
                   child: Text(
-                    "PROXIMO",
+                    "PRÓXIMO",
                     style: TextStyle(color: Colors.white),
                   ),
                   disabledColor: Colors.black54,

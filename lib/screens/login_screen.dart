@@ -1,5 +1,6 @@
 import 'file:///C:/Users/Denis%20Barbosa/AndroidStudioProjects/cultiveapp/lib/screens/reset_password_screen.dart';
 import 'package:cultiveapp/screens/subscription/screen1.dart';
+import 'package:cultiveapp/utils/textField_util.dart';
 import 'package:cultiveapp/widgets/input_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class LoginScreen extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Image.asset("assets/leaf.png", width: 250, height: 150),
+                child: Image.asset("assets/leaf.png", width: 200, height: 100),
               ),
               Text("CultiveApp",
                   style: TextStyle(
@@ -35,30 +36,26 @@ class LoginScreen extends StatelessWidget {
                       fontSize: 35.0,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center),
+              SizedBox(height: 40),
+              TextFieldUtil.buildTextField("E-mail", Icon(Icons.person_outline, color: Colors.black,), null, Colors.black),
               SizedBox(height: 20),
-              InputField(
-                icon: Icons.person_outline,
-                hint: "E-mail",
-                obscure: false,
-              ),
-              InputField(
-                icon: Icons.lock_outline,
-                hint: "Senha",
-                obscure: true,
-              ),
-              SizedBox(height: 30),
-              SizedBox(
-                height: 50.0,
-                child: RaisedButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Entrar",
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  textColor: Colors.white,
-                  color: Colors.green[900],
-                  disabledColor: Colors.grey,
-                ),
+              TextFieldUtil.buildTextField("Senha", Icon(Icons.lock_outline, color: Colors.black,), null, Colors.black),
+              SizedBox(height: 20),
+              Container(
+                  padding: EdgeInsets.only(top:20, right: 10, left: 10),
+                  child: ButtonTheme(
+                      height: 50,
+                      child: FlatButton(
+                        onPressed: (){},
+                        color: Colors.green[900],
+                        child: Text(
+                          "ENTRAR",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        disabledColor: Colors.black54,
+                        disabledTextColor: Colors.white,
+                      )
+                  )
               ),
               Center(
                   child: FlatButton(
@@ -71,7 +68,7 @@ class LoginScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
-                padding: EdgeInsets.only(top: 40),
+                padding: EdgeInsets.only(top: 30, bottom: 10),
               )),
             ],
           ));
