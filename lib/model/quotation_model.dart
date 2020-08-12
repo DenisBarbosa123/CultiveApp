@@ -16,7 +16,6 @@ class Quotation {
       this.dataSet);
 
   Quotation.fromJson(Map<String, dynamic> json){
-    debugPrint("Building a Quotation object");
     dataSet = json["dataset_data"];
     updatedDate = dataSet["end_date"];
     data = dataSet["data"];

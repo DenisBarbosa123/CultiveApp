@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:cultiveapp/api/dolar_api.dart';
 import 'package:cultiveapp/model/quotation_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,8 @@ import 'dart:convert';
 const String API_KEY = "TfvPST_D3yKtyq6mxkAj";
 
 class QuotationBloc extends BlocBase{
+
+  DolarAPI _dolarAPI = DolarAPI();
 
   //CORN
   final StreamController<Quotation> _cornStreamController =
@@ -78,8 +81,12 @@ class QuotationBloc extends BlocBase{
 
   _getQuotation(String productName) async {
     debugPrint("Get Quotation");
+    double dolarValue = await _getDolarPrice();
     Response response = await Dio().get(_getUrl(productName));
-    return Quotation.fromJson(response.data);
+    Quotation quotation = Quotation.fromJson(response.data);
+    quotation.firstPrice = quotation.firstPrice * dolarValue;
+    quotation.lastPrice = quotation.lastPrice * dolarValue;
+    return quotation;
   }
 
   _getUrl(String productName) =>
@@ -92,6 +99,10 @@ class QuotationBloc extends BlocBase{
     _milkStreamController.close();
     _cattleStreamController.close();
     _coffeeStreamController.close();
+  }
+
+  Future<double>_getDolarPrice() async{
+    return await _dolarAPI.getDolarPrice();
   }
 
 }

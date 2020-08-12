@@ -2,9 +2,19 @@ import 'file:///C:/Users/Denis%20Barbosa/AndroidStudioProjects/cultiveapp/lib/sc
 import 'package:cultiveapp/screens/subscription/screen1.dart';
 import 'package:cultiveapp/utils/textField_util.dart';
 import 'package:cultiveapp/widgets/input_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
+
+  //controllers
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _repeatedPasswordController = TextEditingController();
+
+  //global-key
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,25 +47,81 @@ class LoginScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center),
               SizedBox(height: 40),
-              TextFieldUtil.buildTextField("E-mail", Icon(Icons.person_outline, color: Colors.black,), null, Colors.black),
-              SizedBox(height: 20),
-              TextFieldUtil.buildTextField("Senha", Icon(Icons.lock_outline, color: Colors.black,), null, Colors.black),
-              SizedBox(height: 20),
-              Container(
-                  padding: EdgeInsets.only(top:20, right: 10, left: 10),
-                  child: ButtonTheme(
-                      height: 50,
-                      child: FlatButton(
-                        onPressed: (){},
-                        color: Colors.green[900],
-                        child: Text(
-                          "ENTRAR",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        disabledColor: Colors.black54,
-                        disabledTextColor: Colors.white,
-                      )
-                  )
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if(value.isEmpty) return "Campo Obrigatório";
+                          if(!value.contains("@")) return "Informe um e-mail válido";
+                          return null;
+                        },
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.person_outline, color: Colors.black,),
+                            labelText: "E-mail",
+                            hintStyle: TextStyle(color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.black),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black, width: 1.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black, width: 1.0),
+                            ),
+                          )
+                      ),
+                      SizedBox(height: 20,),
+                      TextFormField(
+                        obscureText: true,
+                          validator: (value) {
+                            if(value.isEmpty) return "Campo Obrigatório";
+                            if(value.length < 5) return "Informe uma senha com mais de 5 caracteres";
+                            return null;
+                          },
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.lock_outline, color: Colors.black,),
+                            labelText: "Senha",
+                            hintStyle: TextStyle(color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.black),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black, width: 1.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black, width: 1.0),
+                            ),
+                          )
+                      ),
+                      SizedBox(height: 20,),
+                      Container(
+                          padding: EdgeInsets.only(top:20, right: 10, left: 10),
+                          child: ButtonTheme(
+                            minWidth: 200,
+                              height: 50,
+                              child: FlatButton(
+                                onPressed: (){
+                                  if(_formKey.currentState.validate()){
+                                    debugPrint("Sucesso!");
+                                  }
+                                },
+                                color: Colors.green[900],
+                                child: Text(
+                                  "ENTRAR",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                disabledColor: Colors.black54,
+                                disabledTextColor: Colors.white,
+                              )
+                          )
+                      ),
+                    ],
+                  ),
+                ),
               ),
               Center(
                   child: FlatButton(
@@ -68,7 +134,7 @@ class LoginScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
-                padding: EdgeInsets.only(top: 30, bottom: 10),
+                padding: EdgeInsets.only(top: 10, bottom: 10),
               )),
             ],
           ));
