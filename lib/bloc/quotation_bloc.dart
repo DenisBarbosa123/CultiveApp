@@ -5,7 +5,6 @@ import 'package:cultiveapp/api/dolar_api.dart';
 import 'package:cultiveapp/model/quotation_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:convert';
 
 const String API_KEY = "TfvPST_D3yKtyq6mxkAj";
 

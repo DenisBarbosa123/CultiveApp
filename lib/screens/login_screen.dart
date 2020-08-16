@@ -1,7 +1,5 @@
 import 'file:///C:/Users/Denis%20Barbosa/AndroidStudioProjects/cultiveapp/lib/screens/reset_password_screen.dart';
 import 'package:cultiveapp/screens/subscription/screen1.dart';
-import 'package:cultiveapp/utils/textField_util.dart';
-import 'package:cultiveapp/widgets/input_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +8,6 @@ class LoginScreen extends StatelessWidget {
   //controllers
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _repeatedPasswordController = TextEditingController();
 
   //global-key
   final _formKey = GlobalKey<FormState>();
