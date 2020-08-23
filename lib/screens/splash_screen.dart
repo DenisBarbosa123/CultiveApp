@@ -16,7 +16,7 @@ class _SplashScreenState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-     Future.delayed(Duration(seconds: 5)).then((_) {
+    Future.delayed(Duration(seconds: 5)).then((_) {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => HomeScreen()));
     });
@@ -25,9 +25,12 @@ class _SplashScreenState extends State<Splash> {
   Widget _introScreen() {
     return Container(
         decoration: BoxDecoration(
+            color: Color.fromRGBO(255, 255, 255, 0.19),
             image: DecorationImage(
-                image: AssetImage("assets/login-image.jpg"),
-                fit: BoxFit.cover)),
+                fit: BoxFit.cover,
+                colorFilter: new ColorFilter.mode(
+                    Colors.grey.withOpacity(0.4), BlendMode.dstATop),
+                image: AssetImage("assets/login-image.jpg"))),
         child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Container(
