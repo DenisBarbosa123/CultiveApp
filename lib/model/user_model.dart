@@ -78,16 +78,19 @@ class Localizacao {
 
 class Topicos {
   String nome;
+  String descricao;
 
-  Topicos({this.nome});
+  Topicos({this.nome, this.descricao});
 
   Topicos.fromJson(Map<String, dynamic> json) {
     nome = json['nome'];
+    descricao = json['descricao'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['nome'] = this.nome;
+    data['descricao'] = this.descricao;
     return data;
   }
 

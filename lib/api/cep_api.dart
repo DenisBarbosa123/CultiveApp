@@ -1,26 +1,15 @@
-
 import 'dart:async';
-
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:dio/dio.dart';
 
-class CepAPI extends BlocBase{
-  final StreamController<String> _streamController = StreamController<String>();
-  Sink<String> get input => _streamController.sink;
-  Stream<Cep> get output => _streamController.stream
-      .where((cep) => cep.length > 7)
-      .asyncMap((cep) => _searchCep(cep));
-
+class CepAPI {
   String url(String cep) => "https://viacep.com.br/ws/$cep/json/";
 
-  Future<Cep> _searchCep(String cep) async{
+  Future<Cep> searchCep(String cep) async {
     Response response = await Dio().get(url(cep));
-    return Cep.fromJson(response.data);
-  }
-
-  @override
-  void dispose() {
-    _streamController.close();
+    if (response.statusCode == 200) {
+      return Cep.fromJson(response.data);
+    }
+    return null;
   }
 }
 

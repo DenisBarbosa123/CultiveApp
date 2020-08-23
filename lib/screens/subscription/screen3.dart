@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:cultiveapp/bloc/topic_bloc.dart';
+import 'package:cultiveapp/bloc/user_bloc.dart';
+import 'package:cultiveapp/model/topico_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/subscription/successSubscription.dart';
 import 'package:cultiveapp/utils/CircleUtil.dart';
-import 'package:cultiveapp/utils/base64Convert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 // ignore: must_be_immutable
 class Screen3 extends StatefulWidget {
@@ -18,10 +21,14 @@ class Screen3 extends StatefulWidget {
 }
 
 class _Screen3State extends State<Screen3> {
+  //All Topic List
+  List<TopicoModel> _topicList = List<TopicoModel>();
 
-  //Topic List
-  final _topicList = ["Plantio", "Criação de gado", "Sementes"];
+  //User Topic List
   final List<String> _userTopicList = List<String>();
+
+  //TopicApi
+  TopicApi _topicApi = new TopicApi();
 
   //User
   User user;
@@ -29,21 +36,68 @@ class _Screen3State extends State<Screen3> {
   //Profile image
   PickedFile image;
 
+  //ImagePicker plugin
   ImagePicker _picker = ImagePicker();
 
+  //UserBloc
+  UserBloc _userBloc;
+
+  //Scaffold Key
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  //Progress Dialog
+  ProgressDialog pr;
+
   //Constructor
-  _Screen3State({this.user, this.image});
+  _Screen3State({this.user, this.image}) {
+    _userBloc = UserBloc();
+    _topicApi.getTopicList();
+  }
 
   Future getImageFromGallery() async {
     var image = await _picker.getImage(source: ImageSource.gallery);
-    setState((){
+    setState(() {
       this.image = image;
+      final fileImage = File(this.image.path);
+      fileImage.readAsBytes().then((value) => setFileImage(value));
     });
+  }
+
+  getFileImage(PickedFile pickedFile) {
+    final fileImage = File(pickedFile.path);
+    return FileImage(fileImage);
+  }
+
+  setFileImage(List<int> image) {
+    user.fotoPerfil = base64.encode(image);
   }
 
   @override
   Widget build(BuildContext context) {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+
+    pr.style(
+      message: 'Por favor, aguarde',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      progress: 0.0,
+      progressWidgetAlignment: Alignment.center,
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: Text("CADASTRO"),
@@ -58,18 +112,18 @@ class _Screen3State extends State<Screen3> {
                   width: 150.0,
                   height: 150.0,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black26, width: 1.0),
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: image == null ? AssetImage("assets/person.png") :
-                        AssetImage(this.image.path),
-                        fit: BoxFit.cover)
-                  ),
+                      border: Border.all(color: Colors.black26, width: 1.0),
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: image == null
+                              ? AssetImage("assets/person.png")
+                              : getFileImage(this.image),
+                          fit: BoxFit.cover)),
                 ),
                 Padding(
                     padding: EdgeInsets.only(left: 40),
                     child: ButtonTheme(
-                      minWidth: 100,
+                        minWidth: 100,
                         height: 50,
                         child: FlatButton(
                           onPressed: () {
@@ -84,61 +138,71 @@ class _Screen3State extends State<Screen3> {
           SizedBox(height: 20),
           Container(
             padding: EdgeInsets.all(10),
-            child: ChipsInput(
-              initialValue: [],
-              decoration: InputDecoration(
-                labelText: "Adicione seus interesses",
-                hintStyle: TextStyle(color: Colors.black),
-                labelStyle: TextStyle(color: Colors.black),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black, width: 1.0),
-                ),
-              ),
-              maxChips: _topicList.length,
-              findSuggestions: (String query) {
-                if (query.length != 0) {
-                  var lowercaseQuery = query.toLowerCase();
-                  return _topicList.where((profile) {
-                    return profile.toLowerCase().contains(query.toLowerCase());
-                  }).toList(growable: false)
-                    ..sort((a, b) => a
-                        .toLowerCase()
-                        .indexOf(lowercaseQuery)
-                        .compareTo(b.toLowerCase().indexOf(lowercaseQuery)));
-                } else {
-                  return const <String>[];
-                }
-              },
-              onChanged: (data) {
-
-              },
-              chipBuilder: (context, state, topic) {
-                return InputChip(
-                  key: ObjectKey(topic),
-                  label: Text(topic),
-                  onDeleted: () {
-                    state.deleteChip(topic);
-                    _userTopicList.remove(topic);
-                  },
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                );
-              },
-              suggestionBuilder: (context, state, topic) {
-                return ListTile(
-                    key: ObjectKey(topic),
-                    title: Text(topic),
-                    onTap: () {
-                      debugPrint("$topic");
-                      debugPrint("${_userTopicList.length}");
-                      state.selectSuggestion(topic);
-                      _userTopicList.add(topic);
-                    }
-                );
-              },
-            ),
+            child: StreamBuilder<List<TopicoModel>>(
+                initialData: [],
+                stream: _topicApi.output,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _topicList = snapshot.data;
+                  } else {
+                    return Container();
+                  }
+                  return ChipsInput(
+                    initialValue: [],
+                    decoration: InputDecoration(
+                      labelText: "Adicione seus tópicos de interesses",
+                      hintStyle: TextStyle(color: Colors.black),
+                      labelStyle: TextStyle(color: Colors.black),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
+                    ),
+                    maxChips: _topicList.length,
+                    findSuggestions: (String query) {
+                      if (query.length != 0) {
+                        var lowercaseQuery = query.toLowerCase();
+                        return _topicList.where((profile) {
+                          return profile.nome
+                              .toLowerCase()
+                              .contains(query.toLowerCase());
+                        }).toList(growable: false)
+                          ..sort((a, b) => a.nome
+                              .toLowerCase()
+                              .indexOf(lowercaseQuery)
+                              .compareTo(b.nome
+                                  .toLowerCase()
+                                  .indexOf(lowercaseQuery)));
+                      } else {
+                        return const <String>[];
+                      }
+                    },
+                    chipBuilder: (context, state, topic) {
+                      return InputChip(
+                        key: ObjectKey(topic),
+                        label: Text(topic.nome),
+                        onDeleted: () {
+                          state.deleteChip(topic);
+                          _userTopicList.remove(topic.nome);
+                        },
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      );
+                    },
+                    suggestionBuilder: (context, state, topic) {
+                      return ListTile(
+                          key: ObjectKey(topic),
+                          title: Text(topic.nome),
+                          subtitle: Text(topic.descricao),
+                          onTap: () {
+                            state.selectSuggestion(topic);
+                            _userTopicList.add(topic.nome);
+                          });
+                    },
+                    onChanged: (List<dynamic> value) {},
+                  );
+                }),
           ),
           SizedBox(height: 40),
           Row(
@@ -155,14 +219,16 @@ class _Screen3State extends State<Screen3> {
           Container(
               padding: EdgeInsets.only(right: 10, left: 10),
               child: ButtonTheme(
-                minWidth: 200,
+                  minWidth: 200,
                   height: 50,
                   child: FlatButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      pr.show();
                       user.topicos = Topicos.buildTopicList(_userTopicList);
-                      user.fotoPerfil = Base64Convert.convertImagePathToBase64(File(this.image.path));
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => SuccessSubscription()));
+                      _userBloc.submitSubscription(
+                          userPayload: user.toJson(),
+                          onSuccess: _onSuccess,
+                          onFail: _onFail);
                     },
                     color: Colors.green[900],
                     child: Text(
@@ -174,5 +240,19 @@ class _Screen3State extends State<Screen3> {
                   )))
         ]));
   }
-}
 
+  void _onSuccess() {
+    pr.hide();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => SuccessScreen(this.user.nome)));
+  }
+
+  void _onFail() {
+    pr.hide();
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Falha ao criar usuário"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 3),
+    ));
+  }
+}

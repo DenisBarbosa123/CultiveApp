@@ -1,13 +1,16 @@
-import 'dart:io';
 import 'dart:convert';
-class Base64Convert {
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
+class Base64Convert {
   /*
   * Provides a base64 String in order to convert Image File to base64 String  *
    */
-   static String convertImagePathToBase64(File imageFilePath){
-     File imageFile = new File(imageFilePath.toString());
-     List<int> imageBytes = imageFile.readAsBytesSync();
-     return base64.encode(imageBytes);
+  static Future<String> convertImagePathToBase64(PickedFile pickedFile) async {
+    if (pickedFile == null) {
+      return null;
+    }
+    final imageBytes = await File(pickedFile.path).readAsBytes();
+    return base64.encode(imageBytes);
   }
 }

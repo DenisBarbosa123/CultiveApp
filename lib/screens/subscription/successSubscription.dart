@@ -1,7 +1,28 @@
 import 'package:cultiveapp/widgets/logo_cultive.dart';
 import 'package:flutter/material.dart';
 
-class SuccessSubscription extends StatelessWidget {
+import '../home_screen.dart';
+
+class SuccessScreen extends StatefulWidget {
+  final String name;
+  SuccessScreen(this.name);
+  @override
+  _SuccessScreenState createState() => _SuccessScreenState(this.name);
+}
+
+class _SuccessScreenState extends State<SuccessScreen> {
+  final String name;
+  _SuccessScreenState(this.name);
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 5)).then((_) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen()));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +35,7 @@ class SuccessSubscription extends StatelessWidget {
             child: Text("CADASTRO REALIZADO COM SUCESSO"),
           ),
           Center(
-            child: Text("SEJA BEM VINDO, DENIS!"),
+            child: Text("Seja Bem-vindo, $name!"),
           ),
           SizedBox(height: 70),
           Center(
@@ -29,5 +50,3 @@ class SuccessSubscription extends StatelessWidget {
     );
   }
 }
-
-
