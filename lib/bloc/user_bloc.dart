@@ -18,8 +18,8 @@ class UserBloc extends BlocBase {
   String _createUserUrl() => "https://cultiveapp.herokuapp.com/api/usuario";
   String _userLoginUrl() =>
       "https://cultiveapp.herokuapp.com/api/usuario/login";
-  String _resetUserPasswordUrl(String userId) =>
-      "https://cultiveapp.herokuapp.com/api/usuario/$userId/senha";
+  String _resetUserPasswordUrl() =>
+      "https://cultiveapp.herokuapp.com/api/usuario/resetSenha";
 
   Future<void> submitSubscription(
       {Map<String, dynamic> userPayload,
@@ -58,14 +58,15 @@ class UserBloc extends BlocBase {
   }
 
   Future<void> resetUserPassword(
-      {String userId,
+      {String username,
       String newPassword,
       VoidCallback onSuccess,
       VoidCallback onFail}) async {
-    UserAuth userAuth = UserAuth(password: newPassword);
-    Response response = await Dio().put(_resetUserPasswordUrl(userId),
-        data: json.encode(userAuth.toJson()));
+    UserAuth userAuth = UserAuth(password: newPassword, username: username);
+    Response response = await Dio()
+        .put(_resetUserPasswordUrl(), data: json.encode(userAuth.toJson()));
     if (response.statusCode == 200) {
+      makeUserLogin(email: username, password: newPassword);
       onSuccess();
     } else {
       onFail();
