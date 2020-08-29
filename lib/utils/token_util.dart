@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TokenUtil {
@@ -5,13 +6,13 @@ class TokenUtil {
   final _storage = new FlutterSecureStorage();
 
   void saveToken(String bearerToken) async {
-    _storage.write(
-        key: "jwt", value: bearerToken.replaceFirst("Bearer", "").trim());
+    String token = bearerToken.replaceFirst("Bearer", "").trim();
+    debugPrint("saving token $token");
+    _storage.write(key: "jwt", value: token);
   }
 
   Future<String> getToken() async {
-    String token = await _storage.read(key: "jwt");
-    return "Bearer " + token;
+    return await _storage.read(key: "jwt");
   }
 
   void deleteToken() {

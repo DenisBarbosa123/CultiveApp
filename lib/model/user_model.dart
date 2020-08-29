@@ -1,4 +1,5 @@
 class User {
+  int id;
   String nome;
   String email;
   String telefone;
@@ -9,16 +10,18 @@ class User {
   List<Topicos> topicos;
 
   User(
-      {this.nome,
-        this.email,
-        this.telefone,
-        this.senha,
-        this.celular,
-        this.localizacao,
-        this.fotoPerfil,
-        this.topicos});
+      {this.id,
+      this.nome,
+      this.email,
+      this.telefone,
+      this.senha,
+      this.celular,
+      this.localizacao,
+      this.fotoPerfil,
+      this.topicos});
 
   User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     nome = json['nome'];
     email = json['email'];
     telefone = json['telefone'];
@@ -95,7 +98,7 @@ class Topicos {
   }
 
   static List<Topicos> buildTopicList(List<String> stringList) {
-    if(stringList.isEmpty){
+    if (stringList.isEmpty) {
       return [];
     }
     List<Topicos> topicList = List();
