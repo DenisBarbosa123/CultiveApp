@@ -13,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomePageState extends State<HomeScreen> {
   PageController _pageController;
-  String token;
   UserBloc _userBloc;
 
   @override
@@ -22,10 +21,6 @@ class _HomePageState extends State<HomeScreen> {
     _pageController = PageController();
     _userBloc = UserBloc();
     _userBloc.loadCurrentUser();
-  }
-
-  populateToekn(token) {
-    this.token = token;
   }
 
   @override

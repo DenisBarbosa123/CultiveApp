@@ -67,7 +67,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     Padding(
                       padding: EdgeInsets.only(left: 30),
                       child: Text(
-                        "Promova seu produto, compre direto do produtor",
+                        "Cultivando ideias criando oportunidades",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 25.0,
@@ -93,7 +93,31 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 30),
                         child: Text(
-                          "Compartilhe seu conhecimento, obtenha informação para tomada de decisão",
+                          "Promova seu produto ou compre direto do produtor",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800),
+                        ))),
+                SizedBox(
+                    height: 300,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Text(
+                          "Compartilhe seu conhecimento ou obtenha informações para tomada de decisão",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800),
+                        ))),
+                SizedBox(
+                    height: 300,
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Text(
+                          "Divulgue o compartilhe eventos relacionados ao agronegócio",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 25.0,
