@@ -42,7 +42,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                               colorFilter: new ColorFilter.mode(
                                   Colors.grey.withOpacity(0.5),
                                   BlendMode.dstATop),
-                              image: AssetImage("assets/compra-venda.png"))),
+                              image: AssetImage("assets/splash-image.jpg"))),
                     ),
                     clipper: CustomClipPath(),
                   ),
@@ -69,7 +69,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     Padding(
                       padding: EdgeInsets.only(left: 30),
                       child: Text(
-                        "Semeando ideias cultivando oportunidades",
+                        "Semeando ideias \nCultivando oportunidades",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 25.0,

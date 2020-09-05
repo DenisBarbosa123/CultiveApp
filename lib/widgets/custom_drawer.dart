@@ -119,10 +119,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             title: Text("Conta"),
                             subtitle: Text("Meu perfil"),
                             onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfileScreen(
-                                          widget.userInformation)));
+                              Navigator.of(context).pop();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfileScreen(widget.userInformation)));
                             }),
                         ListTile(
                             leading: Icon(Icons.cancel),
