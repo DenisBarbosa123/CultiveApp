@@ -10,40 +10,42 @@ class DrawerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: pageController.page.round() == page
-          ? Colors.grey[200]
-          : Colors.transparent,
-      child: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-            pageController.jumpToPage(page);
-          },
-          child: Container(
-            height: 60.0,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  icon,
-                  size: 32.0,
-                  color: pageController.page.round() == page
-                      ? Theme.of(context).primaryColor
-                      : Colors.black,
-                ),
-                SizedBox(
-                  width: 32,
-                ),
-                Text(
-                  text,
-                  style: TextStyle(
-                      fontSize: 16.0,
+    return Padding(
+        padding: EdgeInsets.only(left: 20.0),
+        child: Material(
+          color: pageController.page.round() == page
+              ? Colors.grey[200]
+              : Colors.transparent,
+          child: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+                pageController.jumpToPage(page);
+              },
+              child: Container(
+                height: 60.0,
+                child: Row(
+                  children: <Widget>[
+                    Icon(
+                      icon,
+                      size: 32.0,
                       color: pageController.page.round() == page
-                          ? Colors.green[900]
-                          : Colors.black),
-                )
-              ],
-            ),
-          )),
-    );
+                          ? Theme.of(context).primaryColor
+                          : Colors.black,
+                    ),
+                    SizedBox(
+                      width: 32,
+                    ),
+                    Text(
+                      text,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: pageController.page.round() == page
+                              ? Colors.green[900]
+                              : Colors.black),
+                    )
+                  ],
+                ),
+              )),
+        ));
   }
 }

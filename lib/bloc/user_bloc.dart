@@ -104,10 +104,12 @@ class UserBloc extends BlocBase {
   }
 
   void logout() {
+    debugPrint("Logout is performing...");
     _loginController.add(AuthenticationStatus.unauthenticated);
     userInformation.clear();
     _tokenUtil.deleteToken();
     _userIdUtil.deleteUserId();
+    debugPrint("Logout successful...");
   }
 
   Future<void> loadCurrentUser() async {

@@ -42,10 +42,11 @@ class _HomePageState extends State<HomeScreen> {
                   return DefaultTabController(
                       length: 3,
                       child: Scaffold(
-                        drawer: CustomDrawer(_pageController),
+                        drawer: CustomDrawer(_pageController,
+                            userInformation: _userBloc.userInformation["user"]),
                         appBar: AppBar(
                           title: Text(
-                            "DASHBOARD",
+                            "PÁGINA INICIAL",
                           ),
                           centerTitle: true,
                           backgroundColor: Theme.of(context).primaryColor,

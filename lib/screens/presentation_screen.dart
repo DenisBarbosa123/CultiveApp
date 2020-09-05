@@ -19,7 +19,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            "APRESENTAÇÃO",
+            "PÁGINA INICIAL",
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -67,7 +67,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     Padding(
                       padding: EdgeInsets.only(left: 30),
                       child: Text(
-                        "Cultivando ideias criando oportunidades",
+                        "Semeando ideias cultivando oportunidades",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             fontSize: 25.0,
@@ -103,10 +103,10 @@ class _PresentationScreenState extends State<PresentationScreen> {
                 SizedBox(
                     height: 300,
                     child: Padding(
-                        padding: EdgeInsets.only(left: 30),
+                        padding: EdgeInsets.only(right: 30),
                         child: Text(
                           "Compartilhe seu conhecimento ou obtenha informações para tomada de decisão",
-                          textAlign: TextAlign.left,
+                          textAlign: TextAlign.right,
                           style: TextStyle(
                               fontSize: 25.0,
                               color: Colors.black,
@@ -117,8 +117,20 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     child: Padding(
                         padding: EdgeInsets.only(left: 30),
                         child: Text(
-                          "Divulgue o compartilhe eventos relacionados ao agronegócio",
+                          "Divulgue ou fique sabendo de eventos relacionados ao agronegócio",
                           textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 25.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800),
+                        ))),
+                SizedBox(
+                    height: 300,
+                    child: Padding(
+                        padding: EdgeInsets.only(right: 30),
+                        child: Text(
+                          "Fique por dentro do clima de sua cidade, cotações de produtos e também sobre notícias sobre o agronegócio",
+                          textAlign: TextAlign.right,
                           style: TextStyle(
                               fontSize: 25.0,
                               color: Colors.black,
