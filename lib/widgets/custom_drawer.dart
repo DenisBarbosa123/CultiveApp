@@ -4,6 +4,7 @@ import 'file:///C:/Users/Denis%20Barbosa/AndroidStudioProjects/cultiveapp/lib/sc
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/home_screen.dart';
+import 'package:cultiveapp/screens/profile_screen.dart';
 import 'package:cultiveapp/tiles/drawer_tile.dart';
 import "package:flutter/material.dart";
 
@@ -118,7 +119,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             title: Text("Conta"),
                             subtitle: Text("Meu perfil"),
                             onTap: () {
-                              debugPrint('toquei no drawer');
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileScreen(
+                                          widget.userInformation)));
                             }),
                         ListTile(
                             leading: Icon(Icons.cancel),
