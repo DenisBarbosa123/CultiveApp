@@ -1,3 +1,5 @@
+import 'package:cultiveapp/screens/login_screen.dart';
+import 'package:cultiveapp/screens/subscription/screen1.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +40,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               colorFilter: new ColorFilter.mode(
-                                  Colors.grey.withOpacity(0.3),
+                                  Colors.grey.withOpacity(0.5),
                                   BlendMode.dstATop),
                               image: AssetImage("assets/compra-venda.png"))),
                     ),
@@ -68,76 +70,236 @@ class _PresentationScreenState extends State<PresentationScreen> {
                       padding: EdgeInsets.only(left: 30),
                       child: Text(
                         "Semeando ideias cultivando oportunidades",
-                        textAlign: TextAlign.left,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 25.0,
                             color: Colors.black87,
                             fontWeight: FontWeight.w800),
                       ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        RaisedButton(
+                          color: Colors.green[500],
+                          child: Text("CADASTRAR",
+                              style: TextStyle(fontWeight: FontWeight.w800)),
+                          textColor: Colors.black87,
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Screen1()));
+                          },
+                        ),
+                        RaisedButton(
+                          color: Colors.green[500],
+                          child: Text(
+                            "LOGIN",
+                            style: TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                          textColor: Colors.black87,
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => LoginScreen()));
+                          },
+                        )
+                      ],
                     )
                   ],
                 )
               ],
             ),
-            SizedBox(
-              height: 10,
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Promova seu produto ou compre direto do produtor",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Divulgue seu produto \ndentro do Cultive App, \ne tenha também \na possibilidade de \ncomprar produtos\n de outros produtores",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Image.asset("assets/vegetal.png",
+                          width: 100, height: 100),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  RaisedButton(
+                    color: Colors.green[500],
+                    child: Text(
+                      "VENDAS",
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    textColor: Colors.black87,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginScreen()));
+                    },
+                  )
+                ],
+              ),
             ),
             Container(
-                child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                    height: 300,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 30),
-                        child: Text(
-                          "Promova seu produto ou compre direto do produtor",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800),
-                        ))),
-                SizedBox(
-                    height: 300,
-                    child: Padding(
-                        padding: EdgeInsets.only(right: 30),
-                        child: Text(
-                          "Compartilhe seu conhecimento ou obtenha informações para tomada de decisão",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                              fontSize: 25.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800),
-                        ))),
-                SizedBox(
-                    height: 300,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 30),
-                        child: Text(
-                          "Divulgue ou fique sabendo de eventos relacionados ao agronegócio",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 25.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800),
-                        ))),
-                SizedBox(
-                    height: 300,
-                    child: Padding(
-                        padding: EdgeInsets.only(right: 30),
-                        child: Text(
-                          "Fique por dentro do clima de sua cidade, cotações de produtos e também sobre notícias sobre o agronegócio",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                              fontSize: 25.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800),
-                        ))),
-              ],
-            )),
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Compartilhe seu conhecimento ou obtenha informações para tomada de decisão",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset("assets/ecologia-da-informacao.png",
+                          width: 100, height: 100),
+                      Text(
+                        "Compartilhe suas \nexperiências \ncom outros produtores\n e obtenha informações \npara tomada de\ndecisão",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  RaisedButton(
+                    color: Colors.green[500],
+                    child: Text(
+                      "PUBLICAÇÕES",
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    textColor: Colors.black87,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginScreen()));
+                    },
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Divulgue ou fique sabendo de eventos relacionados ao agronegócio",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "Compartilhe eventos\n para outros usuários\n e fique por\n dentro dos eventos\n compartilhados \ndentro da plataforma",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Image.asset("assets/inovacao.png",
+                          width: 100, height: 100),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  RaisedButton(
+                    color: Colors.green[500],
+                    child: Text(
+                      "EVENTOS",
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    textColor: Colors.black87,
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginScreen()));
+                    },
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Fique por dentro do clima de sua cidade, cotações de produtos e também sobre notícias sobre o agronegócio",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset("assets/aplicacao-meteorologica.png",
+                          width: 80, height: 80),
+                      Image.asset("assets/dinheiro.png", width: 80, height: 80),
+                      Image.asset("assets/jornal.png", width: 80, height: 80),
+                    ],
+                  ),
+                  SizedBox(height: 30)
+                ],
+              ),
+            )
           ],
         ));
   }
