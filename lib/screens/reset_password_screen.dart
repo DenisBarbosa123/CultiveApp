@@ -1,4 +1,5 @@
 import 'package:cultiveapp/bloc/user_bloc.dart';
+import 'package:cultiveapp/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -173,12 +174,36 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             child: FlatButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  pr.show();
-                                  _userBloc.resetUserPassword(
-                                      username: _emailController.text,
-                                      newPassword: _passwordController.text,
-                                      onSuccess: _onSuccess,
-                                      onFail: _onFail);
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("Alterar senha"),
+                                          content: Text(
+                                              "Deseja realmente alterar a senha da sua conta?"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("Cancelar")),
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  pr.show();
+                                                  _userBloc.resetUserPassword(
+                                                      username:
+                                                          _emailController.text,
+                                                      newPassword:
+                                                          _passwordController
+                                                              .text,
+                                                      onSuccess: _onSuccess,
+                                                      onFail: _onFail);
+                                                },
+                                                child: Text("Sim"))
+                                          ],
+                                        );
+                                      });
                                 }
                               },
                               color: Colors.green[900],
@@ -199,8 +224,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   void _onSuccess() {
     pr.hide();
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
   void _onFail() {

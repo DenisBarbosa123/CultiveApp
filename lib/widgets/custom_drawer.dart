@@ -125,15 +125,39 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       ProfileScreen(widget.userInformation)));
                             }),
                         ListTile(
-                            leading: Icon(Icons.cancel),
-                            title: Text("Sair"),
-                            subtitle: Text("Logout da conta"),
-                            onTap: () {
-                              _userBloc.logout();
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
-                            })
+                          leading: Icon(Icons.cancel),
+                          title: Text("Sair"),
+                          subtitle: Text("Logout da conta"),
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text("Sair da conta"),
+                                    content: Text(
+                                        "Deseja realmente sair da sua conta?"),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text("Cancelar")),
+                                      FlatButton(
+                                          onPressed: () {
+                                            _userBloc.logout();
+                                            Navigator.pop(context);
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            HomeScreen()));
+                                          },
+                                          child: Text("Sim"))
+                                    ],
+                                  );
+                                });
+                          },
+                        )
                       ],
                     )
                   : Container()

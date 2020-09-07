@@ -5,7 +5,7 @@ import 'package:cultiveapp/model/user_auth.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/utils/path_constants.dart';
 import 'package:cultiveapp/utils/token_util.dart';
-import 'package:cultiveapp/utils/user_id_util.dart';
+import 'package:cultiveapp/utils/json_store_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -14,8 +14,8 @@ enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 class UserBloc extends BlocBase {
   //Token util
   final _tokenUtil = TokenUtil();
-  //User Id Util
-  UserIdUtil _userIdUtil = UserIdUtil();
+  //JsonStoreUtil
+  JsonStoreUtil _jsonStoreUtil = JsonStoreUtil();
   //user information map
   Map<String, dynamic> userInformation = Map<String, dynamic>();
 
@@ -84,7 +84,6 @@ class UserBloc extends BlocBase {
           data: json.encode(userAuth.toJson()));
       if (response.statusCode == 200) {
         debugPrint("Reset password is successful...");
-        makeUserLogin(email: username, password: newPassword);
         onSuccess();
       } else {
         onFail();
@@ -99,7 +98,7 @@ class UserBloc extends BlocBase {
     userInformation["user"] = user;
     userInformation["token"] = token;
     _userInformationController.add(userInformation);
-    _userIdUtil.saveUserId(user.id);
+    _jsonStoreUtil.saveJson("user", user.toJson());
     _tokenUtil.saveToken(token);
   }
 
@@ -108,7 +107,7 @@ class UserBloc extends BlocBase {
     _loginController.add(AuthenticationStatus.unauthenticated);
     userInformation.clear();
     _tokenUtil.deleteToken();
-    _userIdUtil.deleteUserId();
+    _jsonStoreUtil.deleteJsonByKey("user");
     debugPrint("Logout successful...");
   }
 
@@ -116,7 +115,10 @@ class UserBloc extends BlocBase {
     if (userInformation.isEmpty) {
       debugPrint("Loading current user in progress...");
       userInformation["token"] = await _tokenUtil.getToken();
-      await getUserById(userInformation["token"]);
+      Map<String, dynamic> userJson = await _jsonStoreUtil.getJsonByKey("user");
+      userJson != null
+          ? userInformation["user"] = User.fromJson(userJson)
+          : userInformation["user"] = null;
       if (userInformation["token"] != null && userInformation["user"] != null) {
         debugPrint("Loading current user successful...");
         _loginController.add(AuthenticationStatus.authenticated);
@@ -124,25 +126,6 @@ class UserBloc extends BlocBase {
       } else {
         debugPrint("user not found...");
         _loginController.add(AuthenticationStatus.unauthenticated);
-      }
-    }
-  }
-
-  Future<void> getUserById(String token) async {
-    String userId = await _userIdUtil.getUserId();
-    debugPrint("Get user by id in progress...");
-    debugPrint(userId);
-    debugPrint(token);
-    if (userId != null && token != null) {
-      try {
-        Response response = await Dio().get(PathConstants.getUserById(userId),
-            options: RequestOptions(headers: {"Authorization": token}));
-        if (response.statusCode == 200) {
-          debugPrint("Get user by id is successful...");
-          userInformation["user"] = User.fromJson(response.data);
-        }
-      } catch (e) {
-        debugPrint("Get user by id is fail...");
       }
     }
   }

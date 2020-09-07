@@ -277,7 +277,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     height: 20,
                   ),
                   Text(
-                    "Fique por dentro do clima de sua cidade, cotações de produtos e também sobre notícias sobre o agronegócio",
+                    "Fique por dentro do clima de sua cidade, cotações de produtos e também sobre notícias relacionadas ao agronegócio",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 20.0,
