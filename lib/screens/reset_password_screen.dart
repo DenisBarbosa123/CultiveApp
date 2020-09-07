@@ -3,8 +3,6 @@ import 'package:cultiveapp/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-import 'home_screen.dart';
-
 class ResetPasswordScreen extends StatefulWidget {
   @override
   _ResetPasswordScreenState createState() => _ResetPasswordScreenState();

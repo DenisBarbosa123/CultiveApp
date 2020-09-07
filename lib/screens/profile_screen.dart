@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -45,7 +46,12 @@ class ProfileScreen extends StatelessWidget {
                       OutlineButton(
                         borderSide:
                             BorderSide(color: Colors.green[700], width: 2),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  EditProfileScreen(this.user)));
+                        },
                         child: Text(
                           "Editar Perfil",
                           style: TextStyle(

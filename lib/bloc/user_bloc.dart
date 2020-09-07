@@ -102,6 +102,8 @@ class UserBloc extends BlocBase {
     _tokenUtil.saveToken(token);
   }
 
+  void editUser({User user, VoidCallback onSuccess, VoidCallback onFail}) {}
+
   void logout() {
     debugPrint("Logout is performing...");
     _loginController.add(AuthenticationStatus.unauthenticated);
