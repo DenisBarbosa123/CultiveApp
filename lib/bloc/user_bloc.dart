@@ -102,7 +102,34 @@ class UserBloc extends BlocBase {
     _tokenUtil.saveToken(token);
   }
 
-  void editUser({User user, VoidCallback onSuccess, VoidCallback onFail}) {}
+  Future<void> editUser(
+      {User user,
+      int userId,
+      VoidCallback onSuccess,
+      VoidCallback onFail}) async {
+    try {
+      debugPrint("User update performing....");
+      String token = await _tokenUtil.getToken();
+      Response response = await Dio().put(
+          PathConstants.editUserById(userId.toString()),
+          data: json.encode(user.toJson()),
+          options: RequestOptions(headers: {"Authorization": token}));
+      if (response.statusCode == 200) {
+        debugPrint("User update successfully....");
+        User userUpdated = User.fromJson(response.data);
+        userInformation["user"] = userUpdated;
+        _userInformationController.add(userInformation);
+        _jsonStoreUtil.saveJson("user", userUpdated.toJson());
+        onSuccess();
+      } else {
+        debugPrint("Fail during user update");
+        onFail();
+      }
+    } catch (e) {
+      debugPrint("Exception during user update");
+      onFail();
+    }
+  }
 
   void logout() {
     debugPrint("Logout is performing...");
@@ -117,6 +144,8 @@ class UserBloc extends BlocBase {
     if (userInformation.isEmpty) {
       debugPrint("Loading current user in progress...");
       userInformation["token"] = await _tokenUtil.getToken();
+      String token = userInformation["token"];
+      debugPrint("$token");
       Map<String, dynamic> userJson = await _jsonStoreUtil.getJsonByKey("user");
       userJson != null
           ? userInformation["user"] = User.fromJson(userJson)

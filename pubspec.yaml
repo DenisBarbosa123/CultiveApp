@@ -37,6 +37,7 @@ dependencies:
   flutter_secure_storage: ^3.3.3
   progress_dialog: ^1.2.4
   json_store: ^1.1.0
+  firebase_storage: ^3.0.3
 
 dev_dependencies:
   flutter_test:

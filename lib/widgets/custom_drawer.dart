@@ -1,9 +1,7 @@
-import 'dart:convert';
-
-import 'file:///C:/Users/Denis%20Barbosa/AndroidStudioProjects/cultiveapp/lib/screens/login_screen.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/home_screen.dart';
+import 'package:cultiveapp/screens/login_screen.dart';
 import 'package:cultiveapp/screens/profile_screen.dart';
 import 'package:cultiveapp/tiles/drawer_tile.dart';
 import "package:flutter/material.dart";
@@ -45,11 +43,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       currentAccountPicture: CircleAvatar(
                         foregroundColor: Colors.white,
                         radius: 30.0,
-                        backgroundImage:
-                            widget.userInformation.fotoPerfil != null
-                                ? MemoryImage(base64
-                                    .decode(widget.userInformation.fotoPerfil))
-                                : AssetImage("assets/person.png"),
+                        backgroundImage: widget.userInformation.fotoPerfil !=
+                                null
+                            ? NetworkImage(widget.userInformation.fotoPerfil)
+                            : AssetImage("assets/person.png"),
                         backgroundColor:
                             widget.userInformation.fotoPerfil != null
                                 ? Colors.transparent

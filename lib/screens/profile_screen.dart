@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
                   CircleAvatar(
                     backgroundColor: Colors.white,
                     backgroundImage: user.fotoPerfil != null
-                        ? MemoryImage(base64.decode(user.fotoPerfil))
+                        ? NetworkImage(user.fotoPerfil)
                         : AssetImage("assets/person.png"),
                     radius: 50,
                   ),

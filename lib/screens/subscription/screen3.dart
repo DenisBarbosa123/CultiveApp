@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:cultiveapp/bloc/topic_bloc.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
@@ -6,6 +5,7 @@ import 'package:cultiveapp/model/topico_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/subscription/successSubscription.dart';
 import 'package:cultiveapp/utils/CircleUtil.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,6 +48,9 @@ class _Screen3State extends State<Screen3> {
   //Progress Dialog
   ProgressDialog pr;
 
+  //Image File
+  File _image;
+
   //Constructor
   _Screen3State({this.user, this.image}) {
     _userBloc = UserBloc();
@@ -58,18 +61,8 @@ class _Screen3State extends State<Screen3> {
     var image = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       this.image = image;
-      final fileImage = File(this.image.path);
-      fileImage.readAsBytes().then((value) => setFileImage(value));
+      _image = File(this.image.path);
     });
-  }
-
-  getFileImage(PickedFile pickedFile) {
-    final fileImage = File(pickedFile.path);
-    return FileImage(fileImage);
-  }
-
-  setFileImage(List<int> image) {
-    user.fotoPerfil = base64.encode(image);
   }
 
   @override
@@ -117,7 +110,7 @@ class _Screen3State extends State<Screen3> {
                       image: DecorationImage(
                           image: image == null
                               ? AssetImage("assets/person.png")
-                              : getFileImage(this.image),
+                              : FileImage(_image),
                           fit: BoxFit.cover)),
                 ),
                 Padding(
@@ -224,6 +217,7 @@ class _Screen3State extends State<Screen3> {
                   child: FlatButton(
                     onPressed: () async {
                       pr.show();
+                      await uploadFile();
                       user.topicos = Topicos.buildTopicList(_userTopicList);
                       _userBloc.submitSubscription(
                           userPayload: user.toJson(),
@@ -254,5 +248,18 @@ class _Screen3State extends State<Screen3> {
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
     ));
+  }
+
+  uploadFile() async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('profiles_photos/${_image.path.split("/").last}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    var fileURL = await storageReference.getDownloadURL();
+    setState(() {
+      this.user.fotoPerfil = fileURL;
+    });
   }
 }

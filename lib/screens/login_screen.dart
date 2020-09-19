@@ -200,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _onFail() {
     pr.hide();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Falha ao criar usuário"),
+      content: Text("Falha ao logar o usuário"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
     ));
