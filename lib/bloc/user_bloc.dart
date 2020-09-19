@@ -7,6 +7,7 @@ import 'package:cultiveapp/utils/path_constants.dart';
 import 'package:cultiveapp/utils/token_util.dart';
 import 'package:cultiveapp/utils/json_store_util.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
@@ -131,6 +132,37 @@ class UserBloc extends BlocBase {
     }
   }
 
+  Future<void> deleteUser(
+      {User user, VoidCallback onSuccess, VoidCallback onFail}) async {
+    try {
+      debugPrint("User exclusion performing....");
+      if (user.fotoPerfil != null) {
+        StorageReference storageReference = await FirebaseStorage.instance
+            .ref()
+            .getStorage()
+            .getReferenceFromUrl(user.fotoPerfil);
+        storageReference
+            .delete()
+            .then((value) => print("deleted profile photo"));
+      }
+      String token = await _tokenUtil.getToken();
+      Response response = await Dio().delete(
+          PathConstants.deleteUserById(user.id.toString()),
+          options: RequestOptions(headers: {"Authorization": token}));
+      if (response.statusCode == 204) {
+        _loginController.add(AuthenticationStatus.unauthenticated);
+        userInformation.clear();
+        _tokenUtil.deleteToken();
+        _jsonStoreUtil.deleteJsonByKey("user");
+        onSuccess();
+        debugPrint("User exclusion successfully....");
+      }
+    } catch (e) {
+      debugPrint("Exception during user exclusion");
+      onFail();
+    }
+  }
+
   void logout() {
     debugPrint("Logout is performing...");
     _loginController.add(AuthenticationStatus.unauthenticated);
@@ -144,8 +176,6 @@ class UserBloc extends BlocBase {
     if (userInformation.isEmpty) {
       debugPrint("Loading current user in progress...");
       userInformation["token"] = await _tokenUtil.getToken();
-      String token = userInformation["token"];
-      debugPrint("$token");
       Map<String, dynamic> userJson = await _jsonStoreUtil.getJsonByKey("user");
       userJson != null
           ? userInformation["user"] = User.fromJson(userJson)
