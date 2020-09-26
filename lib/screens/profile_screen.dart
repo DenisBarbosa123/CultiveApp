@@ -14,6 +14,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  List<String> options = ['Excluir Conta'];
   final User user;
   final _userBloc = UserBloc();
   ProgressDialog pr;
@@ -97,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           PopupMenuButton<String>(
             onSelected: handleClick,
             itemBuilder: (context) {
-              return {'Excluir Conta'}.map((String choice) {
+              return options.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),

@@ -98,9 +98,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ],
                       ),
                     ),
-              widget.userInformation != null
-                  ? DrawerTile(Icons.home, "Home", widget.pageController, 0)
-                  : Container(),
+              ListTile(
+                  focusColor: widget.pageController.page.round() == 0
+                      ? Colors.green[900]
+                      : Colors.black,
+                  leading: Icon(
+                    Icons.home,
+                    color: Colors.black,
+                    size: 32.0,
+                  ),
+                  title: Text(
+                    "Home",
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  }),
               DrawerTile(
                   Icons.rss_feed, "Publicações", widget.pageController, 1),
               DrawerTile(
@@ -112,7 +128,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       children: [
                         Divider(color: Colors.grey),
                         ListTile(
-                            leading: Icon(Icons.account_box),
+                            leading: Icon(
+                              Icons.account_box,
+                              color: Colors.black,
+                            ),
                             title: Text("Conta"),
                             subtitle: Text("Meu perfil"),
                             onTap: () {
@@ -122,7 +141,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                       ProfileScreen(widget.userInformation)));
                             }),
                         ListTile(
-                          leading: Icon(Icons.cancel),
+                          leading: Icon(
+                            Icons.cancel,
+                            color: Colors.black,
+                          ),
                           title: Text("Sair"),
                           subtitle: Text("Logout da conta"),
                           onTap: () {
