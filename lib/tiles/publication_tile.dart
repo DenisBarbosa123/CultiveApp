@@ -96,11 +96,10 @@ class _PublicationTileState extends State<PublicationTile> {
                 SizedBox(
                   height: 15,
                 ),
-                AspectRatio(
-                  aspectRatio: 0.9,
-                  child: _publication.imagens == null
-                      ? Container()
-                      : Carousel(
+                _publication.imagens != null
+                    ? AspectRatio(
+                        aspectRatio: 0.9,
+                        child: Carousel(
                           images: _publication.imagens.map((imagem) {
                             return NetworkImage(imagem.imagemEncoded);
                           }).toList(),
@@ -111,7 +110,8 @@ class _PublicationTileState extends State<PublicationTile> {
                           dotIncreasedColor: Theme.of(context).primaryColor,
                           autoplay: false,
                         ),
-                ),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 15,
                 ),

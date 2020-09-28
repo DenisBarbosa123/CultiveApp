@@ -1,7 +1,9 @@
 import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/tiles/publication_tile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PublicationTabs extends StatefulWidget {
   @override
@@ -11,11 +13,12 @@ class PublicationTabs extends StatefulWidget {
 class _PublicationTabsState extends State<PublicationTabs> {
   PublicationBloc _publicationBloc = new PublicationBloc();
   bool endOfList;
+
   @override
   void initState() {
     super.initState();
     endOfList = false;
-    _publicationBloc.getListPublication(endOfTheList);
+    _publicationBloc.getListPublication(endOfTheList, false);
   }
 
   @override
@@ -47,7 +50,7 @@ class _PublicationTabsState extends State<PublicationTabs> {
                   ),
                 );
               } else if (index > 1) {
-                _publicationBloc.getListPublication(endOfTheList);
+                _publicationBloc.getListPublication(endOfTheList, false);
                 return Container(
                     height: 40,
                     width: 40,

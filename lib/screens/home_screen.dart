@@ -1,4 +1,5 @@
 import 'package:cultiveapp/bloc/user_bloc.dart';
+import 'package:cultiveapp/screens/create_publication_screen.dart';
 import 'package:cultiveapp/screens/presentation_screen.dart';
 import 'package:cultiveapp/tabs/news_tabs.dart';
 import 'package:cultiveapp/tabs/publication_tabs.dart';
@@ -73,7 +74,10 @@ class _HomePageState extends State<HomeScreen> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              // Add your onPressed code here!
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CreatePublicationScreen(
+                      _userBloc.userInformation["user"],
+                      _userBloc.userInformation["token"])));
             },
             child: Icon(
               Icons.add,

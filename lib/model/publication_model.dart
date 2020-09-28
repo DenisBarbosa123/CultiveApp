@@ -5,10 +5,11 @@ class Publication {
   String titulo;
   String corpo;
   Status status;
-  Status tipo;
+  Tipo tipo;
   List<Imagens> imagens;
   User usuario;
   String data;
+  List<Topicos> topicos;
 
   Publication(
       {this.id,
@@ -18,7 +19,8 @@ class Publication {
       this.tipo,
       this.imagens,
       this.usuario,
-      this.data});
+      this.data,
+      this.topicos});
 
   Publication.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -26,11 +28,18 @@ class Publication {
     corpo = json['corpo'];
     status =
         json['status'] != null ? new Status.fromJson(json['status']) : null;
-    tipo = json['tipo'] != null ? new Status.fromJson(json['tipo']) : null;
+    tipo = json['tipo'] != null ? new Tipo.fromJson(json['tipo']) : null;
     if (json['imagens'] != null) {
       imagens = new List<Imagens>();
       json['imagens'].forEach((v) {
         imagens.add(new Imagens.fromJson(v));
+      });
+    }
+
+    if (json['topicos'] != null) {
+      topicos = new List<Topicos>();
+      json['topicos'].forEach((v) {
+        topicos.add(new Topicos.fromJson(v));
       });
     }
     usuario =
@@ -52,6 +61,9 @@ class Publication {
     if (this.imagens != null) {
       data['imagens'] = this.imagens.map((v) => v.toJson()).toList();
     }
+    if (this.imagens != null) {
+      data['topicos'] = this.topicos.map((v) => v.toJson()).toList();
+    }
     if (this.usuario != null) {
       data['usuario'] = this.usuario.toJson();
     }
@@ -68,6 +80,28 @@ class Status {
   Status({this.id, this.nome, this.descricao});
 
   Status.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nome = json['nome'];
+    descricao = json['descricao'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['nome'] = this.nome;
+    data['descricao'] = this.descricao;
+    return data;
+  }
+}
+
+class Tipo {
+  int id;
+  String nome;
+  String descricao;
+
+  Tipo({this.id, this.nome, this.descricao});
+
+  Tipo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nome = json['nome'];
     descricao = json['descricao'];
