@@ -1,3 +1,4 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/edit_profile_screen.dart';
@@ -16,7 +17,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   List<String> options = ['Excluir Conta'];
   final User user;
-  final _userBloc = UserBloc();
+  final _userBloc = BlocProvider.getBloc<UserBloc>();
   ProgressDialog pr;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   _ProfileScreenState(this.user);

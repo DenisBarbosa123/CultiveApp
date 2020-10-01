@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/topic_bloc.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/topico_model.dart';
@@ -53,7 +54,7 @@ class _Screen3State extends State<Screen3> {
 
   //Constructor
   _Screen3State({this.user, this.image}) {
-    _userBloc = UserBloc();
+    _userBloc = BlocProvider.getBloc<UserBloc>();
     _topicApi.getTopicList();
   }
 

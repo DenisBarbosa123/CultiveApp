@@ -1,4 +1,3 @@
-
 class Quotation {
   Map<String, dynamic> dataSet;
   List<dynamic> data;
@@ -8,13 +7,9 @@ class Quotation {
   double lastPrice;
   String updatedDate;
 
-  Quotation(
-      this.lastPrice,
-      this.updatedDate,
-      this.firstPrice,
-      this.dataSet);
+  Quotation({this.lastPrice, this.updatedDate, this.firstPrice, this.dataSet});
 
-  Quotation.fromJson(Map<String, dynamic> json){
+  Quotation.fromJson(Map<String, dynamic> json) {
     dataSet = json["dataset_data"];
     updatedDate = dataSet["end_date"];
     data = dataSet["data"];

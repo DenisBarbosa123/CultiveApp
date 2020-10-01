@@ -28,6 +28,7 @@ class WeatherBloc extends BlocBase {
 
   @override
   void dispose() {
+    super.dispose();
     _streamController.close();
   }
 }

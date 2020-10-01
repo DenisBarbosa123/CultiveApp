@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/model/topico_model.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
 class TopicApi extends BlocBase {
   StreamController<List<TopicoModel>> _streamController =
@@ -15,13 +14,13 @@ class TopicApi extends BlocBase {
 
   Future<void> getTopicList() async {
     Response response = await Dio().get(_url());
-    debugPrint(response.data[0].toString());
     List<TopicoModel> topicList = topicoModelFromJson(response.data);
     _streamController.sink.add(topicList);
   }
 
   @override
   void dispose() {
+    super.dispose();
     _streamController.close();
   }
 }

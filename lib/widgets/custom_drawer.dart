@@ -1,3 +1,4 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/home_screen.dart';
@@ -16,7 +17,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  UserBloc _userBloc = UserBloc();
+  UserBloc _userBloc = BlocProvider.getBloc<UserBloc>();
   @override
   Widget build(BuildContext context) {
     return Drawer(

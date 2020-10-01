@@ -23,107 +23,119 @@ class _QuotationTabsState extends State<QuotationTabs> {
             crossAxisCount: 2,
             children: <Widget>[
               StreamBuilder<Quotation>(
-                stream: _quotationBloc.outputCorn,
-                builder: (context, snapshot) {
-                  if(!snapshot.hasData){
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
-                      ),
-                    );
-                  }
-                  return _buildCard(
-                      title: "Saca de Milho",
-                      imageName: "assets/corn.png",
-                      isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
-                      productPrice: snapshot.data.firstPrice.toStringAsFixed(2));
-                }
-              ),
+                  stream: _quotationBloc.outputCorn,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
+                        ),
+                      );
+                    }
+                    return _buildCard(
+                        title: "Saca de Milho",
+                        imageName: "assets/corn.png",
+                        isIncreased: isIncreased(
+                            snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice:
+                            snapshot.data.firstPrice.toStringAsFixed(2));
+                  }),
               StreamBuilder<Quotation>(
                   stream: _quotationBloc.outputSoy,
                   builder: (context, snapshot) {
-                    if(!snapshot.hasData){
+                    if (!snapshot.hasData) {
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
                         ),
                       );
                     }
                     return _buildCard(
                         title: "Saca da Soja",
                         imageName: "assets/soy.png",
-                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
-                        productPrice: snapshot.data.firstPrice.toStringAsFixed(2));
-                  }
-              ),
+                        isIncreased: isIncreased(
+                            snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice:
+                            snapshot.data.firstPrice.toStringAsFixed(2));
+                  }),
               StreamBuilder<Quotation>(
                   stream: _quotationBloc.outputWheat,
                   builder: (context, snapshot) {
-                    if(!snapshot.hasData){
+                    if (!snapshot.hasData) {
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
                         ),
                       );
                     }
                     return _buildCard(
                         title: "Saca de Trigo",
                         imageName: "assets/wheat.png",
-                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
-                        productPrice: snapshot.data.firstPrice.toStringAsFixed(2));
-                  }
-              ),
+                        isIncreased: isIncreased(
+                            snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice:
+                            snapshot.data.firstPrice.toStringAsFixed(2));
+                  }),
               StreamBuilder<Quotation>(
                   stream: _quotationBloc.outputMilk,
                   builder: (context, snapshot) {
-                    if(!snapshot.hasData){
+                    if (!snapshot.hasData) {
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
                         ),
                       );
                     }
                     return _buildCard(
                         title: "Litro do Leite",
                         imageName: "assets/milk.png",
-                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
-                        productPrice: snapshot.data.firstPrice.toStringAsFixed(2));
-                  }
-              ),
+                        isIncreased: isIncreased(
+                            snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice:
+                            snapshot.data.firstPrice.toStringAsFixed(2));
+                  }),
               StreamBuilder<Quotation>(
                   stream: _quotationBloc.outputCoffee,
                   builder: (context, snapshot) {
-                    if(!snapshot.hasData){
+                    if (!snapshot.hasData) {
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
                         ),
                       );
                     }
                     return _buildCard(
                         title: "Saca de Café",
                         imageName: "assets/coffee.png",
-                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
-                        productPrice: snapshot.data.firstPrice.toStringAsFixed(2));
-                  }
-              ),
+                        isIncreased: isIncreased(
+                            snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice:
+                            snapshot.data.firstPrice.toStringAsFixed(2));
+                  }),
               StreamBuilder<Quotation>(
                   stream: _quotationBloc.outputCattle,
                   builder: (context, snapshot) {
-                    if(!snapshot.hasData){
+                    if (!snapshot.hasData) {
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).primaryColor),
                         ),
                       );
                     }
                     return _buildCard(
                         title: "Arroba do Boi",
                         imageName: "assets/cow.png",
-                        isIncreased: isIncreased(snapshot.data.firstPrice, snapshot.data.lastPrice),
-                        productPrice: snapshot.data.firstPrice.toStringAsFixed(2));
-                  }
-              ),
+                        isIncreased: isIncreased(
+                            snapshot.data.firstPrice, snapshot.data.lastPrice),
+                        productPrice:
+                            snapshot.data.firstPrice.toStringAsFixed(2));
+                  }),
             ],
           ),
         ),
@@ -131,7 +143,8 @@ class _QuotationTabsState extends State<QuotationTabs> {
     );
   }
 
-  Widget _buildCard({String title, String imageName, String productPrice, bool isIncreased}){
+  Widget _buildCard(
+      {String title, String imageName, String productPrice, bool isIncreased}) {
     return Container(
       alignment: Alignment.center,
       child: Card(
@@ -146,13 +159,11 @@ class _QuotationTabsState extends State<QuotationTabs> {
                 children: <Widget>[
                   Text("R\$$productPrice", style: TextStyle(fontSize: 18.0)),
                   Icon(
-                      isIncreased == true ?
-                      Icons.arrow_upward :
-                      Icons.arrow_downward,
-                      color:  isIncreased == true ?
-                      Colors.green : Colors.red
-                  ),
-                  Image.asset("$imageName",height: 35, width: 30)
+                      isIncreased == true
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward,
+                      color: isIncreased == true ? Colors.green : Colors.red),
+                  Image.asset("$imageName", height: 35, width: 30)
                 ],
               ),
             ),
@@ -185,16 +196,22 @@ class _QuotationTabsState extends State<QuotationTabs> {
   @override
   void initState() {
     super.initState();
-    _quotationBloc = QuotationBloc();
-    _quotationBloc.getCornPrice();
-    _quotationBloc.getMilkPrice();
-    _quotationBloc.getCattlePrice();
-    _quotationBloc.getWheatPrice();
-    _quotationBloc.getSoyPrice();
-    _quotationBloc.getCoffeePrice();
+    loadQuotationData();
   }
-  
-  bool isIncreased(double firstPrice, double lastPrice){
-    return firstPrice > lastPrice ? true : false; 
+
+  void loadQuotationData() {
+    _quotationBloc = QuotationBloc();
+    _quotationBloc.getDolarPrice().then((value) {
+      _quotationBloc.getCornPrice(value);
+      _quotationBloc.getMilkPrice(value);
+      _quotationBloc.getCattlePrice(value);
+      _quotationBloc.getWheatPrice(value);
+      _quotationBloc.getSoyPrice(value);
+      _quotationBloc.getCoffeePrice(value);
+    });
+  }
+
+  bool isIncreased(double firstPrice, double lastPrice) {
+    return firstPrice > lastPrice ? true : false;
   }
 }

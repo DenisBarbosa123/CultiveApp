@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/bloc/topic_bloc.dart';
@@ -49,7 +50,7 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
   final _formKey = GlobalKey<FormState>();
 
   _CreatePublicationScreenState(this.user, this.token) {
-    _bloc = PublicationBloc();
+    _bloc = BlocProvider.getBloc<PublicationBloc>();
     _topicApi.getTopicList();
     userId = user.id;
   }
@@ -295,19 +296,46 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
 
     publication.topicos = Topicos.buildTopicList(_pubTopicList);
 
-    debugPrint("${publication.toJson()}");
     return publication;
   }
 
   void _onSuccess() {
     pr.hide();
-    Navigator.of(context).pop();
+    _showMyDialog();
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Publicação criada com sucesso!'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Tudo ok com criação de sua publicação!'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _onFail() {
     pr.hide();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Falha ao criar publicação"),
+      content: Text("Falha ao criar publicação, tente novamente."),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
     ));

@@ -1,9 +1,9 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/tiles/publication_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PublicationTabs extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class PublicationTabs extends StatefulWidget {
 }
 
 class _PublicationTabsState extends State<PublicationTabs> {
-  PublicationBloc _publicationBloc = new PublicationBloc();
+  PublicationBloc _publicationBloc = BlocProvider.getBloc<PublicationBloc>();
   bool endOfList;
 
   @override
@@ -33,37 +33,40 @@ class _PublicationTabsState extends State<PublicationTabs> {
                       Theme.of(context).primaryColor)),
             );
           }
-          return ListView.builder(
-            itemCount: snapshot.data.length + 1,
-            itemBuilder: (context, index) {
-              if (index < snapshot.data.length) {
-                return PublicationTile(snapshot.data[index]);
-              } else if (endOfList) {
-                return Container(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text("Você chegou ao final da lista"),
+          return RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              child: ListView.builder(
+                itemCount: snapshot.data.length + 1,
+                itemBuilder: (context, index) {
+                  if (index < snapshot.data.length) {
+                    return PublicationTile(snapshot.data[index]);
+                  } else if (endOfList) {
+                    return Container(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Text("Você chegou ao final da lista"),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              } else if (index > 1) {
-                _publicationBloc.getListPublication(endOfTheList, false);
-                return Container(
-                    height: 40,
-                    width: 40,
-                    alignment: Alignment.center,
-                    child: Center(
-                        child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                Theme.of(context).primaryColor))));
-              } else {
-                return Container();
-              }
-            },
-          );
+                    );
+                  } else if (index > 1) {
+                    _publicationBloc.getListPublication(endOfTheList, false);
+                    return Container(
+                        height: 40,
+                        width: 40,
+                        alignment: Alignment.center,
+                        child: Center(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Theme.of(context).primaryColor))));
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
+              onRefresh: _onRefresh);
         });
   }
 
@@ -71,5 +74,15 @@ class _PublicationTabsState extends State<PublicationTabs> {
     setState(() {
       endOfList = true;
     });
+  }
+
+  Future<void> _onRefresh() {
+    debugPrint("on refresh");
+    setState(() {
+      Future.delayed(Duration(seconds: 2))
+          .then((_) => _publicationBloc.getListPublication(endOfTheList, true));
+    });
+
+    return Future.value();
   }
 }

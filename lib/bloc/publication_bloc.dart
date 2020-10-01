@@ -9,17 +9,21 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:rxdart/rxdart.dart';
 
 class PublicationBloc extends BlocBase {
   int offset = 0;
   List<Publication> publications = [];
-  StreamController<List<Publication>> _listPublicationsController =
-      StreamController<List<Publication>>();
-  Sink<List<Publication>> get input => _listPublicationsController.sink;
+  BehaviorSubject<List<Publication>> _listPublicationsController =
+      BehaviorSubject<List<Publication>>();
   Stream<List<Publication>> get output => _listPublicationsController.stream;
 
-  void getListPublication(VoidCallback endOfList, bool isRefresh) async {
-    if (isRefresh) offset = 0;
+  void getListPublication(VoidCallback endOfList, bool inRefresh) async {
+    if (inRefresh) {
+      debugPrint("list refresh");
+      offset = 0;
+      publications = [];
+    }
     debugPrint("Loading Publication From Cultive App server");
     Response response = await Dio().get(
         PathConstants.getPublicationsByParameters(
@@ -40,7 +44,10 @@ class PublicationBloc extends BlocBase {
       } else {
         publications += newPubs;
       }
-      _listPublicationsController.sink.add(publications);
+      _listPublicationsController.add(publications);
+      if (inRefresh) {
+        notifyListeners();
+      }
     } else {
       throw Exception("Failed to load the publications!");
     }
@@ -93,7 +100,8 @@ class PublicationBloc extends BlocBase {
         debugPrint("Publication saved with successfully");
         Publication publicationCreated = Publication.fromJson(response.data);
         publications.add(publicationCreated);
-        input.add(publications);
+        _listPublicationsController.add(publications);
+        notifyListeners();
         onSuccess();
       } else {
         debugPrint("Fault during saving publication");
@@ -107,6 +115,7 @@ class PublicationBloc extends BlocBase {
 
   @override
   void dispose() {
+    super.dispose();
     _listPublicationsController.close();
   }
 }
