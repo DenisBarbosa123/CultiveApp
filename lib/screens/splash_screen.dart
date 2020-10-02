@@ -1,5 +1,3 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/widgets/logo_cultive.dart';
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
@@ -10,7 +8,6 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<Splash> {
-  UserBloc _userBloc;
   @override
   Widget build(BuildContext context) {
     return _introScreen();
@@ -19,8 +16,6 @@ class _SplashScreenState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    _userBloc = BlocProvider.getBloc<UserBloc>();
-    _userBloc.loadCurrentUser();
     Future.delayed(Duration(seconds: 5)).then((_) {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => HomeScreen()));

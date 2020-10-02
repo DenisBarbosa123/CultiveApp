@@ -72,9 +72,6 @@ class NewsTile extends StatelessWidget {
                           onPressed: () {
                             launch("${news.url}");
                           })),
-                  IconButton(
-                      icon: Icon(Icons.share, color: Colors.green[900]),
-                      onPressed: () {})
                 ],
               )
             ],

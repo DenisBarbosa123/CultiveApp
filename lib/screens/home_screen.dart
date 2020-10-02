@@ -1,10 +1,6 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
-import 'package:cultiveapp/screens/create_publication_screen.dart';
 import 'package:cultiveapp/screens/presentation_screen.dart';
 import 'package:cultiveapp/tabs/news_tabs.dart';
-import 'package:cultiveapp/tabs/no_logged_in.dart';
-import 'package:cultiveapp/tabs/publication_tabs.dart';
 import 'package:cultiveapp/tabs/quotation_tabs.dart';
 import 'package:cultiveapp/tabs/weather_tabs.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
@@ -16,20 +12,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomeScreen> {
-  PageController _pageController;
   UserBloc _userBloc;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
-    _userBloc = BlocProvider.getBloc<UserBloc>();
+    _userBloc = UserBloc();
+    _userBloc.loadCurrentUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PageView(controller: _pageController, children: <Widget>[
-      StreamBuilder<AuthenticationStatus>(
+    return StreamBuilder<AuthenticationStatus>(
         stream: _userBloc.loginOutput,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -42,7 +36,7 @@ class _HomePageState extends State<HomeScreen> {
               return DefaultTabController(
                   length: 3,
                   child: Scaffold(
-                    drawer: CustomDrawer(_pageController,
+                    drawer: CustomDrawer(
                         userInformation: _userBloc.userInformation["user"]),
                     appBar: AppBar(
                       title: Text(
@@ -60,81 +54,10 @@ class _HomePageState extends State<HomeScreen> {
                         children: [WeatherTabs(), QuotationTabs(), NewsTabs()]),
                   ));
             } else {
-              return PresentationScreen(_pageController);
+              return PresentationScreen();
             }
           }
         },
-      ),
-      StreamBuilder<AuthenticationStatus>(
-          stream: _userBloc.loginOutput,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container(
-                  color: Colors.white,
-                  child: Center(
-                      child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Colors.green))));
-            } else {
-              if (snapshot.data == AuthenticationStatus.authenticated) {
-                return Scaffold(
-                    drawer: CustomDrawer(_pageController,
-                        userInformation: _userBloc.userInformation["user"]),
-                    appBar: AppBar(
-                      title: Text("PUBLICAÇÕES"),
-                      centerTitle: true,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    floatingActionButton: FloatingActionButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CreatePublicationScreen(
-                                _userBloc.userInformation["user"],
-                                _userBloc.userInformation["token"])));
-                      },
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                      backgroundColor: Colors.green,
-                    ),
-                    body: PublicationTabs());
-              } else {
-                return Scaffold(
-                    drawer: CustomDrawer(_pageController,
-                        userInformation: _userBloc.userInformation["user"]),
-                    appBar: AppBar(
-                      title: Text("PUBLICAÇÕES"),
-                      centerTitle: true,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    body: NoLoggedInTabs());
-              }
-            }
-          }),
-      Scaffold(
-        drawer: CustomDrawer(_pageController,
-            userInformation: _userBloc.userInformation["user"]),
-        appBar: AppBar(
-          title: Text("EVENTOS"),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).primaryColor,
-        ),
-        body: Container(
-          color: Colors.blue,
-        ),
-      ),
-      Scaffold(
-        drawer: CustomDrawer(_pageController,
-            userInformation: _userBloc.userInformation["user"]),
-        appBar: AppBar(
-          title: Text("VENDAS"),
-          centerTitle: true,
-          backgroundColor: Theme.of(context).primaryColor,
-        ),
-        body: Container(
-          color: Colors.yellow,
-        ),
-      )
-    ]);
+      );
   }
 }

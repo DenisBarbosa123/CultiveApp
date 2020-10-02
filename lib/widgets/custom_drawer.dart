@@ -1,23 +1,24 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/screens/events_screen.dart';
 import 'package:cultiveapp/screens/home_screen.dart';
 import 'package:cultiveapp/screens/login_screen.dart';
 import 'package:cultiveapp/screens/profile_screen.dart';
-import 'package:cultiveapp/tiles/drawer_tile.dart';
+import 'package:cultiveapp/screens/publication_screen.dart';
+import 'package:cultiveapp/screens/sales_screen.dart';
 import "package:flutter/material.dart";
 
 // ignore: must_be_immutable
 class CustomDrawer extends StatefulWidget {
-  PageController pageController;
   User userInformation;
-  CustomDrawer(this.pageController, {this.userInformation});
+  CustomDrawer({this.userInformation});
   @override
   _CustomDrawerState createState() => _CustomDrawerState();
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  UserBloc _userBloc = BlocProvider.getBloc<UserBloc>();
+  var _userBloc = BlocProvider.getBloc<UserBloc>();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -100,9 +101,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                     ),
               ListTile(
-                  focusColor: widget.pageController.page.round() == 0
-                      ? Colors.green[900]
-                      : Colors.black,
+                  focusColor: Colors.black,
                   leading: Icon(
                     Icons.home,
                     color: Colors.black,
@@ -118,12 +117,57 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   }),
-              DrawerTile(
-                  Icons.rss_feed, "Publicações", widget.pageController, 1),
-              DrawerTile(
-                  Icons.event_available, "Eventos", widget.pageController, 2),
-              DrawerTile(
-                  Icons.shopping_cart, "Vendas", widget.pageController, 3),
+              ListTile(
+                  focusColor: Colors.black,
+                  leading: Icon(
+                    Icons.rss_feed,
+                    color: Colors.black,
+                    size: 32.0,
+                  ),
+                  title: Text(
+                    "Publicações",
+                    style:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => PublicationScreen()));
+                  }),
+              ListTile(
+                  focusColor: Colors.black,
+                  leading: Icon(
+                    Icons.event_note,
+                    color: Colors.black,
+                    size: 32.0,
+                  ),
+                  title: Text(
+                    "Eventos",
+                    style:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => EventsScreen()));
+                  }),
+              ListTile(
+                  focusColor: Colors.black,
+                  leading: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.black,
+                    size: 32.0,
+                  ),
+                  title: Text(
+                    "Vendas",
+                    style:
+                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => SalesScreen()));
+                  }),
               widget.userInformation != null
                   ? Column(
                       children: [
@@ -137,7 +181,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             subtitle: Text("Meu perfil"),
                             onTap: () {
                               Navigator.of(context).pop();
-                              Navigator.of(context).push(MaterialPageRoute(
+                              Navigator.of(context).pushReplacement(MaterialPageRoute(
                                   builder: (context) =>
                                       ProfileScreen(widget.userInformation)));
                             }),

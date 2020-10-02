@@ -157,13 +157,13 @@ class _QuotationTabsState extends State<QuotationTabs> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text("R\$$productPrice", style: TextStyle(fontSize: 18.0)),
+                  Text("R\$$productPrice", style: TextStyle(fontSize: 15.0)),
                   Icon(
                       isIncreased == true
                           ? Icons.arrow_upward
                           : Icons.arrow_downward,
                       color: isIncreased == true ? Colors.green : Colors.red),
-                  Image.asset("$imageName", height: 35, width: 30)
+                  Image.asset("$imageName", height: 30, width: 30)
                 ],
               ),
             ),

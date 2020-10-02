@@ -7,6 +7,7 @@ import 'package:cultiveapp/bloc/topic_bloc.dart';
 import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/model/topico_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/screens/publication_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -323,7 +324,8 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PublicationScreen()));
               },
             ),
           ],

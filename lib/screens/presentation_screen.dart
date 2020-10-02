@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class PresentationScreen extends StatefulWidget {
-  PageController _pageController;
-  PresentationScreen(this._pageController);
-
   @override
   _PresentationScreenState createState() => _PresentationScreenState();
 }
@@ -16,7 +13,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: CustomDrawer(this.widget._pageController),
+        drawer: CustomDrawer(),
         backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,

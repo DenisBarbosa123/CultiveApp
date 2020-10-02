@@ -9,7 +9,6 @@ import 'package:cultiveapp/utils/json_store_util.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:rxdart/rxdart.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -21,10 +20,10 @@ class UserBloc extends BlocBase {
   //user information map
   Map<String, dynamic> userInformation = Map<String, dynamic>();
 
-  final _loginController = BehaviorSubject<AuthenticationStatus>();
+  final _loginController = StreamController<AuthenticationStatus>.broadcast();
   Stream get loginOutput => _loginController.stream;
 
-  final _userInformationController = BehaviorSubject<Map<String, dynamic>>();
+  final _userInformationController = StreamController<Map<String, dynamic>>.broadcast();
   Stream get userInformationOutput => _loginController.stream;
 
   Future<void> submitSubscription(

@@ -36,6 +36,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   File _image;
 
+  Localizacao localizacao = Localizacao();
+
   //Mask
   final _phoneMask = MaskTextInputFormatter(
       mask: "(##) #####-####", filter: {"#": RegExp(r'[0-9]')});
@@ -213,7 +215,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onChanged: (value) {
                             if (value != widget.user.localizacao.bairro) {
                               _userEdited = true;
-                              userToBeUpdated.localizacao.bairro = value;
+                              localizacao.bairro = value;
                             }
                           },
                           keyboardType: TextInputType.text,
@@ -244,7 +246,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onChanged: (value) {
                             if (value != widget.user.localizacao.cidade) {
                               _userEdited = true;
-                              userToBeUpdated.localizacao.cidade = value;
+                              localizacao.cidade = value;
                             }
                           },
                           keyboardType: TextInputType.text,
@@ -275,7 +277,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           onChanged: (value) {
                             if (value != widget.user.localizacao.estado) {
                               _userEdited = true;
-                              userToBeUpdated.localizacao.estado = value;
+                              localizacao.estado = value;
                             }
                           },
                           keyboardType: TextInputType.text,
@@ -345,6 +347,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                   onPressed: () async {
                                                     Navigator.pop(context);
                                                     pr.show();
+                                                    userToBeUpdated.localizacao = localizacao;
                                                     if (_image != null)
                                                       await uploadFile();
                                                     _userBloc.editUser(
@@ -391,8 +394,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Text("Cancelar")),
                 FlatButton(
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => HomeScreen()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                             HomeScreen()));
                     },
                     child: Text("Sim"))
               ],

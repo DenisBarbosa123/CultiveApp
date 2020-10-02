@@ -18,7 +18,7 @@ class _PublicationTabsState extends State<PublicationTabs> {
   void initState() {
     super.initState();
     endOfList = false;
-    _publicationBloc.getListPublication(endOfTheList, false);
+    _publicationBloc.getListPublication(endOfTheList);
   }
 
   @override
@@ -33,9 +33,7 @@ class _PublicationTabsState extends State<PublicationTabs> {
                       Theme.of(context).primaryColor)),
             );
           }
-          return RefreshIndicator(
-              color: Theme.of(context).primaryColor,
-              child: ListView.builder(
+          return ListView.builder(
                 itemCount: snapshot.data.length + 1,
                 itemBuilder: (context, index) {
                   if (index < snapshot.data.length) {
@@ -52,7 +50,7 @@ class _PublicationTabsState extends State<PublicationTabs> {
                       ),
                     );
                   } else if (index > 1) {
-                    _publicationBloc.getListPublication(endOfTheList, false);
+                    _publicationBloc.getListPublication(endOfTheList);
                     return Container(
                         height: 40,
                         width: 40,
@@ -64,9 +62,7 @@ class _PublicationTabsState extends State<PublicationTabs> {
                   } else {
                     return Container();
                   }
-                },
-              ),
-              onRefresh: _onRefresh);
+                });
         });
   }
 
@@ -74,15 +70,5 @@ class _PublicationTabsState extends State<PublicationTabs> {
     setState(() {
       endOfList = true;
     });
-  }
-
-  Future<void> _onRefresh() {
-    debugPrint("on refresh");
-    setState(() {
-      Future.delayed(Duration(seconds: 2))
-          .then((_) => _publicationBloc.getListPublication(endOfTheList, true));
-    });
-
-    return Future.value();
   }
 }
