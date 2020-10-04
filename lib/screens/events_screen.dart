@@ -1,4 +1,3 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +10,16 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   UserBloc _userBloc;
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    _userBloc = BlocProvider.getBloc<UserBloc>();
+    _userBloc = UserBloc();
     _userBloc.loadCurrentUser();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(
-          userInformation: _userBloc.userInformation["user"]),
+      drawer: CustomDrawer(userInformation: _userBloc.userInformation["user"]),
       appBar: AppBar(
         title: Text("EVENTOS"),
         centerTitle: true,

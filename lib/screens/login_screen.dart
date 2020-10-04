@@ -1,4 +1,3 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/screens/home_screen.dart';
 import 'package:cultiveapp/screens/reset_password_screen.dart';
@@ -20,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   //UserBloc
-  final _userBloc = BlocProvider.getBloc<UserBloc>();
+  final _userBloc = UserBloc();
 
   //ScaffoldKey
   final _scaffoldKey = GlobalKey<ScaffoldState>();

@@ -1,4 +1,3 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class _SalesScreenState extends State<SalesScreen> {
   @override
   void initState(){
     super.initState();
-    _userBloc = BlocProvider.getBloc<UserBloc>();
+    _userBloc = UserBloc();
     _userBloc.loadCurrentUser();
   }
   @override
