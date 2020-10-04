@@ -21,4 +21,8 @@ class PathConstants {
       "https://cultiveapp.herokuapp.com/api/publicacao?tipo=$tipo&limit=$limit&offset=$offset";
   static String createPublication(int userId) =>
       "https://cultiveapp.herokuapp.com/api/usuario/${userId.toString()}/publicacao";
+  static String editPublication(int postId) =>
+      "https://cultiveapp.herokuapp.com/api/publicacao/${postId.toString()}";
+  static String deletePublication(int postId) =>
+      "https://cultiveapp.herokuapp.com/api/publicacao/${postId.toString()}";
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/bloc/topic_bloc.dart';
@@ -51,7 +50,7 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
   final _formKey = GlobalKey<FormState>();
 
   _CreatePublicationScreenState(this.user, this.token) {
-    _bloc = BlocProvider.getBloc<PublicationBloc>();
+    _bloc = PublicationBloc();
     _topicApi.getTopicList();
     userId = user.id;
   }
@@ -301,8 +300,11 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
   }
 
   void _onSuccess() {
-    pr.hide();
-    _showMyDialog();
+    Future.delayed(Duration(seconds: 5)).then((_) {
+      pr.hide();
+      _showMyDialog();
+    }
+    );
   }
 
   Future<void> _showMyDialog() async {
@@ -324,7 +326,7 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => PublicationScreen()));
               },
             ),

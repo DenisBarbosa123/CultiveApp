@@ -54,7 +54,7 @@ class _PublicationScreenState extends State<PublicationScreen> {
                     ),
                     backgroundColor: Colors.green,
                   ),
-                  body: PublicationTabs());
+                  body: PublicationTabs(_userBloc.userInformation));
             } else {
               return Scaffold(
                   drawer: CustomDrawer(

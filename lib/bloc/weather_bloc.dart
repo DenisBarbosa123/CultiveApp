@@ -16,7 +16,7 @@ class WeatherBloc extends BlocBase {
   void getUpdateWeather() async {
     debugPrint("Get Weather from HG Brasil");
     Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     Response response = await Dio().get(
         _getUrl(position.latitude.toString(), position.longitude.toString()));
     Weather weather = Weather.fromJson(response.data);

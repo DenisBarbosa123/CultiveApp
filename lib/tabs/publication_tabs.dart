@@ -1,4 +1,3 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/tiles/publication_tile.dart';
@@ -6,17 +5,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PublicationTabs extends StatefulWidget {
+  final Map<String, dynamic> userInfo;
+  PublicationTabs(this.userInfo);
   @override
   _PublicationTabsState createState() => _PublicationTabsState();
 }
 
 class _PublicationTabsState extends State<PublicationTabs> {
-  PublicationBloc _publicationBloc = BlocProvider.getBloc<PublicationBloc>();
+  PublicationBloc _publicationBloc;
   bool endOfList;
 
   @override
   void initState() {
     super.initState();
+    _publicationBloc = PublicationBloc();
     endOfList = false;
     _publicationBloc.getListPublication(endOfTheList);
   }
@@ -37,7 +39,7 @@ class _PublicationTabsState extends State<PublicationTabs> {
                 itemCount: snapshot.data.length + 1,
                 itemBuilder: (context, index) {
                   if (index < snapshot.data.length) {
-                    return PublicationTile(snapshot.data[index]);
+                    return PublicationTile(snapshot.data[index], widget.userInfo);
                   } else if (endOfList) {
                     return Container(
                       padding: EdgeInsets.all(10),

@@ -33,11 +33,11 @@ class _WeatherTabsState extends State<WeatherTabs> {
                 Container(
                   padding: EdgeInsets.only(top: 20, bottom: 20),
                   child: Text("${snapshot.data.city}",
-                      style: TextStyle(fontSize: 25.0)),
+                      style: TextStyle(fontSize: 20.0)),
                 ),
                 Text("${snapshot.data.description}",
                     style:
-                        TextStyle(fontSize: 20.0, fontStyle: FontStyle.italic)),
+                        TextStyle(fontSize: 17.0, fontStyle: FontStyle.italic)),
                 SizedBox(
                   width: 120,
                   height: 100,
@@ -46,11 +46,12 @@ class _WeatherTabsState extends State<WeatherTabs> {
                 ),
                 Text(
                   "${snapshot.data.temp}°",
-                  style: TextStyle(fontSize: 60.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 55.0, fontWeight: FontWeight.bold),
                 ),
-                Center(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
                       "Min: ${snapshot.data.forecast[0].min}°",
@@ -59,41 +60,42 @@ class _WeatherTabsState extends State<WeatherTabs> {
                     VerticalDivider(color: Colors.grey[900]),
                     Text("Max: ${snapshot.data.forecast[0].max}°")
                   ],
-                )),
+                ),
                 SizedBox(height: 5),
                 Divider(color: Colors.grey[400]),
                 SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.only(right: 25, left: 50),
-                  child: Row(
-                    children: <Widget>[
-                      _getWeatherPrevision(
-                          dayOfTheWeek: "${snapshot.data.forecast[1].weekday}",
-                          icon: _provideWeatherIcon(
-                              "${snapshot.data.forecast[1].condition}", 20),
-                          temperature: "${snapshot.data.forecast[1].max}°"),
-                      _getWeatherPrevision(
-                          dayOfTheWeek: "${snapshot.data.forecast[2].weekday}",
-                          icon: _provideWeatherIcon(
-                              "${snapshot.data.forecast[2].condition}", 20),
-                          temperature: "${snapshot.data.forecast[2].max}°"),
-                      _getWeatherPrevision(
-                          dayOfTheWeek: "${snapshot.data.forecast[3].weekday}",
-                          icon: _provideWeatherIcon(
-                              "${snapshot.data.forecast[3].condition}", 20),
-                          temperature: "${snapshot.data.forecast[3].max}°"),
-                      _getWeatherPrevision(
-                          dayOfTheWeek: "${snapshot.data.forecast[4].weekday}",
-                          icon: _provideWeatherIcon(
-                              "${snapshot.data.forecast[4].condition}", 20),
-                          temperature: "${snapshot.data.forecast[4].max}°"),
-                      _getWeatherPrevision(
-                          dayOfTheWeek: "${snapshot.data.forecast[5].weekday}",
-                          icon: _provideWeatherIcon(
-                              "${snapshot.data.forecast[5].condition}", 20),
-                          temperature: "${snapshot.data.forecast[5].max}°")
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _getWeatherPrevision(
+                        dayOfTheWeek: "${snapshot.data.forecast[1].weekday}",
+                        icon: _provideWeatherIcon(
+                            "${snapshot.data.forecast[1].condition}", 20),
+                        temperatureMax: " Max ${snapshot.data.forecast[1].max}°",
+                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°"
+                    ),
+                    _getWeatherPrevision(
+                        dayOfTheWeek: "${snapshot.data.forecast[2].weekday}",
+                        icon: _provideWeatherIcon(
+                            "${snapshot.data.forecast[2].condition}", 20),
+                        temperatureMax: "Max ${snapshot.data.forecast[2].max}°",
+                      temperatureMin: "Min ${snapshot.data.forecast[2].min}°"
+                    ),
+                    _getWeatherPrevision(
+                        dayOfTheWeek: "${snapshot.data.forecast[3].weekday}",
+                        icon: _provideWeatherIcon(
+                            "${snapshot.data.forecast[3].condition}", 20),
+                        temperatureMax: "Max ${snapshot.data.forecast[3].max}°",
+                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°"),
+                    _getWeatherPrevision(
+                        dayOfTheWeek: "${snapshot.data.forecast[4].weekday}",
+                        icon: _provideWeatherIcon(
+                            "${snapshot.data.forecast[4].condition}", 20),
+                        temperatureMax: "Max ${snapshot.data.forecast[4].max}°",
+                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°"
+                    )
+                  ],
                 ),
                 Divider(color: Colors.grey[400]),
                 Center(
@@ -113,14 +115,19 @@ class _WeatherTabsState extends State<WeatherTabs> {
   }
 
   Widget _getWeatherPrevision(
-      {String dayOfTheWeek, IconButton icon, String temperature}) {
+      {String dayOfTheWeek, IconButton icon, String temperatureMax, String temperatureMin}) {
     return Column(children: <Widget>[
       Text(dayOfTheWeek),
       SizedBox(width: 50, height: 50, child: icon),
       Text(
-        temperature,
+        temperatureMin,
         style: TextStyle(fontWeight: FontWeight.bold),
-      )
+      ),
+      Text(
+        temperatureMax,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+
     ]);
   }
 

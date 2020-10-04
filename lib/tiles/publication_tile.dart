@@ -1,26 +1,180 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/model/publication_model.dart';
+import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/screens/publication_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class PublicationTile extends StatefulWidget {
   final Publication _publication;
-  PublicationTile(this._publication);
+  final Map<String, dynamic> _userInfo;
+
+  PublicationTile(this._publication, this._userInfo);
+
   @override
   _PublicationTileState createState() => _PublicationTileState(_publication);
 }
 
 class _PublicationTileState extends State<PublicationTile> {
   final Publication _publication;
+
+  ProgressDialog pr;
+
   _PublicationTileState(this._publication);
+
   String firstHalf;
   String secondHalf;
+  User _user;
+  String token;
+
+  PublicationBloc _publicationBloc;
+  List<String> options = ['Editar Publicação', 'Excluir Publicação'];
 
   bool flag = true;
 
   @override
   void initState() {
     super.initState();
+    _publicationBloc = PublicationBloc();
     checkDetails(_publication.corpo);
+    _user = widget._userInfo["user"];
+    token = widget._userInfo["token"];
+  }
+
+  void handleClick(String option) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          switch (option) {
+            case 'Editar Publicação':
+              {
+                return showEditPostDialog();
+              }
+              break;
+            case 'Excluir Publicação':
+              {
+                return showDeletePostDialog();
+              }
+              break;
+            default:
+              {
+                return Container();
+              }
+              break;
+          }
+        });
+  }
+
+  showEditPostDialog() {
+    return AlertDialog(
+      title: Text("Editar Publicação"),
+      content: Text("Deseja editar esta publicação?"),
+      actions: <Widget>[
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancelar")),
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              pr.show();
+              _publicationBloc.editPublication();
+            },
+            child: Text("Sim"))
+      ],
+    );
+  }
+
+  showDeletePostDialog() {
+    return AlertDialog(
+      title: Text("Excluir Publicação"),
+      content: Text("Deseja excluir esta publicação?"),
+      actions: <Widget>[
+        FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancelar")),
+        FlatButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              pr.show();
+              await _publicationBloc
+                  .deletePublicationImages(_publication.imagens);
+              _publicationBloc.deletePublication(
+                  token: token,
+                  postId: _publication.id,
+                  onDeleteFail: onDeleteFail,
+                  onDeleteSuccess: onDeleteSuccess);
+            },
+            child: Text("Sim"))
+      ],
+    );
+  }
+
+  void onDeleteSuccess() {
+    pr.hide();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Sucesso"),
+            content: Text("Publicação deletada com sucesso"),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => PublicationScreen()));
+                  },
+                  child: Text("OK")),
+            ],
+          );
+        });
+  }
+
+  void onDeleteFail() {
+    pr.hide();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Erro"),
+            content: Text("Erro ao deletar a publicação desejada"),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("OK")),
+            ],
+          );
+        });
+  }
+
+  void configureProgressDialog(BuildContext context) {
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      textDirection: TextDirection.rtl,
+      isDismissible: true,
+    );
+
+    pr.style(
+      message: 'Por favor, aguarde',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      progress: 0.0,
+      progressWidgetAlignment: Alignment.center,
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
   }
 
   checkDetails(String detail) {
@@ -35,6 +189,7 @@ class _PublicationTileState extends State<PublicationTile> {
 
   @override
   Widget build(BuildContext context) {
+    configureProgressDialog(context);
     return Padding(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       child: Card(
@@ -62,7 +217,23 @@ class _PublicationTileState extends State<PublicationTile> {
                       "${_publication.usuario.nome}",
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    )
+                    ),
+                    _publicationBloc.isMine(_user.id, _publication.usuario.id)
+                        ? Expanded(
+                            child: PopupMenuButton<String>(
+                            padding: EdgeInsets.only(left: 120),
+                            onSelected: handleClick,
+                            itemBuilder: (context) {
+                              return options.map((String choice) {
+                                return PopupMenuItem<String>(
+                                  value: choice,
+                                  child: Text(choice,
+                                      style: TextStyle(fontSize: 14)),
+                                );
+                              }).toList();
+                            },
+                          ))
+                        : Container(),
                   ],
                 ),
                 SizedBox(

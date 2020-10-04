@@ -9,13 +9,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:rxdart/rxdart.dart';
 
 class PublicationBloc extends BlocBase {
   int offset = 0;
   List<Publication> publications = [];
-  BehaviorSubject<List<Publication>> _listPublicationsController =
-      BehaviorSubject<List<Publication>>();
+  StreamController<List<Publication>> _listPublicationsController =
+      StreamController<List<Publication>>();
+
   Stream<List<Publication>> get output => _listPublicationsController.stream;
 
   void getListPublication(VoidCallback endOfList) async {
@@ -93,7 +93,6 @@ class PublicationBloc extends BlocBase {
         Publication publicationCreated = Publication.fromJson(response.data);
         publications.add(publicationCreated);
         _listPublicationsController.add(publications);
-        notifyListeners();
         onSuccess();
       } else {
         debugPrint("Fault during saving publication");
@@ -103,6 +102,45 @@ class PublicationBloc extends BlocBase {
       debugPrint("Exception during saving publication" + e);
       onFail();
     }
+  }
+
+  void editPublication({String token, Publication publicationToBeEdited}) {}
+
+  Future<void> deletePublication({String token, int postId, VoidCallback onDeleteSuccess, VoidCallback onDeleteFail}) async {
+    debugPrint("Delete performing to exclude post with id $postId");
+    try{
+      Response response = await Dio()
+          .delete(PathConstants.deletePublication(postId),
+          options: RequestOptions(headers: {"Authorization": token}));
+      if(response.statusCode == 204){
+        debugPrint("Post was excluded successfully");
+        onDeleteSuccess();
+      }else {
+        debugPrint("Error during post exclusion");
+        onDeleteFail();
+      }
+    }catch(e){
+      debugPrint("Exception during post exclusion");
+      onDeleteFail();
+    }
+  }
+
+  Future<void> deletePublicationImages(List<Imagens> imageList) async {
+    if (imageList == null) {
+      return;
+    }
+
+    for (Imagens image in imageList) {
+      StorageReference storageReference = await FirebaseStorage.instance
+          .ref()
+          .getStorage()
+          .getReferenceFromUrl(image.imagemEncoded);
+      storageReference.delete().then((value) => print("deleted post image"));
+    }
+  }
+
+  bool isMine(int myUserId, int userId) {
+    return myUserId == userId;
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/events_screen.dart';
@@ -18,7 +17,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  var _userBloc = BlocProvider.getBloc<UserBloc>();
+  var _userBloc = UserBloc();
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -181,7 +180,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             subtitle: Text("Meu perfil"),
                             onTap: () {
                               Navigator.of(context).pop();
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                              Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
                                       ProfileScreen(widget.userInformation)));
                             }),
