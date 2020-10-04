@@ -125,6 +125,7 @@ class _PublicationTileState extends State<PublicationTile> {
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
+                    Navigator.pop(context);
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => PublicationScreen()));
                   },

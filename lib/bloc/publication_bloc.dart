@@ -129,14 +129,18 @@ class PublicationBloc extends BlocBase {
     if (imageList == null) {
       return;
     }
-
-    for (Imagens image in imageList) {
-      StorageReference storageReference = await FirebaseStorage.instance
-          .ref()
-          .getStorage()
-          .getReferenceFromUrl(image.imagemEncoded);
-      storageReference.delete().then((value) => print("deleted post image"));
+    try{
+      for (Imagens image in imageList) {
+        StorageReference storageReference = await FirebaseStorage.instance
+            .ref()
+            .getStorage()
+            .getReferenceFromUrl(image.imagemEncoded);
+        storageReference.delete().then((value) => print("deleted post image"));
+      }
+    }catch(e){
+      debugPrint("Exception during delete post images");
     }
+
   }
 
   bool isMine(int myUserId, int userId) {
