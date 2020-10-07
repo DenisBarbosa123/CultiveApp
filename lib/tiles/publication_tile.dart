@@ -2,8 +2,10 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cultiveapp/bloc/publication_bloc.dart';
 import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/screens/comments_screen.dart';
 import 'package:cultiveapp/screens/publication_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class PublicationTile extends StatefulWidget {
@@ -18,6 +20,8 @@ class PublicationTile extends StatefulWidget {
 
 class _PublicationTileState extends State<PublicationTile> {
   final Publication _publication;
+
+  final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
 
   ProgressDialog pr;
 
@@ -158,7 +162,6 @@ class _PublicationTileState extends State<PublicationTile> {
     pr = ProgressDialog(
       context,
       type: ProgressDialogType.Normal,
-      textDirection: TextDirection.rtl,
       isDismissible: true,
     );
 
@@ -205,25 +208,25 @@ class _PublicationTileState extends State<PublicationTile> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      radius: 28,
+                      radius: 25,
                       backgroundImage: _publication.usuario.fotoPerfil == null
                           ? AssetImage("assets/person.png")
                           : NetworkImage(_publication.usuario.fotoPerfil),
                       backgroundColor: Colors.white,
                     ),
                     SizedBox(
-                      width: 25,
+                      width: 18,
                     ),
                     Text(
                       "${_publication.usuario.nome}",
                       style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     _publicationBloc.isMine(_user.id, _publication.usuario.id)
                         ? Expanded(
                             child: PopupMenuButton<String>(
-                            padding: EdgeInsets.only(left: 120),
                             onSelected: handleClick,
+                            padding: EdgeInsets.only(left: 50),
                             itemBuilder: (context) {
                               return options.map((String choice) {
                                 return PopupMenuItem<String>(
@@ -241,12 +244,12 @@ class _PublicationTileState extends State<PublicationTile> {
                   height: 15,
                 ),
                 secondHalf.isEmpty
-                    ? new Text(firstHalf)
+                    ? new Text(firstHalf, textAlign: TextAlign.left, style: TextStyle(fontSize: 14),)
                     : new Column(
                         children: <Widget>[
                           new Text(flag
                               ? (firstHalf + "...")
-                              : (firstHalf + secondHalf)),
+                              : (firstHalf + secondHalf), textAlign: TextAlign.left, style: TextStyle(fontSize: 14),),
                           new InkWell(
                             child: new Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -296,9 +299,12 @@ class _PublicationTileState extends State<PublicationTile> {
                         color: Theme.of(context).primaryColor,
                         size: 35,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CommentsScreen(_publication, widget._userInfo, openCommentScreen)));
+                      },
                     ),
-                    Text("${_publication.data}",
+                    Text("${_dateFormat.format(DateTime.parse(_publication.data))}",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontStyle: FontStyle.italic,
@@ -310,5 +316,11 @@ class _PublicationTileState extends State<PublicationTile> {
             ),
           )),
     );
+  }
+
+  void openCommentScreen(List<Comentario> commentList){
+    _publication.comentarios = commentList;
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CommentsScreen(_publication, widget._userInfo, openCommentScreen)));
   }
 }

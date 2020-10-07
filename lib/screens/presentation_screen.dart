@@ -1,4 +1,7 @@
+import 'package:cultiveapp/screens/events_screen.dart';
 import 'package:cultiveapp/screens/login_screen.dart';
+import 'package:cultiveapp/screens/publication_screen.dart';
+import 'package:cultiveapp/screens/sales_screen.dart';
 import 'package:cultiveapp/screens/subscription/screen1.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
 import 'package:flutter/material.dart';
@@ -155,7 +158,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     textColor: Colors.black87,
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LoginScreen()));
+                          builder: (context) => SalesScreen()));
                     },
                   )
                 ],
@@ -207,7 +210,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     textColor: Colors.black87,
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LoginScreen()));
+                          builder: (context) => PublicationScreen()));
                     },
                   )
                 ],
@@ -259,7 +262,7 @@ class _PresentationScreenState extends State<PresentationScreen> {
                     textColor: Colors.black87,
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => LoginScreen()));
+                          builder: (context) => EventsScreen()));
                     },
                   )
                 ],

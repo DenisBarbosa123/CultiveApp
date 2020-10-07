@@ -25,4 +25,13 @@ class PathConstants {
       "https://cultiveapp.herokuapp.com/api/publicacao/${postId.toString()}";
   static String deletePublication(int postId) =>
       "https://cultiveapp.herokuapp.com/api/publicacao/${postId.toString()}";
+
+  //Comments
+  static String createComment(int userId, int postId) =>
+      "https://cultiveapp.herokuapp.com/api/usuario/${userId.toString()}/publicacao/${postId.toString()}/comentario";
+  static String editComment(int userId, int postId, int commentId) =>
+      "https://cultiveapp.herokuapp.com/api/usuario/${userId.toString()}/publicacao/${postId.toString()}/comentario/${commentId.toString()}";
+  static String deleteComment(int userId, int postId, int commentId) =>
+      "https://cultiveapp.herokuapp.com/api/usuario/${userId.toString()}/publicacao/${postId.toString()}/comentario/${commentId.toString()}";
+
 }

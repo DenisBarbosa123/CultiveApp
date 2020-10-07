@@ -51,6 +51,7 @@ class _HomePageState extends State<HomeScreen> {
                       ]),
                     ),
                     body: TabBarView(
+                      physics: NeverScrollableScrollPhysics(),
                         children: [WeatherTabs(), QuotationTabs(), NewsTabs()]),
                   ));
             } else {

@@ -10,6 +10,7 @@ class Publication {
   User usuario;
   String data;
   List<Topicos> topicos;
+  List<Comentario> comentarios;
 
   Publication(
       {this.id,
@@ -42,6 +43,13 @@ class Publication {
         topicos.add(new Topicos.fromJson(v));
       });
     }
+
+    if (json['comentarios'] != null) {
+      comentarios = new List<Comentario>();
+      json['comentarios'].forEach((v) {
+        comentarios.add(new Comentario.fromJson(v));
+      });
+    }
     usuario =
         json['usuario'] != null ? new User.fromJson(json['usuario']) : null;
     data = json['data'];
@@ -61,11 +69,14 @@ class Publication {
     if (this.imagens != null) {
       data['imagens'] = this.imagens.map((v) => v.toJson()).toList();
     }
-    if (this.imagens != null) {
+    if (this.topicos != null) {
       data['topicos'] = this.topicos.map((v) => v.toJson()).toList();
     }
     if (this.usuario != null) {
       data['usuario'] = this.usuario.toJson();
+    }
+    if(this.comentarios != null) {
+      data['comentarios'] = this.comentarios.map((v) => v.toJson()).toList();
     }
     data['data'] = this.data;
     return data;
@@ -131,6 +142,34 @@ class Imagens {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['imagemEncoded'] = this.imagemEncoded;
+    return data;
+  }
+}
+
+class Comentario {
+  int id;
+  String data;
+  User usuario;
+  String corpo;
+
+  Comentario({this.id, this.data, this.usuario, this.corpo});
+
+  Comentario.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    data = json['data'];
+    usuario =
+    json['usuario'] != null ? new User.fromJson(json['usuario']) : null;
+    corpo = json['corpo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['data'] = this.data;
+    if (this.usuario != null) {
+      data['usuario'] = this.usuario.toJson();
+    }
+    data['corpo'] = this.corpo;
     return data;
   }
 }

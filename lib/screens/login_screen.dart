@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
           centerTitle: true,
           actions: <Widget>[
             RaisedButton(
-              child: Text("CADASTRE-SE"),
+              child: Text("CADASTRE-SE", style: TextStyle(fontSize: 10),),
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => Screen1()));
