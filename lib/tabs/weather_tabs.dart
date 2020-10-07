@@ -134,7 +134,7 @@ class _WeatherTabsState extends State<WeatherTabs> {
   IconButton _provideWeatherIcon(String condition, double size) {
     if (condition == 'storm')
       return _buildWeatherIconButton(
-          WeatherIcons.storm_warning, Colors.grey[800], size);
+          WeatherIcons.storm_showers, Colors.grey[800], size);
     if (condition == 'snow')
       return _buildWeatherIconButton(WeatherIcons.snow, Colors.grey[800], size);
     if (condition == 'hail')

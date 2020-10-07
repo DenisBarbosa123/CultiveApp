@@ -17,8 +17,8 @@ class WeatherBloc extends BlocBase {
     debugPrint("Get Weather from HG Brasil");
     Position position =
         await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    Response response = await Dio().get(
-        _getUrl(position.latitude.toString(), position.longitude.toString()));
+    String weatherEndPointPath = _getUrl(position.latitude.toString(), position.longitude.toString());
+    Response response = await Dio().get(weatherEndPointPath);
     Weather weather = Weather.fromJson(response.data);
     _streamController.add(weather);
   }

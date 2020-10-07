@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chips_input/flutter_chips_input.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
- 
+
 // ignore: must_be_immutable
 class Screen3 extends StatefulWidget {
   //User
@@ -20,6 +20,7 @@ class Screen3 extends StatefulWidget {
   @override
   _Screen3State createState() => _Screen3State(user: user);
 }
+
 class _Screen3State extends State<Screen3> {
   //All Topic List
   List<TopicoModel> _topicList = List<TopicoModel>();
@@ -217,7 +218,7 @@ class _Screen3State extends State<Screen3> {
                   child: FlatButton(
                     onPressed: () async {
                       pr.show();
-                      await uploadFile();
+                      uploadFile();
                       user.topicos = Topicos.buildTopicList(_userTopicList);
                       _userBloc.submitSubscription(
                           userPayload: user.toJson(),
@@ -251,6 +252,9 @@ class _Screen3State extends State<Screen3> {
   }
 
   uploadFile() async {
+    if (_image == null) {
+      return;
+    }
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
         .child('profiles_photos/${_image.path.split("/").last}');
