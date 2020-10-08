@@ -103,276 +103,279 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       color: Colors.white),
                                 ))),
                       ])),
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                          onChanged: (value) {
-                            if (value != widget.user.nome) {
-                              _userEdited = true;
-                              userToBeUpdated.nome = value;
-                            }
-                          },
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.person_outline,
-                              color: Colors.black,
-                            ),
-                            labelText: "Nome",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                          onChanged: (value) {
-                            if (value != widget.user.email) {
-                              _userEdited = true;
-                              userToBeUpdated.email = value;
-                            }
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            if (!value.contains("@"))
-                              return "Informe um e-mail válido";
-                            return null;
-                          },
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.email,
-                              color: Colors.black,
-                            ),
-                            labelText: "E-mail",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                          onChanged: (value) {
-                            if (value != widget.user.celular) {
-                              _userEdited = true;
-                              userToBeUpdated.celular = value;
-                            }
-                          },
-                          inputFormatters: [_phoneMask],
-                          keyboardType: TextInputType.phone,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            if (value.length < 11)
-                              return "Informe um numero válido";
-                            return null;
-                          },
-                          controller: _phoneController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.phone_android,
-                              color: Colors.black,
-                            ),
-                            labelText: "Celular",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                          onChanged: (value) {
-                            if (value != widget.user.localizacao.bairro) {
-                              _userEdited = true;
-                              localizacao.bairro = value;
-                            }
-                          },
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _neighborhoodController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.black,
-                            ),
-                            labelText: "Bairro",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(height: 20),
-                      TextFormField(
-                          onChanged: (value) {
-                            if (value != widget.user.localizacao.cidade) {
-                              _userEdited = true;
-                              localizacao.cidade = value;
-                            }
-                          },
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _cityController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.black,
-                            ),
-                            labelText: "Cidade",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(height: 20),
-                      TextFormField(
-                          onChanged: (value) {
-                            if (value != widget.user.localizacao.estado) {
-                              _userEdited = true;
-                              localizacao.estado = value;
-                            }
-                          },
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _stateController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.black,
-                            ),
-                            labelText: "Estado",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(height: 20),
-                      Container(
-                          padding: EdgeInsets.only(right: 10, left: 10),
-                          child: ButtonTheme(
-                              minWidth: 200,
-                              height: 50,
-                              child: FlatButton(
-                                onPressed: () async {
-                                  if (userToBeUpdated == null) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: Text("Editar Perfil"),
-                                            content: Text(
-                                                "Nenhum dado foi alterado, necessário alterar algum dado para editar o perfil"),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text("Ok"))
-                                            ],
-                                          );
-                                        });
-                                  }
-                                  if (_formKey.currentState.validate()) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: Text("Editar Perfil"),
-                                            content: Text(
-                                                "Deseja realmente alterar os dados da sua conta?"),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text("Cancelar")),
-                                              FlatButton(
-                                                  onPressed: () async {
-                                                    Navigator.pop(context);
-                                                    pr.show();
-                                                    userToBeUpdated.localizacao = localizacao;
-                                                    if (_image != null)
-                                                      await uploadFile();
-                                                    _userBloc.editUser(
-                                                        user: userToBeUpdated,
-                                                        userId: widget.user.id,
-                                                        onSuccess: _onSuccess,
-                                                        onFail: _onFail);
-                                                  },
-                                                  child: Text("Sim"))
-                                            ],
-                                          );
-                                        });
-                                  }
-                                },
-                                color: Colors.green[900],
-                                child: Text(
-                                  "CONCLUIR EDIÇÃO",
-                                  style: TextStyle(color: Colors.white),
+              Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                              onChanged: (value) {
+                                if (value != widget.user.nome) {
+                                  _userEdited = true;
+                                  userToBeUpdated.nome = value;
+                                }
+                              },
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) return "Campo Obrigatório";
+                                return null;
+                              },
+                              controller: _nameController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.person_outline,
+                                  color: Colors.black,
                                 ),
-                                disabledColor: Colors.black54,
-                                disabledTextColor: Colors.white,
-                              ))),
-                      SizedBox(height: 20),
-                    ],
-                  ))
+                                labelText: "Nome",
+                                hintStyle: TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                              onChanged: (value) {
+                                if (value != widget.user.email) {
+                                  _userEdited = true;
+                                  userToBeUpdated.email = value;
+                                }
+                              },
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value.isEmpty) return "Campo Obrigatório";
+                                if (!value.contains("@"))
+                                  return "Informe um e-mail válido";
+                                return null;
+                              },
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.email,
+                                  color: Colors.black,
+                                ),
+                                labelText: "E-mail",
+                                hintStyle: TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                              onChanged: (value) {
+                                if (value != widget.user.celular) {
+                                  _userEdited = true;
+                                  userToBeUpdated.celular = value;
+                                }
+                              },
+                              inputFormatters: [_phoneMask],
+                              keyboardType: TextInputType.phone,
+                              validator: (value) {
+                                if (value.isEmpty) return "Campo Obrigatório";
+                                if (value.length < 11)
+                                  return "Informe um numero válido";
+                                return null;
+                              },
+                              controller: _phoneController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.phone_android,
+                                  color: Colors.black,
+                                ),
+                                labelText: "Celular",
+                                hintStyle: TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                              onChanged: (value) {
+                                if (value != widget.user.localizacao.bairro) {
+                                  _userEdited = true;
+                                  localizacao.bairro = value;
+                                }
+                              },
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) return "Campo Obrigatório";
+                                return null;
+                              },
+                              controller: _neighborhoodController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.home,
+                                  color: Colors.black,
+                                ),
+                                labelText: "Bairro",
+                                hintStyle: TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                              )),
+                          SizedBox(height: 20),
+                          TextFormField(
+                              onChanged: (value) {
+                                if (value != widget.user.localizacao.cidade) {
+                                  _userEdited = true;
+                                  localizacao.cidade = value;
+                                }
+                              },
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) return "Campo Obrigatório";
+                                return null;
+                              },
+                              controller: _cityController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.home,
+                                  color: Colors.black,
+                                ),
+                                labelText: "Cidade",
+                                hintStyle: TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                              )),
+                          SizedBox(height: 20),
+                          TextFormField(
+                              onChanged: (value) {
+                                if (value != widget.user.localizacao.estado) {
+                                  _userEdited = true;
+                                  localizacao.estado = value;
+                                }
+                              },
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                if (value.isEmpty) return "Campo Obrigatório";
+                                return null;
+                              },
+                              controller: _stateController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.home,
+                                  color: Colors.black,
+                                ),
+                                labelText: "Estado",
+                                hintStyle: TextStyle(color: Colors.black),
+                                labelStyle: TextStyle(color: Colors.black),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                                ),
+                              )),
+                          SizedBox(height: 20),
+                          Container(
+                              padding: EdgeInsets.only(right: 10, left: 10),
+                              child: ButtonTheme(
+                                  minWidth: 200,
+                                  height: 50,
+                                  child: FlatButton(
+                                    onPressed: () async {
+                                      if (userToBeUpdated == null) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text("Editar Perfil"),
+                                                content: Text(
+                                                    "Nenhum dado foi alterado, necessário alterar algum dado para editar o perfil"),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text("Ok"))
+                                                ],
+                                              );
+                                            });
+                                      }
+                                      if (_formKey.currentState.validate()) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: Text("Editar Perfil"),
+                                                content: Text(
+                                                    "Deseja realmente alterar os dados da sua conta?"),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text("Cancelar")),
+                                                  FlatButton(
+                                                      onPressed: () async {
+                                                        Navigator.pop(context);
+                                                        pr.show();
+                                                        userToBeUpdated.localizacao = localizacao;
+                                                        if (_image != null)
+                                                          await uploadFile();
+                                                        _userBloc.editUser(
+                                                            user: userToBeUpdated,
+                                                            userId: widget.user.id,
+                                                            onSuccess: _onSuccess,
+                                                            onFail: _onFail);
+                                                      },
+                                                      child: Text("Sim"))
+                                                ],
+                                              );
+                                            });
+                                      }
+                                    },
+                                    color: Colors.green[900],
+                                    child: Text(
+                                      "CONCLUIR EDIÇÃO",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    disabledColor: Colors.black54,
+                                    disabledTextColor: Colors.white,
+                                  ))),
+                          SizedBox(height: 20),
+                        ],
+                      ))
+              )
             ],
           ),
         ));

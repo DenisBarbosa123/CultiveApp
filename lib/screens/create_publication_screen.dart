@@ -158,7 +158,8 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
                     initialValue: [],
                     decoration: InputDecoration(
                       labelText: "Tópicos relacionados a publicação",
-                      hintStyle: TextStyle(color: Colors.black),
+                      hintText: "Exemplo: Plantio de Milho, Criação de Gado...",
+                      hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
                       labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black, width: 1.0),

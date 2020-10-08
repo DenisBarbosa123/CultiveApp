@@ -8,6 +8,7 @@ class Screen1 extends StatelessWidget {
   //Controller
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _repeatedEmailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatedPasswordController =
       TextEditingController();
@@ -76,6 +77,29 @@ class Screen1 extends StatelessWidget {
                   ),
                   SizedBox(height: 20,),
                   TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if(value.isEmpty) return "Campo Obrigatório";
+                        if(!value.contains("@")) return "Informe um e-mail válido";
+                        if(value != _emailController.text) return "E-mail informado deve ser igual ao do campo anterior";
+                        return null;
+                      },
+                      controller: _repeatedEmailController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.email, color: Colors.black,),
+                        labelText: "Confirme seu e-mail",
+                        hintStyle: TextStyle(color: Colors.black),
+                        labelStyle: TextStyle(color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      )
+                  ),
+                  SizedBox(height: 20,),
+                  TextFormField(
                       obscureText: true,
                       validator: (value) {
                         if(value.isEmpty) return "Campo Obrigatório";
@@ -107,7 +131,7 @@ class Screen1 extends StatelessWidget {
                       controller: _repeatedPasswordController,
                       decoration: InputDecoration(
                         icon: Icon(Icons.lock, color: Colors.black,),
-                        labelText: "Nova senha novamente",
+                        labelText: "Confirme sua senha",
                         hintStyle: TextStyle(color: Colors.black),
                         labelStyle: TextStyle(color: Colors.black),
                         enabledBorder: OutlineInputBorder(

@@ -94,7 +94,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       },
                     ),
                   )
-                : Center(child: Text("Está publicação não possui comentários")),
+                : Container(),
             Padding(
               padding: EdgeInsets.all(10),
               child: Row(
@@ -104,7 +104,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration.collapsed(
                         fillColor: Colors.black26,
-                        hintText: "Add um comentário"),
+                        hintText: "Adicione um comentário"),
                     controller: _commentController,
                   )),
                   IconButton(

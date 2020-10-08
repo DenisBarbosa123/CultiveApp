@@ -120,7 +120,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             Icons.lock_outline,
                             color: Colors.black,
                           ),
-                          labelText: "Senha",
+                          labelText: "Nova senha",
                           hintStyle: TextStyle(color: Colors.black),
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
@@ -149,7 +149,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             Icons.lock,
                             color: Colors.black,
                           ),
-                          labelText: "Nova senha novamente",
+                          labelText: "Confirme sua nova senha",
                           hintStyle: TextStyle(color: Colors.black),
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(

@@ -6,7 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 // ignore: must_be_immutable
-class Screen2 extends StatelessWidget {
+class Screen2 extends StatefulWidget {
+  //User
+  User user;
+  Screen2({@required this.user});
+  @override
+  _Screen2State createState() => _Screen2State();
+}
+
+class _Screen2State extends State<Screen2> {
   //Mask
   final _phoneMask = MaskTextInputFormatter(
       mask: "(##) #####-####", filter: {"#": RegExp(r'[0-9]')});
@@ -26,9 +34,16 @@ class Screen2 extends StatelessWidget {
   //Bloc
   final _cepAPI = CepAPI();
 
+  bool _hasFocus = false;
+
   //User
   User user;
-  Screen2({@required this.user});
+
+  @override
+  void initState(){
+    super.initState();
+    user = widget.user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +81,11 @@ class Screen2 extends StatelessWidget {
                         labelStyle: TextStyle(color: Colors.black),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                       )),
                   SizedBox(
@@ -89,6 +104,9 @@ class Screen2 extends StatelessWidget {
                               .searchCep(value.replaceFirst("-", "").trim());
                           if (cep != null) {
                             _populateAddressFields(cep);
+                            setState(() {
+                              _hasFocus = true;
+                            });
                           }
                         }
                       },
@@ -104,94 +122,93 @@ class Screen2 extends StatelessWidget {
                         labelStyle: TextStyle(color: Colors.black),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
+                          BorderSide(color: Colors.black, width: 1.0),
                         ),
                       )),
-                  Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _neighborhoodController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.black,
-                            ),
-                            labelText: "Bairro",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(height: 20),
-                      TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _cityController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.black,
-                            ),
-                            labelText: "Cidade",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                      SizedBox(height: 20),
-                      TextFormField(
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value.isEmpty) return "Campo Obrigatório";
-                            return null;
-                          },
-                          controller: _stateController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.home,
-                              color: Colors.black,
-                            ),
-                            labelText: "Estado",
-                            hintStyle: TextStyle(color: Colors.black),
-                            labelStyle: TextStyle(color: Colors.black),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
-                            ),
-                          )),
-                    ],
-                  )
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                      enabled: _hasFocus,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value.isEmpty) return "Campo Obrigatório";
+                        return null;
+                      },
+                      controller: _neighborhoodController,
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.home,
+                          color: Colors.black,
+                        ),
+                        labelText: "Bairro",
+                        hintStyle: TextStyle(color: Colors.black),
+                        labelStyle: TextStyle(color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      )),
+                  SizedBox(height: 20),
+                  TextFormField(
+                      enabled: _hasFocus,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value.isEmpty) return "Campo Obrigatório";
+                        return null;
+                      },
+                      controller: _cityController,
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.home,
+                          color: Colors.black,
+                        ),
+                        labelText: "Cidade",
+                        hintStyle: TextStyle(color: Colors.black),
+                        labelStyle: TextStyle(color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      )),
+                  SizedBox(height: 20),
+                  TextFormField(
+                      enabled: _hasFocus,
+                      keyboardType: TextInputType.text,
+                      validator: (value) {
+                        if (value.isEmpty) return "Campo Obrigatório";
+                        return null;
+                      },
+                      controller: _stateController,
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.home,
+                          color: Colors.black,
+                        ),
+                        labelText: "Estado",
+                        hintStyle: TextStyle(color: Colors.black),
+                        labelStyle: TextStyle(color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -257,3 +274,4 @@ class Screen2 extends StatelessWidget {
     this.user.localizacao = localizacao;
   }
 }
+
