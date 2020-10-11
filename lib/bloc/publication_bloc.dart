@@ -104,22 +104,48 @@ class PublicationBloc extends BlocBase {
     }
   }
 
-  void editPublication({String token, Publication publicationToBeEdited}) {}
+  Future<void> editPublication(
+      {String token,
+      String postBody,
+      int postId,
+      VoidCallback onSuccess,
+      VoidCallback onFail}) async {
+    Publication post = Publication(corpo: postBody);
+    try {
+      Response response = await Dio().put(PathConstants.editPublication(postId),
+          options: RequestOptions(headers: {"Authorization": token}),
+          data: post.toJson());
+      if (response.statusCode == 200) {
+        debugPrint("Publicaton edited with successfully");
+        onSuccess();
+      } else {
+        debugPrint("Failure during post edition");
+        onFail();
+      }
+    } catch (e) {
+      debugPrint("Exception during post edition");
+      onFail();
+    }
+  }
 
-  Future<void> deletePublication({String token, int postId, VoidCallback onDeleteSuccess, VoidCallback onDeleteFail}) async {
+  Future<void> deletePublication(
+      {String token,
+      int postId,
+      VoidCallback onDeleteSuccess,
+      VoidCallback onDeleteFail}) async {
     debugPrint("Delete performing to exclude post with id $postId");
-    try{
-      Response response = await Dio()
-          .delete(PathConstants.deletePublication(postId),
+    try {
+      Response response = await Dio().delete(
+          PathConstants.deletePublication(postId),
           options: RequestOptions(headers: {"Authorization": token}));
-      if(response.statusCode == 204){
+      if (response.statusCode == 204) {
         debugPrint("Post was excluded successfully");
         onDeleteSuccess();
-      }else {
+      } else {
         debugPrint("Error during post exclusion");
         onDeleteFail();
       }
-    }catch(e){
+    } catch (e) {
       debugPrint("Exception during post exclusion");
       onDeleteFail();
     }
@@ -129,7 +155,7 @@ class PublicationBloc extends BlocBase {
     if (imageList == null) {
       return;
     }
-    try{
+    try {
       for (Imagens image in imageList) {
         StorageReference storageReference = await FirebaseStorage.instance
             .ref()
@@ -137,10 +163,9 @@ class PublicationBloc extends BlocBase {
             .getReferenceFromUrl(image.imagemEncoded);
         storageReference.delete().then((value) => print("deleted post image"));
       }
-    }catch(e){
+    } catch (e) {
       debugPrint("Exception during delete post images");
     }
-
   }
 
   bool isMine(int myUserId, int userId) {

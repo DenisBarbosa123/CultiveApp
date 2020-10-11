@@ -1,10 +1,17 @@
 import 'package:cultiveapp/bloc/weather_bloc.dart';
+import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/model/weather_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+// ignore: must_be_immutable
 class WeatherTabs extends StatefulWidget {
+  final User user;
+  String cityName;
+  WeatherTabs(this.user) {
+    cityName = user.localizacao.cidade;
+  }
   @override
   _WeatherTabsState createState() => _WeatherTabsState();
 }
@@ -72,29 +79,30 @@ class _WeatherTabsState extends State<WeatherTabs> {
                         dayOfTheWeek: "${snapshot.data.forecast[1].weekday}",
                         icon: _provideWeatherIcon(
                             "${snapshot.data.forecast[1].condition}", 20),
-                        temperatureMax: " Max ${snapshot.data.forecast[1].max}°",
-                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°"
-                    ),
+                        temperatureMax:
+                            " Max ${snapshot.data.forecast[1].max}°",
+                        temperatureMin:
+                            "Min ${snapshot.data.forecast[2].min}°"),
                     _getWeatherPrevision(
                         dayOfTheWeek: "${snapshot.data.forecast[2].weekday}",
                         icon: _provideWeatherIcon(
                             "${snapshot.data.forecast[2].condition}", 20),
                         temperatureMax: "Max ${snapshot.data.forecast[2].max}°",
-                      temperatureMin: "Min ${snapshot.data.forecast[2].min}°"
-                    ),
+                        temperatureMin:
+                            "Min ${snapshot.data.forecast[2].min}°"),
                     _getWeatherPrevision(
                         dayOfTheWeek: "${snapshot.data.forecast[3].weekday}",
                         icon: _provideWeatherIcon(
                             "${snapshot.data.forecast[3].condition}", 20),
                         temperatureMax: "Max ${snapshot.data.forecast[3].max}°",
-                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°"),
+                        temperatureMin:
+                            "Min ${snapshot.data.forecast[2].min}°"),
                     _getWeatherPrevision(
                         dayOfTheWeek: "${snapshot.data.forecast[4].weekday}",
                         icon: _provideWeatherIcon(
                             "${snapshot.data.forecast[4].condition}", 20),
                         temperatureMax: "Max ${snapshot.data.forecast[4].max}°",
-                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°"
-                    )
+                        temperatureMin: "Min ${snapshot.data.forecast[2].min}°")
                   ],
                 ),
                 Divider(color: Colors.grey[400]),
@@ -115,7 +123,10 @@ class _WeatherTabsState extends State<WeatherTabs> {
   }
 
   Widget _getWeatherPrevision(
-      {String dayOfTheWeek, IconButton icon, String temperatureMax, String temperatureMin}) {
+      {String dayOfTheWeek,
+      IconButton icon,
+      String temperatureMax,
+      String temperatureMin}) {
     return Column(children: <Widget>[
       Text(dayOfTheWeek),
       SizedBox(width: 50, height: 50, child: icon),
@@ -127,7 +138,6 @@ class _WeatherTabsState extends State<WeatherTabs> {
         temperatureMax,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
-
     ]);
   }
 
@@ -176,7 +186,7 @@ class _WeatherTabsState extends State<WeatherTabs> {
   @override
   void initState() {
     super.initState();
-    _weatherBloc = WeatherBloc();
+    _weatherBloc = WeatherBloc(widget.cityName);
     _weatherBloc.getUpdateWeather();
   }
 }

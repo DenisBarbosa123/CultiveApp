@@ -37,6 +37,9 @@ class _PublicationTileState extends State<PublicationTile> {
 
   bool flag = true;
 
+  bool isEditing = false;
+  var descriptionTextController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -83,8 +86,10 @@ class _PublicationTileState extends State<PublicationTile> {
         FlatButton(
             onPressed: () {
               Navigator.pop(context);
-              pr.show();
-              _publicationBloc.editPublication();
+              setState(() {
+                descriptionTextController.text = _publication.corpo;
+                isEditing = true;
+              });
             },
             child: Text("Sim"))
       ],
@@ -243,31 +248,41 @@ class _PublicationTileState extends State<PublicationTile> {
                 SizedBox(
                   height: 15,
                 ),
-                secondHalf.isEmpty
-                    ? new Text(firstHalf, textAlign: TextAlign.left, style: TextStyle(fontSize: 14),)
-                    : new Column(
-                        children: <Widget>[
-                          new Text(flag
-                              ? (firstHalf + "...")
-                              : (firstHalf + secondHalf), textAlign: TextAlign.left, style: TextStyle(fontSize: 14),),
-                          new InkWell(
-                            child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                new Text(
-                                  flag ? "Mostrar mais" : "Mostrar Menos",
-                                  style: new TextStyle(color: Colors.blue),
+                isEditing
+                    ? editModeScreen()
+                    : secondHalf.isEmpty
+                        ? new Text(
+                            firstHalf,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(fontSize: 14),
+                          )
+                        : new Column(
+                            children: <Widget>[
+                              new Text(
+                                flag
+                                    ? (firstHalf + "...")
+                                    : (firstHalf + secondHalf),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              new InkWell(
+                                child: new Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    new Text(
+                                      flag ? "Mostrar mais" : "Mostrar Menos",
+                                      style: new TextStyle(color: Colors.blue),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            onTap: () {
-                              setState(() {
-                                flag = !flag;
-                              });
-                            },
+                                onTap: () {
+                                  setState(() {
+                                    flag = !flag;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
                 SizedBox(
                   height: 15,
                 ),
@@ -301,10 +316,12 @@ class _PublicationTileState extends State<PublicationTile> {
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CommentsScreen(_publication, widget._userInfo, openCommentScreen)));
+                            builder: (context) => CommentsScreen(_publication,
+                                widget._userInfo, openCommentScreen)));
                       },
                     ),
-                    Text("${_dateFormat.format(DateTime.parse(_publication.data))}",
+                    Text(
+                        "${_dateFormat.format(DateTime.parse(_publication.data))}",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontStyle: FontStyle.italic,
@@ -318,9 +335,90 @@ class _PublicationTileState extends State<PublicationTile> {
     );
   }
 
-  void openCommentScreen(List<Comentario> commentList){
+  void openCommentScreen(List<Comentario> commentList) {
     _publication.comentarios = commentList;
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => CommentsScreen(_publication, widget._userInfo, openCommentScreen)));
+        builder: (context) =>
+            CommentsScreen(_publication, widget._userInfo, openCommentScreen)));
+  }
+
+  Widget editModeScreen() {
+    return Container(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: TextField(
+                style: TextStyle(fontSize: 12),
+                keyboardType: TextInputType.multiline,
+                controller: descriptionTextController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 0.5)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 0.5)),
+                  contentPadding: EdgeInsets.all(5),
+                ),
+                minLines: 1,
+                maxLines: 100),
+          ),
+          Column(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.check, size: 30, color: Colors.black),
+                  onPressed: () {
+                    setState(() {
+                      isEditing = false;
+                      if (descriptionTextController.text != '') {
+                        pr.show();
+                        _publicationBloc.editPublication(
+                            token: token,
+                            postBody: descriptionTextController.text,
+                            postId: _publication.id,
+                            onFail: onFailEditing,
+                            onSuccess: onSuccessEditing);
+                      }
+                    });
+                  }),
+              IconButton(
+                  icon: Icon(Icons.cancel_outlined,
+                      size: 25, color: Colors.black),
+                  onPressed: () {
+                    setState(() {
+                      descriptionTextController.text = '';
+                      isEditing = false;
+                    });
+                  }),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void onSuccessEditing() {
+    pr.hide();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => PublicationScreen()));
+  }
+
+  void onFailEditing() {
+    pr.hide();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Erro"),
+            content: Text("Erro ao editar a publicação desejada"),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("OK")),
+            ],
+          );
+        });
   }
 }

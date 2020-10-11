@@ -24,41 +24,45 @@ class _HomePageState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<AuthenticationStatus>(
-        stream: _userBloc.loginOutput,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(Colors.green)),
-            );
-          } else {
-            if (snapshot.data == AuthenticationStatus.authenticated) {
-              return DefaultTabController(
-                  length: 3,
-                  child: Scaffold(
-                    drawer: CustomDrawer(
-                        userInformation: _userBloc.userInformation["user"]),
-                    appBar: AppBar(
-                      title: Text(
-                        "PÁGINA INICIAL",
-                      ),
-                      centerTitle: true,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      bottom: TabBar(indicatorColor: Colors.white, tabs: [
-                        Tab(text: "Clima", icon: Icon(Icons.ac_unit)),
-                        Tab(text: "Cotação", icon: Icon(Icons.monetization_on)),
-                        Tab(text: "Notícias", icon: Icon(Icons.announcement)),
-                      ]),
+      stream: _userBloc.loginOutput,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(Colors.green)),
+          );
+        } else {
+          if (snapshot.data == AuthenticationStatus.authenticated) {
+            return DefaultTabController(
+                length: 3,
+                child: Scaffold(
+                  drawer: CustomDrawer(
+                      userInformation: _userBloc.userInformation["user"]),
+                  appBar: AppBar(
+                    title: Text(
+                      "PÁGINA INICIAL",
                     ),
-                    body: TabBarView(
+                    centerTitle: true,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    bottom: TabBar(indicatorColor: Colors.white, tabs: [
+                      Tab(text: "Clima", icon: Icon(Icons.ac_unit)),
+                      Tab(text: "Cotação", icon: Icon(Icons.monetization_on)),
+                      Tab(text: "Notícias", icon: Icon(Icons.announcement)),
+                    ]),
+                  ),
+                  body: TabBarView(
                       physics: NeverScrollableScrollPhysics(),
-                        children: [WeatherTabs(), QuotationTabs(), NewsTabs()]),
-                  ));
-            } else {
-              return PresentationScreen();
-            }
+                      children: [
+                        WeatherTabs(_userBloc.userInformation["user"]),
+                        QuotationTabs(),
+                        NewsTabs()
+                      ]),
+                ));
+          } else {
+            return PresentationScreen();
           }
-        },
-      );
+        }
+      },
+    );
   }
 }

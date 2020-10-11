@@ -23,7 +23,7 @@ class _SplashScreenState extends State<Splash> {
     super.initState();
     _tokenUtil.getToken().then((value) {
       debugPrint("Token do user : $value");
-      if(JwtDecoder.isExpired(value)){
+      if (value != null && JwtDecoder.isExpired(value)) {
         debugPrint("Token expirado, fazendo logout");
         _userBloc = UserBloc();
         _userBloc.logout();
