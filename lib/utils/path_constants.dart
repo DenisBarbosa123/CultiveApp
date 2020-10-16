@@ -13,6 +13,7 @@ class PathConstants {
       "https://cultiveapp.herokuapp.com/api/usuario/$id";
   static String deleteUserById(String id) =>
       "https://cultiveapp.herokuapp.com/api/usuario/$id";
+  static String requestUpdatePassword() => "https://cultiveapp.herokuapp.com/api/usuario/autorizaUpdateSenha";
 
   //Publication
 

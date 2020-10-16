@@ -1,19 +1,18 @@
 import 'package:cultiveapp/bloc/user_bloc.dart';
-import 'package:cultiveapp/screens/home_screen.dart';
-import 'package:cultiveapp/screens/request_update_password.dart';
-import 'package:cultiveapp/screens/subscription/screen1.dart';
+import 'package:cultiveapp/screens/reset_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class LoginScreen extends StatefulWidget {
+class RequestUpdatePasswordScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RequestUpdatePasswordScreenState createState() =>
+      _RequestUpdatePasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RequestUpdatePasswordScreenState
+    extends State<RequestUpdatePasswordScreen> {
   //controllers
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   //global-key
   final _formKey = GlobalKey<FormState>();
@@ -54,23 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
         key: _scaffoldKey,
         backgroundColor: Theme.of(context).primaryColor,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text("LOGIN"),
-          centerTitle: true,
-          actions: <Widget>[
-            RaisedButton(
-              child: Text(
-                "CADASTRE-SE",
-                style: TextStyle(fontSize: 10),
-              ),
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Screen1()));
-              },
-              color: Theme.of(context).primaryColor,
-            )
-          ],
-        ),
+            backgroundColor: Theme.of(context).primaryColor,
+            title: Text("ESQUECEU A SENHA"),
+            centerTitle: true),
         body: ListView(
           children: <Widget>[
             Padding(
@@ -83,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: 35.0,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center),
-            SizedBox(height: 40),
+            SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.all(10),
               child: Form(
@@ -106,36 +91,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.black,
                           ),
                           labelText: "E-mail",
-                          hintStyle: TextStyle(color: Colors.black),
-                          labelStyle: TextStyle(color: Colors.black),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 1.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 1.0),
-                          ),
-                        )),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                        obscureText: true,
-                        validator: (value) {
-                          if (value.isEmpty) return "Campo Obrigatório";
-                          if (value.length < 5)
-                            return "Informe uma senha com mais de 5 caracteres";
-                          return null;
-                        },
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          icon: Icon(
-                            Icons.lock_outline,
-                            color: Colors.black,
-                          ),
-                          labelText: "Senha",
-                          hintStyle: TextStyle(color: Colors.black),
+                          hintText:
+                              "E-mail que será enviado código para reset de senha",
+                          hintStyle:
+                              TextStyle(color: Colors.black54, fontSize: 12),
                           labelStyle: TextStyle(color: Colors.black),
                           enabledBorder: OutlineInputBorder(
                             borderSide:
@@ -150,24 +109,67 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 20,
                     ),
                     Container(
-                        padding: EdgeInsets.only(top: 20, right: 10, left: 10),
+                        padding: EdgeInsets.only(top: 10, right: 10, left: 10),
                         child: ButtonTheme(
                             minWidth: 200,
                             height: 50,
                             child: FlatButton(
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  pr.show();
-                                  _userBloc.makeUserLogin(
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                      onSuccess: _onSuccess,
-                                      onFail: _onFail);
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text("Enviar código!"),
+                                          content: Text(
+                                              "Deseja realmente enviar o código de troca de senha para e-mail ${_emailController.text} ?"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Text("Cancelar")),
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  pr.show();
+                                                  _userBloc
+                                                      .requestUpdatePassword(
+                                                          email:
+                                                              _emailController
+                                                                  .text,
+                                                          onSuccess: _onSuccess,
+                                                          onFail: _onFail);
+                                                },
+                                                child: Text("Sim"))
+                                          ],
+                                        );
+                                      });
                                 }
                               },
                               color: Colors.green[900],
                               child: Text(
-                                "ENTRAR",
+                                "ENVIAR CÓDIGO",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              disabledColor: Colors.black54,
+                              disabledTextColor: Colors.white,
+                            ))),
+                    Container(
+                        padding: EdgeInsets.only(top: 10, right: 10, left: 10),
+                        child: ButtonTheme(
+                            minWidth: 200,
+                            height: 50,
+                            child: FlatButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ResetPasswordScreen()));
+                              },
+                              color: Colors.green[900],
+                              child: Text(
+                                "JÁ TEM O CÓDIGO? CLIQUE AQUI",
                                 style: TextStyle(color: Colors.white),
                               ),
                               disabledColor: Colors.black54,
@@ -177,33 +179,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            Center(
-                child: FlatButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => RequestUpdatePasswordScreen()));
-              },
-              child: Text(
-                "Esqueceu sua senha?",
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-              ),
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-            )),
           ],
         ));
   }
 
   void _onSuccess() {
     pr.hide();
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => ResetPasswordScreen()));
   }
 
   void _onFail() {
     pr.hide();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Falha ao logar o usuário"),
+      content: Text("Erro durante a requisição do token de reset de senha"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
     ));

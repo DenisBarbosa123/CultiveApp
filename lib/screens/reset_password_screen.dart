@@ -10,6 +10,7 @@ class ResetPasswordScreen extends StatefulWidget {
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   //controllers
+  final TextEditingController _tokenController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _repeatedPasswordController =
@@ -77,6 +78,33 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value.isEmpty) return "Campo Obrigatório";
+                          if (value.length != 6)
+                            return "Informe um código válido de 5 carateres";
+                          return null;
+                        },
+                        controller: _tokenController,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.code_rounded,
+                            color: Colors.black,
+                          ),
+                          labelText: "Código",
+                          hintStyle: TextStyle(color: Colors.black),
+                          labelStyle: TextStyle(color: Colors.black),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                          ),
+                        )),
+                    SizedBox(height: 20),
                     TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
@@ -196,7 +224,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                                           _passwordController
                                                               .text,
                                                       onSuccess: _onSuccess,
-                                                      onFail: _onFail);
+                                                      onInvalidEmail:
+                                                          _onInvalidEmail,
+                                                      onTokenExpired:
+                                                          _onTokenExpired,
+                                                      onTokenNotFound:
+                                                          _onTokenNotFound,
+                                                      onFail: _onGenericFail,
+                                                      token: _tokenController
+                                                          .text);
                                                 },
                                                 child: Text("Sim"))
                                           ],
@@ -207,6 +243,23 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               color: Colors.green[900],
                               child: Text(
                                 "CONFIRMAR",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              disabledColor: Colors.black54,
+                              disabledTextColor: Colors.white,
+                            ))),
+                    Container(
+                        padding: EdgeInsets.only(top: 10, right: 10, left: 10),
+                        child: ButtonTheme(
+                            minWidth: 200,
+                            height: 50,
+                            child: FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              color: Colors.green[900],
+                              child: Text(
+                                "REENVIAR CÓDIGO",
                                 style: TextStyle(color: Colors.white),
                               ),
                               disabledColor: Colors.black54,
@@ -226,10 +279,27 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 
-  void _onFail() {
+  void _onInvalidEmail() {
+    _onFail("Nenhum usuário encontrado com email informado");
+  }
+
+  void _onTokenNotFound() {
+    _onFail("Token não encontrado");
+  }
+
+  void _onTokenExpired() {
+    _onFail(
+        "Token informado está expirado, favor atualizar seu token para continuar o reset de senha");
+  }
+
+  void _onGenericFail() {
+    _onFail("Ocorreu um erro durante reset de senha");
+  }
+
+  void _onFail(String erro) {
     pr.hide();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Falha ao criar usuário"),
+      content: Text(erro),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
     ));

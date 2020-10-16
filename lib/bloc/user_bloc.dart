@@ -23,7 +23,8 @@ class UserBloc extends BlocBase {
   final _loginController = StreamController<AuthenticationStatus>.broadcast();
   Stream get loginOutput => _loginController.stream;
 
-  final _userInformationController = StreamController<Map<String, dynamic>>.broadcast();
+  final _userInformationController =
+      StreamController<Map<String, dynamic>>.broadcast();
   Stream get userInformationOutput => _loginController.stream;
 
   Future<void> submitSubscription(
@@ -76,11 +77,16 @@ class UserBloc extends BlocBase {
   Future<void> resetUserPassword(
       {String username,
       String newPassword,
+      String token,
       VoidCallback onSuccess,
+      VoidCallback onInvalidEmail,
+      VoidCallback onTokenNotFound,
+      VoidCallback onTokenExpired,
       VoidCallback onFail}) async {
     try {
       debugPrint("Reset password in progress...");
-      UserAuth userAuth = UserAuth(password: newPassword, username: username);
+      UserAuth userAuth =
+          UserAuth(password: newPassword, username: username, token: token);
       Response response = await Dio().put(PathConstants.resetUserPasswordUrl(),
           data: json.encode(userAuth.toJson()));
       if (response.statusCode == 200) {
@@ -90,8 +96,17 @@ class UserBloc extends BlocBase {
         onFail();
       }
     } catch (e) {
-      debugPrint("Reset password fail...");
-      onFail();
+      debugPrint("Exception during Reset password..." + e.toString());
+      String erro = e.toString();
+      if (erro.contains("404")) {
+        onInvalidEmail();
+      } else if (erro.contains("400")) {
+        onTokenNotFound();
+      } else if (erro.contains("403")) {
+        onTokenExpired();
+      } else {
+        onFail();
+      }
     }
   }
 
@@ -159,6 +174,26 @@ class UserBloc extends BlocBase {
       }
     } catch (e) {
       debugPrint("Exception during user exclusion");
+      onFail();
+    }
+  }
+
+  Future<void> requestUpdatePassword(
+      {VoidCallback onSuccess, VoidCallback onFail, String email}) async {
+    debugPrint("Request update password performing");
+    UserAuth auth = UserAuth(username: email);
+    try {
+      Response response = await Dio()
+          .post(PathConstants.requestUpdatePassword(), data: auth.toJson());
+      if (response.statusCode == 202) {
+        debugPrint("Request update password successfully");
+        onSuccess();
+      } else {
+        debugPrint("Request update password fail");
+        onFail();
+      }
+    } catch (e) {
+      debugPrint("Exception during Request password");
       onFail();
     }
   }
