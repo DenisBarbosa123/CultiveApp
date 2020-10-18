@@ -4,6 +4,7 @@ import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/comments_screen.dart';
 import 'package:cultiveapp/screens/publication_screen.dart';
+import 'package:cultiveapp/utils/image_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -110,7 +111,7 @@ class _PublicationTileState extends State<PublicationTile> {
             onPressed: () async {
               Navigator.pop(context);
               pr.show();
-              await _publicationBloc
+              await ImageUtils
                   .deletePublicationImages(_publication.imagens);
               _publicationBloc.deletePublication(
                   token: token,

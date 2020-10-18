@@ -1,14 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/utils/path_constants.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 class PublicationBloc extends BlocBase {
   int offset = 0;
@@ -43,37 +39,6 @@ class PublicationBloc extends BlocBase {
     } else {
       throw Exception("Failed to load the publications!");
     }
-  }
-
-  Future<List<File>> getFileListFromAssetList(List<Asset> assetsList) async {
-    List<File> files = [];
-    for (Asset asset in assetsList) {
-      final filePath =
-          await FlutterAbsolutePath.getAbsolutePath(asset.identifier);
-      files.add(File(filePath));
-    }
-
-    return files;
-  }
-
-  Future<List<Imagens>> uploadListImage(List<File> imagensToSave) async {
-    debugPrint("Uploading image list performing...");
-    List<Imagens> savedImagens = [];
-    StorageReference storageReference;
-    for (File file in imagensToSave) {
-      storageReference = FirebaseStorage.instance
-          .ref()
-          .child('publication_photos/${file.path.split("/").last}');
-      StorageUploadTask uploadTask = storageReference.putFile(file);
-      await uploadTask.onComplete;
-      debugPrint('File Uploaded');
-      var fileURL = await storageReference.getDownloadURL();
-      Imagens imageSaved = Imagens();
-      imageSaved.imagemEncoded = fileURL;
-      savedImagens.add(imageSaved);
-    }
-
-    return savedImagens;
   }
 
   void createPublication(
@@ -148,23 +113,6 @@ class PublicationBloc extends BlocBase {
     } catch (e) {
       debugPrint("Exception during post exclusion");
       onDeleteFail();
-    }
-  }
-
-  Future<void> deletePublicationImages(List<Imagens> imageList) async {
-    if (imageList == null) {
-      return;
-    }
-    try {
-      for (Imagens image in imageList) {
-        StorageReference storageReference = await FirebaseStorage.instance
-            .ref()
-            .getStorage()
-            .getReferenceFromUrl(image.imagemEncoded);
-        storageReference.delete().then((value) => print("deleted post image"));
-      }
-    } catch (e) {
-      debugPrint("Exception during delete post images");
     }
   }
 

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/model/user_auth.dart';
 import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/notification/push_notification_configure.dart';
 import 'package:cultiveapp/utils/path_constants.dart';
 import 'package:cultiveapp/utils/token_util.dart';
 import 'package:cultiveapp/utils/json_store_util.dart';
@@ -19,6 +20,9 @@ class UserBloc extends BlocBase {
   JsonStoreUtil _jsonStoreUtil = JsonStoreUtil();
   //user information map
   Map<String, dynamic> userInformation = Map<String, dynamic>();
+
+  PushNotificationConfigure _pushNotificationConfigure =
+      PushNotificationConfigure();
 
   final _loginController = StreamController<AuthenticationStatus>.broadcast();
   Stream get loginOutput => _loginController.stream;
@@ -39,6 +43,7 @@ class UserBloc extends BlocBase {
         debugPrint("Subscription successful...");
         onSuccess();
         User user = User.fromJson(userPayload);
+        subscribeTopics(user.topicos);
         makeUserLogin(email: user.email, password: user.senha);
       } else
         onFail();
@@ -151,15 +156,8 @@ class UserBloc extends BlocBase {
       {User user, VoidCallback onSuccess, VoidCallback onFail}) async {
     try {
       debugPrint("User exclusion performing....");
-      if (user.fotoPerfil != null) {
-        StorageReference storageReference = await FirebaseStorage.instance
-            .ref()
-            .getStorage()
-            .getReferenceFromUrl(user.fotoPerfil);
-        storageReference
-            .delete()
-            .then((value) => print("deleted profile photo"));
-      }
+      deleteProfilePhoto(user.fotoPerfil);
+      unSubscribeTopics(user.topicos);
       String token = await _tokenUtil.getToken();
       Response response = await Dio().delete(
           PathConstants.deleteUserById(user.id.toString()),
@@ -224,6 +222,26 @@ class UserBloc extends BlocBase {
         _loginController.add(AuthenticationStatus.unauthenticated);
       }
     }
+  }
+
+  Future<void> deleteProfilePhoto(String pathProfilePhoto) async {
+    if (pathProfilePhoto == null) {
+      return;
+    }
+
+    StorageReference storageReference = await FirebaseStorage.instance
+        .ref()
+        .getStorage()
+        .getReferenceFromUrl(pathProfilePhoto);
+    storageReference.delete().then((value) => print("deleted profile photo"));
+  }
+
+  void subscribeTopics(List<Topicos> topicList) {
+    _pushNotificationConfigure.subscribeTopics(topicList);
+  }
+
+  void unSubscribeTopics(List<Topicos> topicList) {
+    _pushNotificationConfigure.unSubscribeTopics(topicList);
   }
 
   @override
