@@ -9,6 +9,7 @@ class Sale {
   List<Imagens> imagens;
   User usuario;
   String data;
+  String corpo;
 
   Sale(
       {this.id,
@@ -21,6 +22,7 @@ class Sale {
 
   Sale.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    corpo = json['corpo'];
     status =
         json['status'] != null ? new Status.fromJson(json['status']) : null;
     tipo = json['tipo'] != null ? new Tipo.fromJson(json['tipo']) : null;
@@ -40,6 +42,7 @@ class Sale {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['corpo'] = this.corpo;
     if (this.status != null) {
       data['status'] = this.status.toJson();
     }
@@ -56,28 +59,6 @@ class Sale {
       data['usuario'] = this.usuario.toJson();
     }
     data['data'] = this.data;
-    return data;
-  }
-}
-
-class Status {
-  int id;
-  String nome;
-  String descricao;
-
-  Status({this.id, this.nome, this.descricao});
-
-  Status.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    nome = json['nome'];
-    descricao = json['descricao'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['nome'] = this.nome;
-    data['descricao'] = this.descricao;
     return data;
   }
 }

@@ -83,7 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         CircleAvatar(
                           backgroundColor: Colors.white,
                           radius: 50,
-                          backgroundImage: widget.user.fotoPerfil == null
+                          backgroundImage: widget.user.fotoPerfil == null && _image == null
                               ? AssetImage("assets/person.png")
                               : _image == null
                                   ? NetworkImage(widget.user.fotoPerfil)

@@ -35,4 +35,7 @@ class PathConstants {
   static String deleteComment(int userId, int postId, int commentId) =>
       "https://cultiveapp.herokuapp.com/api/usuario/${userId.toString()}/publicacao/${postId.toString()}/comentario/${commentId.toString()}";
 
+  //Get all Products
+  static String getAllProducts() => "https://cultiveapp.herokuapp.com/api/produtos";
+
 }

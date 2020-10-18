@@ -21,7 +21,7 @@ class SaleBloc extends BlocBase {
         PathConstants.getPublicationsByParameters(
             tipo: "Venda", limit: "10", offset: "$offset"));
     if (response.statusCode == 200) {
-      debugPrint("Everything ok with Publication API response");
+      debugPrint("Everything ok with Sales API response");
       offset += 10;
       var jsonDecoded = response.data;
       List<Sale> newPubs = [];
@@ -45,14 +45,14 @@ class SaleBloc extends BlocBase {
   void createSale(
       {int userId,
         String token,
-        Publication publication,
+        Sale sale,
         VoidCallback onSuccess,
         VoidCallback onFail}) async {
     debugPrint("Saving sale...");
     try {
       Response response = await Dio().post(
           PathConstants.createPublication(userId),
-          data: publication.toJson(),
+          data: sale.toJson(),
           options: RequestOptions(headers: {"Authorization": token}));
       if (response.statusCode == 200) {
         debugPrint("Sale saved with successfully");
@@ -65,8 +65,24 @@ class SaleBloc extends BlocBase {
         onFail();
       }
     } catch (e) {
-      debugPrint("Exception during saving sale" + e);
+      debugPrint("Exception during saving sale" + e.toString());
       onFail();
+    }
+  }
+  
+  Future<List<Produto>> getAllProdutos() async{
+    try{
+      print("Loading all products from Cultive Server");
+      Response response = await Dio().get(PathConstants.getAllProducts());
+      List<Produto> products = [];
+      products = response.data.map<Produto>((item) {
+        return Produto.fromJson(item);
+      }).toList();
+      final ids = products.map((e) => e.nome).toSet();
+      products.retainWhere((x) => ids.remove(x.nome));
+      return products;
+    }catch(e){
+      print("Exception during get all products from Cultive Server");
     }
   }
 

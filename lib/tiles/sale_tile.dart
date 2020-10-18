@@ -215,33 +215,27 @@ class _SaleTileState extends State<SaleTile> {
 
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment:  _saleBloc.isMine(_user.id, _sale.usuario.id) ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
                     children: [
                       Text("Mais detalhes do produto", style: TextStyle(color: Colors.blue, fontSize: 15),),
-                      Icon(Icons.add, color: Colors.blue)
+                      _saleBloc.isMine(_user.id, _sale.usuario.id)
+                          ? PopupMenuButton<String>(
+                        onSelected: handleClick,
+                        itemBuilder: (context) {
+                          return options.map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice,
+                                  style: TextStyle(fontSize: 14)),
+                            );
+                          }).toList();
+                        },
+                      )
+                          : Container()
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 15,
-                ),
-
-                    _saleBloc.isMine(_user.id, _sale.usuario.id)
-                        ? Expanded(
-                        child: PopupMenuButton<String>(
-                          onSelected: handleClick,
-                          padding: EdgeInsets.only(left: 50),
-                          itemBuilder: (context) {
-                            return options.map((String choice) {
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(choice,
-                                    style: TextStyle(fontSize: 14)),
-                              );
-                            }).toList();
-                          },
-                        ))
-                        : Container()
+                SizedBox(height: 10)
               ],
             ),
       )),
