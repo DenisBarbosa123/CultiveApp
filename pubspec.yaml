@@ -46,6 +46,7 @@ dependencies:
   flutter_local_notifications: ^2.0.1
   search_choices: ^1.0.17
   flutter_masked_text: ^0.7.0
+  flutter_tindercard: ^0.2.0
 
 flutter_icons:
   android: "launcher_icon"

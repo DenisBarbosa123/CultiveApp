@@ -6,7 +6,6 @@ import 'package:cultiveapp/screens/product_details_screen.dart';
 import 'package:cultiveapp/screens/sales_screen.dart';
 import 'package:cultiveapp/utils/image_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 class SaleTile extends StatefulWidget {
   final Sale _sale;
@@ -20,8 +19,6 @@ class SaleTile extends StatefulWidget {
 
 class _SaleTileState extends State<SaleTile> {
   final Sale _sale;
-
-  final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
 
   ProgressDialog pr;
 

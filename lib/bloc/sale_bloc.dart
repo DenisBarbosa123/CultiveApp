@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
-import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/model/sale_model.dart';
 import 'package:cultiveapp/utils/path_constants.dart';
 import 'package:dio/dio.dart';

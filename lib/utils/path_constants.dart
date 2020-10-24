@@ -38,4 +38,10 @@ class PathConstants {
   //Get all Products
   static String getAllProducts() => "https://cultiveapp.herokuapp.com/api/produtos";
 
+  //Events
+
+  static String getAllEvents() => "https://cultiveapp.herokuapp.com/api/eventos";
+  static String createEvent(String userId) => "https://cultiveapp.herokuapp.com/api/usuario/$userId/evento";
+  static String deleteEvent(String eventId) => "https://cultiveapp.herokuapp.com/api/evento/$eventId";
+
 }
