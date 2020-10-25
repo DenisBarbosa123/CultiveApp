@@ -8,7 +8,7 @@ class Event {
   Localizacao localizacao;
   User usuario;
   Status status;
-  List<Imagens> imagens;
+  String imagem;
   String titulo;
 
   Event(
@@ -23,6 +23,7 @@ class Event {
     id = json['id'];
     titulo = json['titulo'];
     data = json['data'];
+    imagem = json['imagem'];
     descricao = json['descricao'];
     localizacao = json['localizacao'] != null
         ? new Localizacao.fromJson(json['localizacao'])
@@ -31,12 +32,6 @@ class Event {
         json['usuario'] != null ? new User.fromJson(json['usuario']) : null;
     status =
         json['status'] != null ? new Status.fromJson(json['status']) : null;
-    if (json['imagens'] != null) {
-      imagens = new List<Imagens>();
-      json['imagens'].forEach((v) {
-        imagens.add(new Imagens.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +39,7 @@ class Event {
     data['id'] = this.id;
     data['data'] = this.data;
     data['descricao'] = this.descricao;
+    data['imagem'] = this.imagem;
     data['titulo'] = this.titulo;
     if (this.localizacao != null) {
       data['localizacao'] = this.localizacao.toJson();
@@ -53,9 +49,6 @@ class Event {
     }
     if (this.status != null) {
       data['status'] = this.status.toJson();
-    }
-    if (this.imagens != null) {
-      data['imagens'] = this.imagens.map((v) => v.toJson()).toList();
     }
     return data;
   }

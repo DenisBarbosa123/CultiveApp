@@ -58,6 +58,32 @@ class EventBloc extends BlocBase {
     }
   }
 
+  void editEvent(
+      {String token,
+      int eventId,
+      Event event,
+      VoidCallback onSuccess,
+      VoidCallback onFail}) async {
+    print("Editing event...");
+    print("payload: ${event.toJson()}");
+    try {
+      Response response = await Dio().put(
+          PathConstants.editEvent(eventId.toString()),
+          data: event.toJson(),
+          options: RequestOptions(headers: {"Authorization": token}));
+      if (response.statusCode == 200) {
+        print("Event edited with successfully");
+        onSuccess();
+      } else {
+        print("Fault during editing event");
+        onFail();
+      }
+    } catch (e) {
+      print("Exception during edit event" + e.toString());
+      onFail();
+    }
+  }
+
   Future<void> deleteEvent(
       {String token,
       Event event,
@@ -65,7 +91,7 @@ class EventBloc extends BlocBase {
       VoidCallback onDeleteFail}) async {
     print("Delete performing to exclude event with id ${event.id}");
     try {
-      deleteEventPhoto(event.imagens[0].imagemEncoded);
+      deleteEventPhoto(event.imagem);
       Response response = await Dio().delete(
           PathConstants.deleteEvent(event.id.toString()),
           options: RequestOptions(headers: {"Authorization": token}));

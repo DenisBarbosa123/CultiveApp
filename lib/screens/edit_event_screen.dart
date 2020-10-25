@@ -1,9 +1,7 @@
 import 'dart:io';
 
-import 'package:cultiveapp/api/cep_api.dart';
 import 'package:cultiveapp/bloc/event_bloc.dart';
 import 'package:cultiveapp/model/event_model.dart';
-import 'package:cultiveapp/model/publication_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
 import 'package:cultiveapp/screens/events_screen.dart';
 import 'package:cultiveapp/utils/input_dropdown.dart';
@@ -11,40 +9,35 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class CreateEventScreen extends StatefulWidget {
-  final String token;
+class EditEventScreen extends StatefulWidget {
   final User user;
-  CreateEventScreen(this.user, this.token);
+  final String token;
+  final Event event;
+  EditEventScreen(this.user, this.token, this.event);
   @override
-  _CreateEventScreenState createState() => _CreateEventScreenState();
+  _EditEventScreenState createState() => _EditEventScreenState();
 }
 
-class _CreateEventScreenState extends State<CreateEventScreen> {
+class _EditEventScreenState extends State<EditEventScreen> {
   //Controllers
   final _descriptionController = TextEditingController();
-  final _cepController = TextEditingController();
   final _stateController = TextEditingController();
   final _cityController = TextEditingController();
   final _neighborhoodController = TextEditingController();
   final _titleController = TextEditingController();
 
+  Localizacao localizacao = Localizacao();
+
   //FormKey
   final _formKey = GlobalKey<FormState>();
 
-  //Bloc
-  final _cepAPI = CepAPI();
+  Event eventToBeUpdated = Event();
 
-  bool _hasFocus = false;
+  DateTime selectedDate;
 
-  final _cepMask = MaskTextInputFormatter(
-      mask: "#####-###", filter: {"#": RegExp(r'[0-9]')});
-
-  DateTime selectedDate = DateTime.now();
-
-  TimeOfDay selectedTime = TimeOfDay.fromDateTime(DateTime.now());
+  TimeOfDay selectedTime;
 
   //Image File
   File _image;
@@ -66,13 +59,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   void initState() {
     super.initState();
     _bloc = EventBloc();
+    initializeTextEditingController();
   }
 
   Future getImageFromGallery() async {
     var image = await _picker.getImage(source: ImageSource.gallery);
     setState(() {
       this.image = image;
-      _image = File(this.image.path);
+      if (this.image != null) {
+        _image = File(this.image.path);
+      }
     });
   }
 
@@ -99,6 +95,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     );
   }
 
+  initializeTextEditingController() {
+    _descriptionController.text = widget.event.descricao;
+    _stateController.text = widget.event.localizacao.estado;
+    _cityController.text = widget.event.localizacao.cidade;
+    _neighborhoodController.text = widget.event.localizacao.bairro;
+    _titleController.text = widget.event.titulo;
+  }
+
   @override
   Widget build(BuildContext context) {
     configureProgressDialog(context);
@@ -106,7 +110,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text("CRIAR EVENTO"),
+        title: Text("EDITAR EVENTO"),
         centerTitle: true,
       ),
       body: ListView(
@@ -122,6 +126,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   TextFormField(
+                      onChanged: (value) {
+                        if (value != widget.event.titulo) {
+                          eventToBeUpdated.titulo = value;
+                        }
+                      },
                       validator: (value) {
                         if (value.isEmpty) return "Campo Obrigatório";
                         return null;
@@ -144,6 +153,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       )),
                   SizedBox(height: 20),
                   TextFormField(
+                      onChanged: (value) {
+                        if (value != widget.event.descricao) {
+                          eventToBeUpdated.descricao = value;
+                        }
+                      },
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       validator: (value) {
@@ -177,8 +191,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                         flex: 4,
                         child: InputDropdown(
                           labelText: "Data",
-                          valueText:
-                              new DateFormat.yMMMd().format(selectedDate),
+                          valueText: selectedDate == null
+                              ? DateFormat.yMMMd()
+                                  .format(DateTime.parse(widget.event.data))
+                              : DateFormat.yMMMd().format(DateTime.parse(
+                                  selectedDate.toIso8601String())),
                           onPressed: () {
                             _selectDate(context);
                           },
@@ -188,7 +205,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       new Expanded(
                         flex: 3,
                         child: new InputDropdown(
-                          valueText: selectedTime.format(context),
+                          valueText: selectedTime == null
+                              ? TimeOfDay.fromDateTime(
+                                      DateTime.parse(widget.event.data))
+                                  .format(context)
+                              : selectedTime.format(context),
                           labelText: 'Hora',
                           onPressed: () {
                             _selectTime(context);
@@ -202,44 +223,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 20),
                   TextFormField(
-                      keyboardType: TextInputType.phone,
-                      validator: (value) {
-                        if (value.isEmpty) return "Campo Obrigatório";
-                        if (value.length < 7) return "Informe um CEP Válido";
-                        return null;
-                      },
-                      onChanged: (value) async {
-                        if (value.replaceFirst("-", "").trim().length == 8) {
-                          Cep cep = await _cepAPI
-                              .searchCep(value.replaceFirst("-", "").trim());
-                          if (cep != null) {
-                            _populateAddressFields(cep);
-                            setState(() {
-                              _hasFocus = true;
-                            });
-                          }
+                      onChanged: (value) {
+                        if (value != widget.event.localizacao.bairro) {
+                          localizacao.bairro = value;
                         }
                       },
-                      inputFormatters: [_cepMask],
-                      controller: _cepController,
-                      decoration: InputDecoration(
-                        labelText: "CEP",
-                        hintStyle: TextStyle(color: Colors.black),
-                        labelStyle: TextStyle(color: Colors.black),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                      )),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                      enabled: _hasFocus,
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value.isEmpty) return "Campo Obrigatório";
@@ -261,7 +249,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       )),
                   SizedBox(height: 20),
                   TextFormField(
-                      enabled: _hasFocus,
+                      onChanged: (value) {
+                        if (value != widget.event.localizacao.cidade) {
+                          localizacao.cidade = value;
+                        }
+                      },
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value.isEmpty) return "Campo Obrigatório";
@@ -283,7 +275,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       )),
                   SizedBox(height: 20),
                   TextFormField(
-                      enabled: _hasFocus,
+                      onChanged: (value) {
+                        if (value != widget.event.localizacao.estado) {
+                          localizacao.estado = value;
+                        }
+                      },
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value.isEmpty) return "Campo Obrigatório";
@@ -309,7 +305,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
-                  _image == null
+                  widget.event.imagem == null && _image == null
                       ? Container()
                       : Container(
                           width: 300.0,
@@ -319,7 +315,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                                   Border.all(color: Colors.black26, width: 1.0),
                               shape: BoxShape.rectangle,
                               image: DecorationImage(
-                                  image: FileImage(_image), fit: BoxFit.cover)),
+                                  image: _image == null
+                                      ? NetworkImage(widget.event.imagem)
+                                      : FileImage(_image),
+                                  fit: BoxFit.cover)),
                         ),
                   SizedBox(height: 20),
                   ButtonTheme(
@@ -343,15 +342,14 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                   height: 50,
                   child: FlatButton(
                     onPressed: () async {
-                      if (_image == null) {
-                        _showErrorImageDialog();
-                      }
-                      if (_formKey.currentState.validate() && _image != null) {
+                      if (_formKey.currentState.validate()) {
                         pr.show();
-                        Event event = await buildEventToSave();
-                        _bloc.createEvent(
-                            event: event,
-                            userId: widget.user.id,
+                        validateAndSetDate();
+                        await validateAndSetImage();
+                        eventToBeUpdated.localizacao = localizacao;
+                        _bloc.editEvent(
+                            eventId: widget.event.id,
+                            event: eventToBeUpdated,
                             token: widget.token,
                             onSuccess: _onSuccess,
                             onFail: _onFail);
@@ -359,7 +357,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                     },
                     color: Colors.green[900],
                     child: Text(
-                      "CRIAR EVENTO",
+                      "EDITAR EVENTO",
                       style: TextStyle(color: Colors.white),
                     ),
                     disabledColor: Colors.black54,
@@ -373,19 +371,15 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: selectedDate == null
+            ? DateTime.parse(widget.event.data)
+            : selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
       });
-  }
-
-  _populateAddressFields(Cep cep) {
-    _stateController.text = cep.uf;
-    _cityController.text = cep.localidade;
-    _neighborhoodController.text = cep.bairro;
   }
 
   Future<String> uploadFileAndReturnURL() async {
@@ -401,27 +395,28 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     return await storageReference.getDownloadURL();
   }
 
-  buildEventToSave() async {
-    Event event = Event();
+  validateAndSetImage() async {
+    if (_image == null) {
+      return;
+    }
 
-    event.imagem = await uploadFileAndReturnURL();
+    eventToBeUpdated.imagem = await uploadFileAndReturnURL();
+  }
 
-    event.titulo = _titleController.text;
-    event.descricao = _descriptionController.text;
-
-    Localizacao localizacao = Localizacao();
-    localizacao.bairro = _neighborhoodController.text;
-    localizacao.cidade = _cityController.text;
-    localizacao.estado = _stateController.text;
-    event.localizacao = localizacao;
-
-    Status status = Status();
-    status.nome = "Criada";
-    event.status = status;
+  validateAndSetDate() {
+    DateTime oldEventDate = DateTime.parse(widget.event.data);
+    if (selectedDate == null) {
+      selectedDate = oldEventDate;
+    }
+    if (selectedTime == null) {
+      selectedTime = TimeOfDay.fromDateTime(oldEventDate);
+    }
     DateTime date = DateTime(selectedDate.year, selectedDate.month,
         selectedDate.day, selectedTime.hour, selectedTime.minute);
-    event.data = date.toLocal().toIso8601String();
-    return event;
+
+    if (date != oldEventDate) {
+      eventToBeUpdated.data = date.toLocal().toIso8601String();
+    }
   }
 
   void _onSuccess() {
@@ -437,11 +432,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Evento criado com sucesso!'),
+          title: Text('Evento editado com sucesso!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Tudo ok com criação de seu evento!'),
+                Text('Tudo ok com edição de seu evento!'),
               ],
             ),
           ),
@@ -461,45 +456,21 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   }
 
   Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay picked =
-        await showTimePicker(context: context, initialTime: selectedTime);
+    final TimeOfDay picked = await showTimePicker(
+        context: context,
+        initialTime: selectedTime == null
+            ? TimeOfDay.fromDateTime(DateTime.parse(widget.event.data))
+            : selectedTime);
     if (picked != null && picked != selectedTime)
       setState(() {
         selectedTime = picked;
       });
   }
 
-  Future<void> _showErrorImageDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Campo Imagem Obrigatório'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Necessário informar campo imagem do evento'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _onFail() {
     pr.hide();
     _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text("Falha ao criar evento, tente novamente."),
+      content: Text("Falha ao editar evento, tente novamente."),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 3),
     ));

@@ -13,7 +13,8 @@ class PathConstants {
       "https://cultiveapp.herokuapp.com/api/usuario/$id";
   static String deleteUserById(String id) =>
       "https://cultiveapp.herokuapp.com/api/usuario/$id";
-  static String requestUpdatePassword() => "https://cultiveapp.herokuapp.com/api/usuario/autorizaUpdateSenha";
+  static String requestUpdatePassword() =>
+      "https://cultiveapp.herokuapp.com/api/usuario/autorizaUpdateSenha";
 
   //Publication
 
@@ -36,12 +37,17 @@ class PathConstants {
       "https://cultiveapp.herokuapp.com/api/usuario/${userId.toString()}/publicacao/${postId.toString()}/comentario/${commentId.toString()}";
 
   //Get all Products
-  static String getAllProducts() => "https://cultiveapp.herokuapp.com/api/produtos";
+  static String getAllProducts() =>
+      "https://cultiveapp.herokuapp.com/api/produtos";
 
   //Events
 
-  static String getAllEvents() => "https://cultiveapp.herokuapp.com/api/eventos";
-  static String createEvent(String userId) => "https://cultiveapp.herokuapp.com/api/usuario/$userId/evento";
-  static String deleteEvent(String eventId) => "https://cultiveapp.herokuapp.com/api/evento/$eventId";
-
+  static String getAllEvents() =>
+      "https://cultiveapp.herokuapp.com/api/eventos";
+  static String createEvent(String userId) =>
+      "https://cultiveapp.herokuapp.com/api/usuario/$userId/evento";
+  static String editEvent(String eventId) =>
+      "https://cultiveapp.herokuapp.com/api/evento/$eventId";
+  static String deleteEvent(String eventId) =>
+      "https://cultiveapp.herokuapp.com/api/evento/$eventId";
 }

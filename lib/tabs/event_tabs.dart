@@ -58,7 +58,7 @@ class _EventTabsState extends State<EventTabs> with TickerProviderStateMixin {
                           padding:
                               EdgeInsets.only(top: 10, right: 10, left: 10),
                           child: Text(
-                              "Arraste os Cards para os lados para navegar pelos eventos",
+                              "Arraste os cards para os lados para navegar pelos eventos",
                               style: TextStyle(fontSize: 12)),
                         ),
                         Container(
@@ -118,23 +118,23 @@ class _EventTabsState extends State<EventTabs> with TickerProviderStateMixin {
                                   snapshot.data[index].titulo == null
                                       ? Container()
                                       : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            Container(
-                                                child: Text(
-                                                  "${snapshot.data[index].titulo}",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                padding: EdgeInsets.all(12)),
+                                            Flexible(
+                                              child: Container(
+                                                  child: Text(
+                                                    "${snapshot.data[index].titulo}",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                  padding: EdgeInsets.all(10)),
+                                            )
                                           ],
                                         ),
                                   Expanded(
                                     child: GestureDetector(
                                       child: Image.network(
-                                        '${snapshot.data[index].imagens[0].imagemEncoded}',
+                                        '${snapshot.data[index].imagem}',
                                         fit: BoxFit.cover,
                                       ),
                                       onTap: () => Navigator.of(context).push(

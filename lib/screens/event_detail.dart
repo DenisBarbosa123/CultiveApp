@@ -1,6 +1,7 @@
 import 'package:cultiveapp/bloc/event_bloc.dart';
 import 'package:cultiveapp/model/event_model.dart';
 import 'package:cultiveapp/model/user_model.dart';
+import 'package:cultiveapp/screens/edit_event_screen.dart';
 import 'package:cultiveapp/screens/events_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -99,7 +100,9 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
             child: Text("Cancelar")),
         FlatButton(
             onPressed: () {
-              pr.show();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => EditEventScreen(
+                      widget.user, widget.token, widget.event)));
             },
             child: Text("Sim"))
       ],
@@ -285,8 +288,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                 height: _appBarHeight,
                                 decoration: new BoxDecoration(
                                   image: DecorationImage(
-                                      image: NetworkImage(
-                                          event.imagens[0].imagemEncoded)),
+                                      image: NetworkImage(event.imagem)),
                                 ),
                               ),
                             ],
