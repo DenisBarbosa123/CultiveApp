@@ -4,18 +4,18 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cultiveapp/model/event_model.dart';
 import 'package:cultiveapp/utils/path_constants.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
-class EventBloc extends BlocBase{
+class EventBloc extends BlocBase {
   List<Event> events = [];
   StreamController<List<Event>> _listEventsController =
-  StreamController<List<Event>>();
+      StreamController<List<Event>>.broadcast();
 
   Stream<List<Event>> get output => _listEventsController.stream;
 
   void getListEvent() async {
     print("Loading Events From Cultive App server");
-    Response response = await Dio().get(
-        PathConstants.getAllEvents());
+    Response response = await Dio().get(PathConstants.getAllEvents());
     if (response.statusCode == 200) {
       print("Everything ok with Events API response");
       var jsonDecoded = response.data;
@@ -32,10 +32,10 @@ class EventBloc extends BlocBase{
 
   void createEvent(
       {int userId,
-        String token,
-        Event event,
-        VoidCallback onSuccess,
-        VoidCallback onFail}) async {
+      String token,
+      Event event,
+      VoidCallback onSuccess,
+      VoidCallback onFail}) async {
     print("Saving event...");
     try {
       Response response = await Dio().post(
@@ -60,13 +60,14 @@ class EventBloc extends BlocBase{
 
   Future<void> deleteEvent(
       {String token,
-        int eventId,
-        VoidCallback onDeleteSuccess,
-        VoidCallback onDeleteFail}) async {
-    print("Delete performing to exclude event with id $eventId");
+      Event event,
+      VoidCallback onDeleteSuccess,
+      VoidCallback onDeleteFail}) async {
+    print("Delete performing to exclude event with id ${event.id}");
     try {
+      deleteEventPhoto(event.imagens[0].imagemEncoded);
       Response response = await Dio().delete(
-          PathConstants.deleteEvent(eventId.toString()),
+          PathConstants.deleteEvent(event.id.toString()),
           options: RequestOptions(headers: {"Authorization": token}));
       if (response.statusCode == 204) {
         print("Event was excluded successfully");
@@ -79,6 +80,18 @@ class EventBloc extends BlocBase{
       print("Exception during event exclusion");
       onDeleteFail();
     }
+  }
+
+  Future<void> deleteEventPhoto(String imageUrl) async {
+    if (imageUrl == null) {
+      return;
+    }
+
+    StorageReference storageReference = await FirebaseStorage.instance
+        .ref()
+        .getStorage()
+        .getReferenceFromUrl(imageUrl);
+    storageReference.delete().then((value) => print("deleted event photo"));
   }
 
   bool isMine(int myUserId, int userId) {

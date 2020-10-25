@@ -10,7 +10,7 @@ class SaleBloc extends BlocBase {
   int offset = 0;
   List<Sale> sales = [];
   StreamController<List<Sale>> _listSalesController =
-  StreamController<List<Sale>>();
+      StreamController<List<Sale>>.broadcast();
 
   Stream<List<Sale>> get output => _listSalesController.stream;
 
@@ -43,10 +43,10 @@ class SaleBloc extends BlocBase {
 
   void createSale(
       {int userId,
-        String token,
-        Sale sale,
-        VoidCallback onSuccess,
-        VoidCallback onFail}) async {
+      String token,
+      Sale sale,
+      VoidCallback onSuccess,
+      VoidCallback onFail}) async {
     debugPrint("Saving sale...");
     try {
       Response response = await Dio().post(
@@ -68,9 +68,9 @@ class SaleBloc extends BlocBase {
       onFail();
     }
   }
-  
-  Future<List<Produto>> getAllProdutos() async{
-    try{
+
+  Future<List<Produto>> getAllProdutos() async {
+    try {
       print("Loading all products from Cultive Server");
       Response response = await Dio().get(PathConstants.getAllProducts());
       List<Produto> products = [];
@@ -80,16 +80,16 @@ class SaleBloc extends BlocBase {
       final ids = products.map((e) => e.nome).toSet();
       products.retainWhere((x) => ids.remove(x.nome));
       return products;
-    }catch(e){
+    } catch (e) {
       print("Exception during get all products from Cultive Server");
     }
   }
 
   Future<void> deleteSale(
       {String token,
-        int postId,
-        VoidCallback onDeleteSuccess,
-        VoidCallback onDeleteFail}) async {
+      int postId,
+      VoidCallback onDeleteSuccess,
+      VoidCallback onDeleteFail}) async {
     debugPrint("Delete performing to exclude sale with id $postId");
     try {
       Response response = await Dio().delete(

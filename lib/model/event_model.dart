@@ -13,11 +13,11 @@ class Event {
 
   Event(
       {this.id,
-        this.data,
-        this.descricao,
-        this.localizacao,
-        this.usuario,
-        this.status});
+      this.data,
+      this.descricao,
+      this.localizacao,
+      this.usuario,
+      this.status});
 
   Event.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -28,9 +28,9 @@ class Event {
         ? new Localizacao.fromJson(json['localizacao'])
         : null;
     usuario =
-    json['usuario'] != null ? new User.fromJson(json['usuario']) : null;
+        json['usuario'] != null ? new User.fromJson(json['usuario']) : null;
     status =
-    json['status'] != null ? new Status.fromJson(json['status']) : null;
+        json['status'] != null ? new Status.fromJson(json['status']) : null;
     if (json['imagens'] != null) {
       imagens = new List<Imagens>();
       json['imagens'].forEach((v) {
@@ -57,28 +57,6 @@ class Event {
     if (this.imagens != null) {
       data['imagens'] = this.imagens.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class Status {
-  int id;
-  String nome;
-  String descricao;
-
-  Status({this.id, this.nome, this.descricao});
-
-  Status.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    nome = json['nome'];
-    descricao = json['descricao'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['nome'] = this.nome;
-    data['descricao'] = this.descricao;
     return data;
   }
 }
