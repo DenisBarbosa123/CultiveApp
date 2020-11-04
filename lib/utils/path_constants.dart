@@ -50,4 +50,13 @@ class PathConstants {
       "https://cultiveapp.herokuapp.com/api/evento/$eventId";
   static String deleteEvent(String eventId) =>
       "https://cultiveapp.herokuapp.com/api/evento/$eventId";
+
+  //Search endpoints
+
+  static String getPostsByTopic(String key, String value, String offsetValue) =>
+      "https://cultiveapp.herokuapp.com/api/publicacao?$key=$value&limit=10&offset=$offsetValue";
+
+  static String getPostsByParameterAndType(
+          String key, String value, String type, String offsetValue) =>
+      "https://cultiveapp.herokuapp.com/api/publicacao?$key=$value&tipo=$type&limit=10&offset=$offsetValue";
 }

@@ -113,7 +113,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => HomeScreen()));
                   }),
               ListTile(
@@ -126,12 +126,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title: Text(
                     "Publicações",
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => PublicationScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => PublicationScreen()));
                   }),
               ListTile(
                   focusColor: Colors.black,
@@ -143,12 +143,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title: Text(
                     "Eventos",
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
                   ),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => EventsScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => EventsScreen()));
                   }),
               ListTile(
                   focusColor: Colors.black,
@@ -160,7 +160,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title: Text(
                     "Vendas",
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
                   ),
                   onTap: () {
                     Navigator.of(context).pop();

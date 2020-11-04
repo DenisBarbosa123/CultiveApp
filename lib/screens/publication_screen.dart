@@ -1,4 +1,5 @@
 import 'package:cultiveapp/bloc/user_bloc.dart';
+import 'package:cultiveapp/screens/search_publication_screen.dart';
 import 'package:cultiveapp/tabs/no_logged_in.dart';
 import 'package:cultiveapp/tabs/publication_tabs.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
@@ -14,7 +15,7 @@ class PublicationScreen extends StatefulWidget {
 class _PublicationScreenState extends State<PublicationScreen> {
   UserBloc _userBloc;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _userBloc = UserBloc();
     _userBloc.loadCurrentUser();
@@ -40,6 +41,15 @@ class _PublicationScreenState extends State<PublicationScreen> {
                     title: Text("PUBLICAÇÕES"),
                     centerTitle: true,
                     backgroundColor: Theme.of(context).primaryColor,
+                    actions: <Widget>[
+                      IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SearchPublicationScreen(
+                                    _userBloc.userInformation)));
+                          })
+                    ],
                   ),
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
