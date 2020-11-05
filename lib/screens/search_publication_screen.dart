@@ -15,8 +15,6 @@ class _SearchPublicationScreenState extends State<SearchPublicationScreen> {
   var _radioValue1;
 
   var editingController = TextEditingController();
-  bool isSearching = false;
-  //FormKey
 
   final _formKey = GlobalKey<FormState>();
 

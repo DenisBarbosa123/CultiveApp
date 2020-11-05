@@ -13,6 +13,11 @@ class EventBloc extends BlocBase {
 
   Stream<List<Event>> get output => _listEventsController.stream;
 
+  StreamController<List<Event>> _searchListEventsController =
+      StreamController<List<Event>>.broadcast();
+
+  Stream<List<Event>> get search => _searchListEventsController.stream;
+
   void getListEvent() async {
     print("Loading Events From Cultive App server");
     Response response = await Dio().get(PathConstants.getAllEvents());
@@ -128,5 +133,39 @@ class EventBloc extends BlocBase {
   void dispose() {
     super.dispose();
     _listEventsController.close();
+    _searchListEventsController.close();
+  }
+
+  Future<void> getSearchListEvents(int filter, String query) async {
+    _searchListEventsController.add(null);
+    Response response = await Dio().get(_prepareEndPoint(filter, query));
+    if (response.statusCode == 200) {
+      var jsonDecoded = response.data;
+      List<Event> newEvents = [];
+      newEvents = jsonDecoded.map<Event>((map) {
+        return Event.fromJson(map);
+      }).toList();
+      events.addAll(newEvents);
+      _searchListEventsController.add(events);
+    } else {
+      throw Exception("Failed to load the sales!");
+    }
+  }
+
+  String _prepareEndPoint(int filter, String query) {
+    String endPoint;
+    switch (filter.toString()) {
+      case '0':
+        {
+          endPoint = PathConstants.getEventsByParameter('corpo', query);
+        }
+        break;
+      default:
+        {
+          endPoint = PathConstants.getAllEvents();
+        }
+        break;
+    }
+    return endPoint;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cultiveapp/bloc/user_bloc.dart';
+import 'package:cultiveapp/screens/search_events_screen.dart';
 import 'package:cultiveapp/tabs/event_tabs.dart';
 import 'package:cultiveapp/tabs/no_logged_in.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
@@ -40,6 +41,15 @@ class _EventsScreenState extends State<EventsScreen> {
                     title: Text("EVENTOS"),
                     centerTitle: true,
                     backgroundColor: Theme.of(context).primaryColor,
+                    actions: <Widget>[
+                      IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SearchEventsScreen(
+                                    _userBloc.userInformation)));
+                          })
+                    ],
                   ),
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {

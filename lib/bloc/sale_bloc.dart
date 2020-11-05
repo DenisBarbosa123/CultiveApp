@@ -9,10 +9,18 @@ import 'package:flutter/material.dart';
 class SaleBloc extends BlocBase {
   int offset = 0;
   List<Sale> sales = [];
+  List<Sale> searchedSaleList = [];
   StreamController<List<Sale>> _listSalesController =
       StreamController<List<Sale>>.broadcast();
 
+  int searchOffset = 0;
+
   Stream<List<Sale>> get output => _listSalesController.stream;
+
+  StreamController<List<Sale>> _searchSalesController =
+      StreamController<List<Sale>>.broadcast();
+
+  Stream<List<Sale>> get search => _searchSalesController.stream;
 
   void getListSale(VoidCallback endOfList) async {
     debugPrint("Loading Sales From Cultive App server");
@@ -116,5 +124,63 @@ class SaleBloc extends BlocBase {
   void dispose() {
     super.dispose();
     _listSalesController.close();
+    _searchSalesController.close();
+  }
+
+  void getSearchListSales(VoidCallback endOfList, int offset, int filter,
+      String query, bool newSearch) async {
+    if (offset != null) {
+      searchOffset = offset;
+    }
+    if (newSearch) {
+      _searchSalesController.add(null);
+      searchedSaleList.clear();
+    }
+    Response response =
+        await Dio().get(_prepareEndPoint(filter, query, searchOffset));
+    if (response.statusCode == 200) {
+      searchOffset += 10;
+      var jsonDecoded = response.data;
+      List<Sale> newSales = [];
+      newSales = jsonDecoded.map<Sale>((map) {
+        return Sale.fromJson(map);
+      }).toList();
+      if (newSales.isEmpty) {
+        endOfList();
+      }
+      if (searchedSaleList.isEmpty) {
+        searchedSaleList.addAll(newSales);
+      } else {
+        searchedSaleList += newSales;
+      }
+      _searchSalesController.add(searchedSaleList);
+    } else {
+      throw Exception("Failed to load the Sales searched!");
+    }
+  }
+
+  String _prepareEndPoint(int filter, String query, int offset) {
+    String endPoint;
+    switch (filter.toString()) {
+      case '0':
+        {
+          endPoint = PathConstants.getPostsByParameterAndType(
+              'usuario', query, 'Venda', offset.toString());
+        }
+        break;
+      case '1':
+        {
+          endPoint = PathConstants.getPostsByParameterAndType(
+              'corpo', query, 'Venda', offset.toString());
+        }
+        break;
+      default:
+        {
+          endPoint = PathConstants.getPublicationsByParameters(
+              tipo: "Geral", limit: "10", offset: "$offset");
+        }
+        break;
+    }
+    return endPoint;
   }
 }

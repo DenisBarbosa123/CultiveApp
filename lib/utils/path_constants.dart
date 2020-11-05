@@ -59,4 +59,7 @@ class PathConstants {
   static String getPostsByParameterAndType(
           String key, String value, String type, String offsetValue) =>
       "https://cultiveapp.herokuapp.com/api/publicacao?$key=$value&tipo=$type&limit=10&offset=$offsetValue";
+
+  static String getEventsByParameter(String key, String value) =>
+      "https://cultiveapp.herokuapp.com/api/evento?$key=$value";
 }

@@ -1,5 +1,6 @@
 import 'package:cultiveapp/bloc/user_bloc.dart';
 import 'package:cultiveapp/screens/create_sale_screen.dart';
+import 'package:cultiveapp/screens/search_sales_screen.dart';
 import 'package:cultiveapp/tabs/no_logged_in.dart';
 import 'package:cultiveapp/tabs/sale_tabs.dart';
 import 'package:cultiveapp/widgets/custom_drawer.dart';
@@ -13,11 +14,12 @@ class SalesScreen extends StatefulWidget {
 class _SalesScreenState extends State<SalesScreen> {
   UserBloc _userBloc;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _userBloc = UserBloc();
     _userBloc.loadCurrentUser();
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<AuthenticationStatus>(
@@ -38,6 +40,15 @@ class _SalesScreenState extends State<SalesScreen> {
                     title: Text("VENDAS"),
                     centerTitle: true,
                     backgroundColor: Theme.of(context).primaryColor,
+                    actions: <Widget>[
+                      IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SearchSalesScreen(
+                                    _userBloc.userInformation)));
+                          })
+                    ],
                   ),
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
