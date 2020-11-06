@@ -83,11 +83,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         CircleAvatar(
                           backgroundColor: Colors.white,
                           radius: 50,
-                          backgroundImage: widget.user.fotoPerfil == null && _image == null
-                              ? AssetImage("assets/person.png")
-                              : _image == null
-                                  ? NetworkImage(widget.user.fotoPerfil)
-                                  : FileImage(_image),
+                          backgroundImage:
+                              widget.user.fotoPerfil == null && _image == null
+                                  ? AssetImage("assets/person.png")
+                                  : _image == null
+                                      ? NetworkImage(widget.user.fotoPerfil)
+                                      : FileImage(_image),
                         ),
                         Padding(
                             padding: EdgeInsets.only(left: 40),
@@ -131,12 +132,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintStyle: TextStyle(color: Colors.black),
                                 labelStyle: TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                               )),
                           SizedBox(
@@ -166,12 +167,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintStyle: TextStyle(color: Colors.black),
                                 labelStyle: TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                               )),
                           SizedBox(
@@ -202,12 +203,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintStyle: TextStyle(color: Colors.black),
                                 labelStyle: TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                               )),
                           SizedBox(
@@ -235,12 +236,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintStyle: TextStyle(color: Colors.black),
                                 labelStyle: TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                               )),
                           SizedBox(height: 20),
@@ -266,12 +267,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintStyle: TextStyle(color: Colors.black),
                                 labelStyle: TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                               )),
                           SizedBox(height: 20),
@@ -297,12 +298,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 hintStyle: TextStyle(color: Colors.black),
                                 labelStyle: TextStyle(color: Colors.black),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                  BorderSide(color: Colors.black, width: 1.0),
+                                  borderSide: BorderSide(
+                                      color: Colors.black, width: 1.0),
                                 ),
                               )),
                           SizedBox(height: 20),
@@ -349,13 +350,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                       onPressed: () async {
                                                         Navigator.pop(context);
                                                         pr.show();
-                                                        userToBeUpdated.localizacao = localizacao;
+                                                        userToBeUpdated
+                                                                .localizacao =
+                                                            localizacao;
                                                         if (_image != null)
                                                           await uploadFile();
                                                         _userBloc.editUser(
-                                                            user: userToBeUpdated,
-                                                            userId: widget.user.id,
-                                                            onSuccess: _onSuccess,
+                                                            user:
+                                                                userToBeUpdated,
+                                                            userId:
+                                                                widget.user.id,
+                                                            onSuccess:
+                                                                _onSuccess,
                                                             onFail: _onFail);
                                                       },
                                                       child: Text("Sim"))
@@ -374,8 +380,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ))),
                           SizedBox(height: 20),
                         ],
-                      ))
-              )
+                      )))
             ],
           ),
         ));
@@ -398,8 +403,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 FlatButton(
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                             HomeScreen()));
+                          builder: (context) => HomeScreen()));
                     },
                     child: Text("Sim"))
               ],
@@ -430,8 +434,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _onSuccess() {
     pr.hide();
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (Route<dynamic> route) => false);
   }
 
   void _onFail() {

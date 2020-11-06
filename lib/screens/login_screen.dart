@@ -196,8 +196,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onSuccess() {
     pr.hide();
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (Route<dynamic> route) => false);
   }
 
   void _onFail() {

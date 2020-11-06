@@ -7,6 +7,7 @@ import 'package:cultiveapp/screens/sales_screen.dart';
 import 'package:cultiveapp/utils/image_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+
 class SaleTile extends StatefulWidget {
   final Sale _sale;
   final Map<String, dynamic> _userInfo;
@@ -78,8 +79,7 @@ class _SaleTileState extends State<SaleTile> {
             onPressed: () async {
               Navigator.pop(context);
               pr.show();
-              await ImageUtils
-                  .deletePublicationImages(_sale.imagens);
+              await ImageUtils.deletePublicationImages(_sale.imagens);
               _saleBloc.deleteSale(
                   token: token,
                   postId: _sale.id,
@@ -103,8 +103,9 @@ class _SaleTileState extends State<SaleTile> {
               FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => SalesScreen()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => SalesScreen()),
+                        (Route<dynamic> route) => false);
                   },
                   child: Text("OK")),
             ],
@@ -168,66 +169,76 @@ class _SaleTileState extends State<SaleTile> {
               children: [
                 _sale.imagens != null
                     ? AspectRatio(
-                  aspectRatio: 0.9,
-                  child: Carousel(
-                    images: _sale.imagens.map((imagem) {
-                      return NetworkImage(imagem.imagemEncoded);
-                    }).toList(),
-                    dotSize: 4.0,
-                    dotSpacing: 15.0,
-                    dotBgColor: Colors.transparent,
-                    dotColor: Colors.white,
-                    dotIncreasedColor: Theme.of(context).primaryColor,
-                    autoplay: false,
-                  ),
-                )
+                        aspectRatio: 0.9,
+                        child: Carousel(
+                          images: _sale.imagens.map((imagem) {
+                            return NetworkImage(imagem.imagemEncoded);
+                          }).toList(),
+                          dotSize: 4.0,
+                          dotSpacing: 15.0,
+                          dotBgColor: Colors.transparent,
+                          dotColor: Colors.white,
+                          dotIncreasedColor: Theme.of(context).primaryColor,
+                          autoplay: false,
+                        ),
+                      )
                     : Container(),
                 SizedBox(
                   height: 15,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        Text("${_sale.produto.nome}"),
-                        Text("Produto", style: TextStyle( fontSize: 13, fontWeight: FontWeight.w300))
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text("${_sale.usuario.localizacao.cidade} - ${_sale.usuario.localizacao.estado}"),
-                        Text("Localização", style: TextStyle(fontSize: 13, fontWeight: FontWeight.w300))
-                      ],
-                    ),
-                ]),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          Text("${_sale.produto.nome}"),
+                          Text("Produto",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w300))
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                              "${_sale.usuario.localizacao.cidade} - ${_sale.usuario.localizacao.estado}"),
+                          Text("Localização",
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.w300))
+                        ],
+                      ),
+                    ]),
                 SizedBox(
                   height: 15,
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ProductDetailsScreen(this._sale))
-                    );
-
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ProductDetailsScreen(this._sale)));
                   },
                   child: Row(
-                    mainAxisAlignment:  _saleBloc.isMine(_user.id, _sale.usuario.id) ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
+                    mainAxisAlignment:
+                        _saleBloc.isMine(_user.id, _sale.usuario.id)
+                            ? MainAxisAlignment.spaceEvenly
+                            : MainAxisAlignment.center,
                     children: [
-                      Text("Mais detalhes do produto", style: TextStyle(color: Colors.blue, fontSize: 15),),
+                      Text(
+                        "Mais detalhes do produto",
+                        style: TextStyle(color: Colors.blue, fontSize: 15),
+                      ),
                       _saleBloc.isMine(_user.id, _sale.usuario.id)
                           ? PopupMenuButton<String>(
-                        onSelected: handleClick,
-                        itemBuilder: (context) {
-                          return options.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice,
-                                  style: TextStyle(fontSize: 14)),
-                            );
-                          }).toList();
-                        },
-                      )
+                              onSelected: handleClick,
+                              itemBuilder: (context) {
+                                return options.map((String choice) {
+                                  return PopupMenuItem<String>(
+                                    value: choice,
+                                    child: Text(choice,
+                                        style: TextStyle(fontSize: 14)),
+                                  );
+                                }).toList();
+                              },
+                            )
                           : Container()
                     ],
                   ),
@@ -235,7 +246,7 @@ class _SaleTileState extends State<SaleTile> {
                 SizedBox(height: 10)
               ],
             ),
-      )),
+          )),
     );
   }
 }

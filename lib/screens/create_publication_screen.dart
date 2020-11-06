@@ -305,8 +305,7 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
     Future.delayed(Duration(seconds: 5)).then((_) {
       pr.hide();
       _showMyDialog();
-    }
-    );
+    });
   }
 
   Future<void> _showMyDialog() async {
@@ -328,8 +327,10 @@ class _CreatePublicationScreenState extends State<CreatePublicationScreen> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => PublicationScreen()));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => PublicationScreen()),
+                    (Route<dynamic> route) => false);
               },
             ),
           ],

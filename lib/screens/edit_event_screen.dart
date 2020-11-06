@@ -445,8 +445,9 @@ class _EditEventScreenState extends State<EditEventScreen> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => EventsScreen()));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => EventsScreen()),
+                    (Route<dynamic> route) => false);
               },
             ),
           ],

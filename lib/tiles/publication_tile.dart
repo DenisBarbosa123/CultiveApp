@@ -111,8 +111,7 @@ class _PublicationTileState extends State<PublicationTile> {
             onPressed: () async {
               Navigator.pop(context);
               pr.show();
-              await ImageUtils
-                  .deletePublicationImages(_publication.imagens);
+              await ImageUtils.deletePublicationImages(_publication.imagens);
               _publicationBloc.deletePublication(
                   token: token,
                   postId: _publication.id,
@@ -136,8 +135,10 @@ class _PublicationTileState extends State<PublicationTile> {
               FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => PublicationScreen()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => PublicationScreen()),
+                        (Route<dynamic> route) => false);
                   },
                   child: Text("OK")),
             ],
@@ -400,8 +401,9 @@ class _PublicationTileState extends State<PublicationTile> {
 
   void onSuccessEditing() {
     pr.hide();
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => PublicationScreen()));
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => PublicationScreen()),
+        (Route<dynamic> route) => false);
   }
 
   void onFailEditing() {

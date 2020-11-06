@@ -29,7 +29,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   Event event;
   double _appBarHeight = 256.0;
   AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
-  final DateFormat _dateFormat = DateFormat('dd-MM-yyyy hh:mm');
   List<String> options = ['Editar Evento', 'Excluir Evento'];
   EventBloc _bloc = EventBloc();
 
@@ -145,8 +144,9 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
               FlatButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => EventsScreen()));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => EventsScreen()),
+                        (Route<dynamic> route) => false);
                   },
                   child: Text("OK")),
             ],
@@ -236,29 +236,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                     shrinkWrap: false,
                     slivers: <Widget>[
                       new SliverAppBar(
-                        actions: [
-                          _bloc.isMine(widget.user.id, event.usuario.id)
-                              ? Expanded(
-                                  child: PopupMenuButton<String>(
-                                  icon: Icon(
-                                    Icons.arrow_drop_down_circle_outlined,
-                                    color: Colors.black,
-                                    size: 30.0,
-                                  ),
-                                  padding: EdgeInsets.only(left: 280),
-                                  onSelected: handleClick,
-                                  itemBuilder: (context) {
-                                    return options.map((String choice) {
-                                      return PopupMenuItem<String>(
-                                        value: choice,
-                                        child: Text(choice,
-                                            style: TextStyle(fontSize: 14)),
-                                      );
-                                    }).toList();
-                                  },
-                                ))
-                              : Container(),
-                        ],
                         elevation: 0.0,
                         forceElevated: true,
                         leading: new IconButton(
@@ -297,10 +274,34 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                       ),
                       new SliverList(
                         delegate: new SliverChildListDelegate(<Widget>[
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: _bloc.isMine(
+                                    widget.user.id, event.usuario.id)
+                                ? PopupMenuButton<String>(
+                                    icon: Icon(
+                                      Icons.view_list,
+                                      color: Colors.black,
+                                      size: 30.0,
+                                    ),
+                                    onSelected: handleClick,
+                                    itemBuilder: (context) {
+                                      return options.map((String choice) {
+                                        return PopupMenuItem<String>(
+                                          value: choice,
+                                          child: Text(choice,
+                                              style: TextStyle(fontSize: 14)),
+                                        );
+                                      }).toList();
+                                    },
+                                  )
+                                : Container(),
+                          ),
                           new Container(
                             color: Colors.white,
                             child: new Padding(
-                              padding: const EdgeInsets.all(35.0),
+                              padding: const EdgeInsets.only(
+                                  right: 35, left: 35, bottom: 35),
                               child: new Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -318,7 +319,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                       children: <Widget>[
                                         new Padding(
                                           padding: const EdgeInsets.only(
-                                              top: 4.0, bottom: 8.0),
+                                              bottom: 8.0),
                                           child: new Text(
                                             "Informações do evento",
                                             style: new TextStyle(
@@ -334,9 +335,11 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                             new Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: new Text(_dateFormat
-                                                  .format(DateTime.parse(
-                                                      event.data))),
+                                              child: new Text(
+                                                  DateFormat('dd/MM/yyyy')
+                                                      .add_Hm()
+                                                      .format(DateTime.parse(
+                                                          event.data))),
                                             ),
                                           ],
                                         ),

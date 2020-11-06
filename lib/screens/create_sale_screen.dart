@@ -24,11 +24,12 @@ class CreateSaleScreen extends StatefulWidget {
 
 class _CreateSaleScreenState extends State<CreateSaleScreen> {
   SaleBloc _bloc = SaleBloc();
-  Produto _productSelected  = Produto();
+  Produto _productSelected = Produto();
   List<Produto> products = [];
   List<DropdownMenuItem<Produto>> productItems = [];
   final _formKey = GlobalKey<FormState>();
-  final _lowPrice = MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
+  final _lowPrice =
+      MoneyMaskedTextController(decimalSeparator: '.', thousandSeparator: ',');
 
   var _categoryController = TextEditingController();
 
@@ -42,6 +43,21 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
   var _descriptionController = TextEditingController();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    populateProductList();
+  }
+
+  populateProductList() async {
+    products = await _bloc.getAllProdutos();
+    setState(() {
+      productItems = products.map((product) {
+        return (DropdownMenuItem(child: Text(product.nome), value: product));
+      }).toList();
+    });
+  }
 
   Future<void> loadAssets() async {
     List<Asset> resultList = List<Asset>();
@@ -106,43 +122,34 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
             key: _formKey,
             child: Column(
               children: [
-                FutureBuilder<List<Produto>>(
-                  future: _bloc.getAllProdutos(),
-                  builder:(context, snapshot) {
-                    if(!snapshot.hasData){
-                      return Container(
-                          color: Colors.white,
-                          child: Center(
-                              child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation(Colors.green))));
-                    }
-                    productItems = snapshot.data.map((product) {
-                      return (DropdownMenuItem(child: Text(product.nome), value: product));
-                    }).toList();
-                    return SearchChoices.single(
-                      validator: (value) {
-                        if (value == null) return "Campo Obrigatório";
-                        return null;
-                      },
-                      items: productItems,
-                      value: _productSelected,
-                      hint: "Selecione um produto",
-                      searchHint: "Ex: Gado, Milho, Café",
-                      onChanged: (value) {
-                        _productSelected = value;
-                        _categoryController.text = _productSelected.categoria.nome;
-                      },
-                      isExpanded: true,
-                    );
+                SearchChoices.single(
+                  validator: (value) {
+                    if (value == null) return "Campo Obrigatório";
+                    return null;
                   },
+                  label: Text('Produto', style: TextStyle(color: Colors.black)),
+                  items: productItems,
+                  value: _productSelected,
+                  hint: "Selecione um produto",
+                  searchHint: "Ex: Gado, Milho, Café",
+                  onChanged: (value) {
+                    if (value != null) {
+                      _productSelected = value;
+                      _categoryController.text =
+                          _productSelected.categoria.nome;
+                    }
+                  },
+                  isExpanded: true,
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                     validator: (value) {
                       if (value.isEmpty) return "Campo Obrigatório";
                       return null;
                     },
-                  controller: _categoryController,
+                    controller: _categoryController,
                     enabled: false,
                     decoration: InputDecoration(
                       labelText: "Categoria",
@@ -160,10 +167,12 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
                       hintStyle: TextStyle(color: Colors.black),
                       labelStyle: TextStyle(color: Colors.black),
                     )),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                     validator: (value) {
-                      if (value.isEmpty) return "Campo Obrigatório";
+                      if (double.parse(value) < 1) return "Campo Obrigatório";
                       return null;
                     },
                     controller: _lowPrice,
@@ -173,7 +182,9 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
                       hintStyle: TextStyle(color: Colors.black),
                       labelStyle: TextStyle(color: Colors.black),
                     )),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                     validator: (value) {
                       if (value.isEmpty) return "Campo Obrigatório";
@@ -186,25 +197,27 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
                       hintStyle: TextStyle(color: Colors.black),
                       labelStyle: TextStyle(color: Colors.black),
                     )),
-                SizedBox(height: 30,),
+                SizedBox(
+                  height: 30,
+                ),
                 assetsList.isNotEmpty
                     ? Padding(
-                    padding: EdgeInsets.all(10),
-                    child: AspectRatio(
-                      aspectRatio: 0.9,
-                      child: Carousel(
-                        images: assetsList.map((imagem) {
-                          return AssetThumb(
-                              asset: imagem, height: 200, width: 200);
-                        }).toList(),
-                        dotSize: 4.0,
-                        dotSpacing: 15.0,
-                        dotBgColor: Colors.transparent,
-                        dotColor: Colors.white,
-                        dotIncreasedColor: Theme.of(context).primaryColor,
-                        autoplay: false,
-                      ),
-                    ))
+                        padding: EdgeInsets.all(10),
+                        child: AspectRatio(
+                          aspectRatio: 0.9,
+                          child: Carousel(
+                            images: assetsList.map((imagem) {
+                              return AssetThumb(
+                                  asset: imagem, height: 200, width: 200);
+                            }).toList(),
+                            dotSize: 4.0,
+                            dotSpacing: 15.0,
+                            dotBgColor: Colors.transparent,
+                            dotColor: Colors.white,
+                            dotIncreasedColor: Theme.of(context).primaryColor,
+                            autoplay: false,
+                          ),
+                        ))
                     : Container(),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -231,8 +244,7 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               pr.show();
-                              Sale sale =
-                              await buildSaleObject();
+                              Sale sale = await buildSaleObject();
                               print(sale.toJson());
                               _bloc.createSale(
                                   token: widget.token,
@@ -286,7 +298,7 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
 
     sale.produto = produto;
 
-    sale.data =  DateTime.now().toLocal().toIso8601String();
+    sale.data = DateTime.now().toLocal().toIso8601String();
 
     return sale;
   }
@@ -295,8 +307,7 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
     Future.delayed(Duration(seconds: 3)).then((_) {
       pr.hide();
       _showMyDialog();
-    }
-    );
+    });
   }
 
   Future<void> _showMyDialog() async {
@@ -318,8 +329,9 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
               child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => SalesScreen()));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => SalesScreen()),
+                    (Route<dynamic> route) => false);
               },
             ),
           ],
