@@ -72,7 +72,7 @@ class _QuotationTabsState extends State<QuotationTabs> {
                       );
                     }
                     return _buildCard(
-                        title: "Saca de Trigo",
+                        title: "Tonelada de Trigo",
                         imageName: "assets/wheat.png",
                         isIncreased: isIncreased(
                             snapshot.data.firstPrice, snapshot.data.lastPrice),

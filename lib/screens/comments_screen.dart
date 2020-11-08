@@ -27,6 +27,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
   Map<String, dynamic> _userInfo;
   User user;
   String token;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -55,6 +56,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
   }
 
   addNewComment() async {
+    setState(() {
+      isLoading = true;
+    });
     if (_commentController.text == "") {
       return;
     }
@@ -72,6 +76,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
       }
       _comments.add(createdComment);
       _commentController.text = "";
+      isLoading = false;
     });
   }
 
@@ -109,9 +114,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   )),
                   IconButton(
                       icon: Icon(Icons.send),
-                      onPressed: () {
-                        addNewComment();
-                      })
+                      disabledColor: Colors.grey,
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              addNewComment();
+                            })
                 ],
               ),
             )

@@ -12,15 +12,15 @@ class CommentTile extends StatefulWidget {
   Function deleteComment;
   Function editComment;
 
-  CommentTile(this._comentario, this._userInfo, this.editComment,
-      this.deleteComment);
+  CommentTile(
+      this._comentario, this._userInfo, this.editComment, this.deleteComment);
 
   @override
   _CommentTileState createState() => _CommentTileState();
 }
 
 class _CommentTileState extends State<CommentTile> {
-  final DateFormat _dateFormat = DateFormat('dd-MM-yyyy');
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
   Comentario _comentario;
   Map<String, dynamic> _userInfo;
   String firstHalf;
@@ -154,52 +154,60 @@ class _CommentTileState extends State<CommentTile> {
                       ),
                       _bloc.isMine(user.id, _comentario.usuario.id)
                           ? Expanded(
-                          child: PopupMenuButton<String>(
-                            padding: EdgeInsets.only(left: 120),
-                            onSelected: handleClick,
-                            itemBuilder: (context) {
-                              return options.map((String choice) {
-                                return PopupMenuItem<String>(
-                                  value: choice,
-                                  child: Text(choice,
-                                      style: TextStyle(fontSize: 14)),
-                                );
-                              }).toList();
-                            },
-                          ))
+                              child: PopupMenuButton<String>(
+                              padding: EdgeInsets.only(left: 120),
+                              onSelected: handleClick,
+                              itemBuilder: (context) {
+                                return options.map((String choice) {
+                                  return PopupMenuItem<String>(
+                                    value: choice,
+                                    child: Text(choice,
+                                        style: TextStyle(fontSize: 14)),
+                                  );
+                                }).toList();
+                              },
+                            ))
                           : Container(),
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  editModel == false ? secondHalf.isEmpty
-                      ? new Text(firstHalf, textAlign: TextAlign.left,)
-                      : new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      new Text(flag
-                          ? (firstHalf + "...")
-                          : (firstHalf + secondHalf),
-                        textAlign: TextAlign.left,),
-                      new InkWell(
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            new Text(
-                              flag ? "Mostrar mais" : "Mostrar Menos",
-                              style: new TextStyle(color: Colors.blue),
-                            ),
-                          ],
-                        ),
-                        onTap: () {
-                          setState(() {
-                            flag = !flag;
-                          });
-                        },
-                      ),
-                    ],
-                  ) : editModeScreen(),
+                  editModel == false
+                      ? secondHalf.isEmpty
+                          ? new Text(
+                              firstHalf,
+                              textAlign: TextAlign.left,
+                            )
+                          : new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                new Text(
+                                  flag
+                                      ? (firstHalf + "...")
+                                      : (firstHalf + secondHalf),
+                                  textAlign: TextAlign.left,
+                                ),
+                                new InkWell(
+                                  child: new Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      new Text(
+                                        flag ? "Mostrar mais" : "Mostrar Menos",
+                                        style:
+                                            new TextStyle(color: Colors.blue),
+                                      ),
+                                    ],
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      flag = !flag;
+                                    });
+                                  },
+                                ),
+                              ],
+                            )
+                      : editModeScreen(),
                   SizedBox(
                     height: 15,
                   ),
@@ -221,18 +229,21 @@ class _CommentTileState extends State<CommentTile> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: TextField(
-            style: TextStyle(fontSize: 12),
-            keyboardType: TextInputType.multiline,
-            controller: _editingController,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 0.5)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black, width: 0.5)),
-              contentPadding: EdgeInsets.all(5),
-            ),
-            minLines: 1,
-            maxLines: 100
-          ),),
+          Expanded(
+            child: TextField(
+                style: TextStyle(fontSize: 12),
+                keyboardType: TextInputType.multiline,
+                controller: _editingController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 0.5)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 0.5)),
+                  contentPadding: EdgeInsets.all(5),
+                ),
+                minLines: 1,
+                maxLines: 100),
+          ),
           Column(
             children: [
               IconButton(
@@ -240,7 +251,7 @@ class _CommentTileState extends State<CommentTile> {
                   onPressed: () {
                     setState(() {
                       editModel = false;
-                      if(_editingController.text != ''){
+                      if (_editingController.text != '') {
                         _comentario.corpo = _editingController.text;
                         checkDetails(_editingController.text);
                         widget.editComment(_comentario);
@@ -248,7 +259,8 @@ class _CommentTileState extends State<CommentTile> {
                     });
                   }),
               IconButton(
-                  icon: Icon(Icons.cancel_outlined, size: 25, color: Colors.black),
+                  icon: Icon(Icons.cancel_outlined,
+                      size: 25, color: Colors.black),
                   onPressed: () {
                     setState(() {
                       _editingController.text = '';

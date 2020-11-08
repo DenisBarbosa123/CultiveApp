@@ -61,12 +61,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       child: Stack(
                         children: <Widget>[
                           Positioned(
-                              top: 8.0,
+                              top: 0.0,
                               left: 0.0,
                               child: Text(
                                 "Bem-vindo\nao\nCultiveApp!",
                                 style: TextStyle(
-                                    fontSize: 25.0,
+                                    fontSize: 23.0,
                                     fontWeight: FontWeight.bold),
                               )),
                           Positioned(
@@ -77,14 +77,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 children: <Widget>[
                                   Text("Olá, visitante!",
                                       style: TextStyle(
-                                          fontSize: 18.0,
+                                          fontSize: 16.0,
                                           fontWeight: FontWeight.bold)),
                                   GestureDetector(
                                     child: Text(
                                       "Entre ou cadastre-se >",
                                       style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                          fontSize: 16.0,
+                                          color: Colors.blue[500],
+                                          fontSize: 14.0,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     onTap: () {
@@ -107,7 +107,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     size: 32.0,
                   ),
                   title: Text(
-                    "Home",
+                    "Página Principal",
                     style:
                         TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
                   ),

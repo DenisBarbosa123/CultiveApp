@@ -172,7 +172,8 @@ class _CreateSaleScreenState extends State<CreateSaleScreen> {
                 ),
                 TextFormField(
                     validator: (value) {
-                      if (double.parse(value) < 1) return "Campo Obrigatório";
+                      if (double.parse(value.replaceAll(",", "")) < 0.1)
+                        return "Campo Obrigatório";
                       return null;
                     },
                     controller: _lowPrice,

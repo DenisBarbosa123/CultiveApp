@@ -145,9 +145,12 @@ class _Screen3State extends State<Screen3> {
                     initialValue: [],
                     decoration: InputDecoration(
                       labelText: "Adicione seus tópicos de interesses",
-                      hintText: "Exemplo : Plantio de Milho, Criação de Gado...",
-                      hintStyle: TextStyle(color: Colors.black54,  fontSize: 14),
-                      labelStyle: TextStyle(color: Colors.black,),
+                      hintText:
+                          "Exemplo : Plantio de Milho, Criação de Gado...",
+                      hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
+                      labelStyle: TextStyle(
+                        color: Colors.black,
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black, width: 1.0),
                       ),
@@ -219,7 +222,7 @@ class _Screen3State extends State<Screen3> {
                   child: FlatButton(
                     onPressed: () async {
                       pr.show();
-                      uploadFile();
+                      await uploadFile();
                       user.topicos = Topicos.buildTopicList(_userTopicList);
                       _userBloc.submitSubscription(
                           userPayload: user.toJson(),
