@@ -99,6 +99,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
             child: Text("Cancelar")),
         FlatButton(
             onPressed: () {
+              Navigator.pop(context);
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => EditEventScreen(
                       widget.user, widget.token, widget.event)));
